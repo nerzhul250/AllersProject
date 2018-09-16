@@ -14,7 +14,9 @@ namespace Modelo
 
         private Dictionary<string,Item> mapFromItemCodeToItem;
         private Dictionary<string,Customer> mapFromCustomerIdToCustomer;
+        private Dictionary<int, Item> mapFromNumberToItem;
         private List<Transaction> listOfAllTransactions;
+        private List<Item[]> frequentItemSets;
 
         static void Main(string[] args)
         {
@@ -22,7 +24,9 @@ namespace Modelo
         public DataManager() {
             mapFromCustomerIdToCustomer = new Dictionary<string, Customer>();
             mapFromItemCodeToItem = new Dictionary<string, Item>();
+            mapFromNumberToItem = new Dictionary<int, Item>();
             listOfAllTransactions = new List<Transaction>();
+            frequentItemSets = new List<Item[]>();
             LoadData();
         }
 
@@ -35,10 +39,15 @@ namespace Modelo
         public int getCustomersCount() {
             return mapFromCustomerIdToCustomer.Count;
         }
+        public int getItemSetsCount()
+        {
+            return frequentItemSets.Count;
+        }
         public void LoadData() {
             LoadItems();
             LoadCustomers();
             LoadSales();
+            GenerateFrequentItemSets(3, 0.2);
         }
         public void LoadSales()
         {
@@ -109,8 +118,108 @@ namespace Modelo
             while ((auxiliarLine = sr.ReadLine()) != null)
             {
                 string[] auxiliarLineInArray = auxiliarLine.Split(';');
-                mapFromItemCodeToItem.Add(auxiliarLineInArray[0], new Item(auxiliarLineInArray[0], auxiliarLineInArray[1]));
+                Item a = new Item(auxiliarLineInArray[0], auxiliarLineInArray[1]);
+                mapFromItemCodeToItem.Add(auxiliarLineInArray[0], a);
+                
             }
         }
+
+        public void GenerateFrequentItemSets(int maxItemsetSize, double minSup)
+        {
+            int itemSet = 1;
+            string x = "";
+            Item[] commonItems = CommonItems(29);
+            for (int i = 0; i < maxItemsetSize; i++)
+            {
+                x += "1";
+            }
+            for (int i = maxItemsetSize; i < commonItems.Length; i++)
+            {
+                x += "0";
+            }
+
+            long maxNum = Convert.ToInt64(x, 2);
+            for (int i = itemSet; i <= maxNum; i++)
+            {
+                Debug.WriteLine(i + "------------------------------------------");
+                int tot1 = CountSetBits(i);
+                if (tot1 <= maxItemsetSize)
+                {
+                    int itemSetAppears = 0;
+                    for (int j = 0; j < listOfAllTransactions.Count; j++)
+                    {
+                        Transaction act = listOfAllTransactions[j];
+                        int num = 0;
+                        foreach (Item item in act.MapFromItemToQuantity.Keys)
+                        {
+                            num += item.Number;
+                        }
+                        int res = num & i;
+                        itemSetAppears += res == i ? 1 : 0;
+                    }
+
+                    if (itemSetAppears >= minSup* mapFromItemCodeToItem.Count)
+                    {
+                        Item[] ComItemSet = new Item[tot1];
+                        string bin = Convert.ToString(i, 2);
+                        int pos = 0;
+                        for (int j = 0; j < bin.Length; j++)
+                        {
+                            if (bin[j] == '1')
+                            {
+                                ComItemSet[pos++] = mapFromNumberToItem[bin.Length - 1 - j];
+                            }
+                        }
+                        frequentItemSets.Add(ComItemSet);
+                    }
+
+                }
+            }
+        }
+
+        //CODE PROVIDED BY https://www.geeksforgeeks.org/count-set-bits-in-an-integer/
+        public int CountSetBits(int n)
+        {
+            int count = 0;
+            while (n > 0)
+            {
+                n &= (n - 1);
+                count++;
+            }
+            return count;
+        }
+        public Item[] CommonItems(int top)
+        {
+            List<Item> commons = new List<Item>();
+
+          Dictionary<Item, int> dict = new Dictionary<Item, int>();
+            foreach(Transaction t in listOfAllTransactions)
+            {
+                foreach(Item i in t.MapFromItemToQuantity.Keys)
+                {
+                    if (dict.ContainsKey(i))
+                    {
+                        dict[i]++;
+                    } else
+                    {
+                        dict.Add(i, 1);
+                        commons.Add(i);
+                    }
+                }
+            }
+           Item[] comonItems = commons.OrderBy(c => dict[c]).Take(top).ToArray();
+
+            int cont = 0;
+            foreach (Item a in comonItems)
+            {
+                a.Number = (int) Math.Pow(2, cont);
+                mapFromNumberToItem.Add(cont++, a);
+            }
+
+
+            return comonItems;
+        }
     }
+
+
 }

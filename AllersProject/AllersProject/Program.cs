@@ -23,6 +23,7 @@ namespace AllersProject
             Debug.WriteLine("ItsBeenASuccesThereAre " + dm.getTransactionsCount() + "Transactions!");
             Debug.WriteLine(dm.getCustomersCount() + "Customers!");
             Debug.WriteLine(dm.getItemsCount() + "Items!");
+            Debug.WriteLine(dm.getItemSetsCount() + "Common Item Sets!");
         }
     }
 }

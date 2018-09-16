@@ -11,10 +11,10 @@ namespace Modelo
         private string tid;
         private DateTime transactionDate;
         private Customer customer;
-        private Dictionary<Item,int> mapFromItemToQuantity;
+        public Dictionary<Item, int> MapFromItemToQuantity { get; set; }
 
         public Transaction(string tid,DateTime date,Customer cus,Object[,] itemCode_Quantity) {
-            mapFromItemToQuantity = new Dictionary<Item, int>();
+            MapFromItemToQuantity = new Dictionary<Item, int>();
             this.tid = tid;
             transactionDate = date;
             customer = cus;
@@ -22,11 +22,11 @@ namespace Modelo
             for (int i = 0; i < itemCode_Quantity.GetLength(0); i++)
             {
                 if (itemCode_Quantity[i, 0] != null) {
-                    if (mapFromItemToQuantity.ContainsKey((Item)itemCode_Quantity[i, 0])) {
-                        mapFromItemToQuantity[(Item)itemCode_Quantity[i, 0]] = mapFromItemToQuantity[(Item)itemCode_Quantity[i, 0]] + (int)itemCode_Quantity[i, 1];
+                    if (MapFromItemToQuantity.ContainsKey((Item)itemCode_Quantity[i, 0])) {
+                        MapFromItemToQuantity[(Item)itemCode_Quantity[i, 0]] = MapFromItemToQuantity[(Item)itemCode_Quantity[i, 0]] + (int)itemCode_Quantity[i, 1];
                     }
                     else {
-                        mapFromItemToQuantity.Add((Item)itemCode_Quantity[i, 0], (int)itemCode_Quantity[i, 1]);
+                        MapFromItemToQuantity.Add((Item)itemCode_Quantity[i, 0], (int)itemCode_Quantity[i, 1]);
                     }
                 }
             }
