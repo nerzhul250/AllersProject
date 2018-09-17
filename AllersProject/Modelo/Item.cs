@@ -8,13 +8,13 @@ namespace Modelo
 {
     public class Item
     {
-        private string itemCode;
+        public string ItemCode { get; set; }
         private string itemName;
         private int price;
         public int Number { get; set; }
 
         public Item(string ic, string ina) {
-            itemCode = ic;
+            ItemCode = ic;
             itemName = ina;
             Number = 0;
         }

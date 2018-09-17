@@ -16,7 +16,7 @@ namespace Modelo
         private Dictionary<string,Customer> mapFromCustomerIdToCustomer;
         private Dictionary<int, Item> mapFromNumberToItem;
         private List<Transaction> listOfAllTransactions;
-        private List<Item[]> frequentItemSets;
+        public List<Item[]> FrequentItemSets { get; set; }
 
         static void Main(string[] args)
         {
@@ -26,7 +26,7 @@ namespace Modelo
             mapFromItemCodeToItem = new Dictionary<string, Item>();
             mapFromNumberToItem = new Dictionary<int, Item>();
             listOfAllTransactions = new List<Transaction>();
-            frequentItemSets = new List<Item[]>();
+            FrequentItemSets = new List<Item[]>();
             LoadData();
         }
 
@@ -41,13 +41,13 @@ namespace Modelo
         }
         public int getItemSetsCount()
         {
-            return frequentItemSets.Count;
+            return FrequentItemSets.Count;
         }
         public void LoadData() {
             LoadItems();
             LoadCustomers();
             LoadSales();
-            GenerateFrequentItemSets(3, 0.2);
+            GenerateFrequentItemSets(3, 0.05, CommonItems(28));
         }
         public void LoadSales()
         {
@@ -123,17 +123,17 @@ namespace Modelo
                 
             }
         }
-
-        public void GenerateFrequentItemSets(int maxItemsetSize, double minSup)
+        
+        public void GenerateFrequentItemSets(int maxItemsetSize, double minSup, Item [] itemsToEvaluate)
         {
             int itemSet = 1;
             string x = "";
-            Item[] commonItems = CommonItems(29);
+            //Item[] commonItems = CommonItems(28);
             for (int i = 0; i < maxItemsetSize; i++)
             {
                 x += "1";
             }
-            for (int i = maxItemsetSize; i < commonItems.Length; i++)
+            for (int i = maxItemsetSize; i < itemsToEvaluate.Length; i++)
             {
                 x += "0";
             }
@@ -141,7 +141,6 @@ namespace Modelo
             long maxNum = Convert.ToInt64(x, 2);
             for (int i = itemSet; i <= maxNum; i++)
             {
-                Debug.WriteLine(i + "------------------------------------------");
                 int tot1 = CountSetBits(i);
                 if (tot1 <= maxItemsetSize)
                 {
@@ -158,7 +157,7 @@ namespace Modelo
                         itemSetAppears += res == i ? 1 : 0;
                     }
 
-                    if (itemSetAppears >= minSup* mapFromItemCodeToItem.Count)
+                    if (itemSetAppears >= minSup* getTransactionsCount())
                     {
                         Item[] ComItemSet = new Item[tot1];
                         string bin = Convert.ToString(i, 2);
@@ -170,7 +169,7 @@ namespace Modelo
                                 ComItemSet[pos++] = mapFromNumberToItem[bin.Length - 1 - j];
                             }
                         }
-                        frequentItemSets.Add(ComItemSet);
+                        FrequentItemSets.Add(ComItemSet);
                     }
 
                 }
@@ -207,7 +206,7 @@ namespace Modelo
                     }
                 }
             }
-           Item[] comonItems = commons.OrderBy(c => dict[c]).Take(top).ToArray();
+           Item[] comonItems = commons.OrderByDescending(c => dict[c]).Take(top).ToArray();
 
             int cont = 0;
             foreach (Item a in comonItems)

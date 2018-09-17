@@ -24,6 +24,13 @@ namespace AllersProject
             Debug.WriteLine(dm.getCustomersCount() + "Customers!");
             Debug.WriteLine(dm.getItemsCount() + "Items!");
             Debug.WriteLine(dm.getItemSetsCount() + "Common Item Sets!");
+            foreach (Item [] i in dm.FrequentItemSets)
+            {
+                foreach (Item it in i)
+                {
+                    Debug.WriteLine(it.ItemCode + " ");
+                }
+            }
         }
     }
 }
