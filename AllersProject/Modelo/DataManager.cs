@@ -12,42 +12,39 @@ namespace Modelo
     {
         public const String dataRoute = "../../../Datos/";
 
-        private Dictionary<string,Item> mapFromItemCodeToItem;
-        private Dictionary<string,Customer> mapFromCustomerIdToCustomer;
-        private Dictionary<int, Item> mapFromNumberToItem;
-        private List<Transaction> listOfAllTransactions;
-        public List<Item[]> FrequentItemSets { get; set; }
+        private Dictionary<string, Item> mapFromItemCodeToItem;
+        private Dictionary<string, Customer> mapFromCustomerIdToCustomer;
+        internal List<Transaction> listOfAllTransactions;
 
         static void Main(string[] args)
         {
         }
-        public DataManager() {
+
+        public DataManager()
+        {
             mapFromCustomerIdToCustomer = new Dictionary<string, Customer>();
             mapFromItemCodeToItem = new Dictionary<string, Item>();
-            mapFromNumberToItem = new Dictionary<int, Item>();
             listOfAllTransactions = new List<Transaction>();
-            FrequentItemSets = new List<Item[]>();
             LoadData();
         }
 
-        public int getTransactionsCount() {
+        public int getTransactionsCount()
+        {
             return listOfAllTransactions.Count;
         }
-        public int getItemsCount() {
+        public int getItemsCount()
+        {
             return mapFromItemCodeToItem.Count;
         }
-        public int getCustomersCount() {
+        public int getCustomersCount()
+        {
             return mapFromCustomerIdToCustomer.Count;
         }
-        public int getItemSetsCount()
+        public void LoadData()
         {
-            return FrequentItemSets.Count;
-        }
-        public void LoadData() {
             LoadItems();
             LoadCustomers();
             LoadSales();
-            GenerateFrequentItemSets(3, 0.05, CommonItems(28));
         }
         public void LoadSales()
         {
@@ -60,10 +57,12 @@ namespace Modelo
             while ((auxiliarLine = sr.ReadLine()) != null)
             {
                 string[] auxiliarLineInArray = auxiliarLine.Split(';');
-                if (!auxiliarLineInArray[1].Equals(auxBillContainer[0][1])) { 
+                if (!auxiliarLineInArray[1].Equals(auxBillContainer[0][1]))
+                {
                     string[] tranArray = auxBillContainer[0];
                     //There are anomalies with a customer
-                    if (mapFromCustomerIdToCustomer.ContainsKey(tranArray[0])) {
+                    if (mapFromCustomerIdToCustomer.ContainsKey(tranArray[0]))
+                    {
                         Customer cus = mapFromCustomerIdToCustomer[tranArray[0]];
                         string tid = tranArray[1];
                         string[] dateSegmented = tranArray[2].Split('-');
@@ -109,9 +108,9 @@ namespace Modelo
                 }
             }
         }
-
-        public void LoadItems() {
-            string itemsRoute=dataRoute+"Articulos.csv";
+        public void LoadItems()
+        {
+            string itemsRoute = dataRoute + "Articulos.csv";
             StreamReader sr = new StreamReader(itemsRoute);
             string auxiliarLine;
             auxiliarLine = sr.ReadLine();
@@ -120,105 +119,8 @@ namespace Modelo
                 string[] auxiliarLineInArray = auxiliarLine.Split(';');
                 Item a = new Item(auxiliarLineInArray[0], auxiliarLineInArray[1]);
                 mapFromItemCodeToItem.Add(auxiliarLineInArray[0], a);
-                
+
             }
-        }
-        
-        public void GenerateFrequentItemSets(int maxItemsetSize, double minSup, Item [] itemsToEvaluate)
-        {
-            int itemSet = 1;
-            string x = "";
-            //Item[] commonItems = CommonItems(28);
-            for (int i = 0; i < maxItemsetSize; i++)
-            {
-                x += "1";
-            }
-            for (int i = maxItemsetSize; i < itemsToEvaluate.Length; i++)
-            {
-                x += "0";
-            }
-
-            long maxNum = Convert.ToInt64(x, 2);
-            for (int i = itemSet; i <= maxNum; i++)
-            {
-                int tot1 = CountSetBits(i);
-                if (tot1 <= maxItemsetSize)
-                {
-                    int itemSetAppears = 0;
-                    for (int j = 0; j < listOfAllTransactions.Count; j++)
-                    {
-                        Transaction act = listOfAllTransactions[j];
-                        int num = 0;
-                        foreach (Item item in act.MapFromItemToQuantity.Keys)
-                        {
-                            num += item.Number;
-                        }
-                        int res = num & i;
-                        itemSetAppears += res == i ? 1 : 0;
-                    }
-
-                    if (itemSetAppears >= minSup* getTransactionsCount())
-                    {
-                        Item[] ComItemSet = new Item[tot1];
-                        string bin = Convert.ToString(i, 2);
-                        int pos = 0;
-                        for (int j = 0; j < bin.Length; j++)
-                        {
-                            if (bin[j] == '1')
-                            {
-                                ComItemSet[pos++] = mapFromNumberToItem[bin.Length - 1 - j];
-                            }
-                        }
-                        FrequentItemSets.Add(ComItemSet);
-                    }
-
-                }
-            }
-        }
-
-        //CODE PROVIDED BY https://www.geeksforgeeks.org/count-set-bits-in-an-integer/
-        public int CountSetBits(int n)
-        {
-            int count = 0;
-            while (n > 0)
-            {
-                n &= (n - 1);
-                count++;
-            }
-            return count;
-        }
-        public Item[] CommonItems(int top)
-        {
-            List<Item> commons = new List<Item>();
-
-          Dictionary<Item, int> dict = new Dictionary<Item, int>();
-            foreach(Transaction t in listOfAllTransactions)
-            {
-                foreach(Item i in t.MapFromItemToQuantity.Keys)
-                {
-                    if (dict.ContainsKey(i))
-                    {
-                        dict[i]++;
-                    } else
-                    {
-                        dict.Add(i, 1);
-                        commons.Add(i);
-                    }
-                }
-            }
-           Item[] comonItems = commons.OrderByDescending(c => dict[c]).Take(top).ToArray();
-
-            int cont = 0;
-            foreach (Item a in comonItems)
-            {
-                a.Number = (int) Math.Pow(2, cont);
-                mapFromNumberToItem.Add(cont++, a);
-            }
-
-
-            return comonItems;
         }
     }
-
-
 }

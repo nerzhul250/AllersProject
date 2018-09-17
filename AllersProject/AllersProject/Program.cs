@@ -19,12 +19,13 @@ namespace AllersProject
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
-            DataManager dm = new DataManager();
-            Debug.WriteLine("ItsBeenASuccesThereAre " + dm.getTransactionsCount() + "Transactions!");
-            Debug.WriteLine(dm.getCustomersCount() + "Customers!");
-            Debug.WriteLine(dm.getItemsCount() + "Items!");
-            Debug.WriteLine(dm.getItemSetsCount() + "Common Item Sets!");
-            foreach (Item [] i in dm.FrequentItemSets)
+
+            AssociationAnalyzer aA = new AssociationAnalyzer();
+            Debug.WriteLine("ItsBeenASuccesThereAre " + aA.data.getTransactionsCount() + "Transactions!");
+            Debug.WriteLine(aA.data.getCustomersCount() + "Customers!");
+            Debug.WriteLine(aA.data.getItemsCount() + "Items!");
+            Debug.WriteLine(aA.getItemSetsCount() + "Common Item Sets!");
+            foreach (Item [] i in aA.FrequentItemSets)
             {
                 foreach (Item it in i)
                 {
