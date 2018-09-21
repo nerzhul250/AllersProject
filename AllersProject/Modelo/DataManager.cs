@@ -10,7 +10,7 @@ namespace Modelo
 {
     public class DataManager
     {
-        public const String dataRoute = "../../../Datos/";
+        private String dataRoute;
 
         private Dictionary<string, Item> mapFromItemCodeToItem;
         private Dictionary<string, Customer> mapFromCustomerIdToCustomer;
@@ -20,8 +20,9 @@ namespace Modelo
         {
         }
 
-        public DataManager()
+        public DataManager(String dr)
         {
+            dataRoute = dr;
             mapFromCustomerIdToCustomer = new Dictionary<string, Customer>();
             mapFromItemCodeToItem = new Dictionary<string, Item>();
             listOfAllTransactions = new List<Transaction>();

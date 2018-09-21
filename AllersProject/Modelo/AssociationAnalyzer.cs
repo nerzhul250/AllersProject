@@ -8,35 +8,54 @@ namespace Modelo
 {
     public class AssociationAnalyzer
     {
-        public const double MINSUPPORT = 0.05;
-        public const int MAXITEMSETSIZE = 3;
-        public const int COMMONITEMSTOTRACK = 28;
-        
-        private Dictionary<int, Item> mapFromNumberToItem;
-        public List<Item[]> FrequentItemSets { get; set; }
+        private double minSupport;
+        private double minConfidence;
+        private int itemsToEvaluate;
+        private int maxItemSetSize;
+        private Dictionary<long, int> frequentItemSetToSupport;
+        private Dictionary<long, Item> mapFromNumberToItem;
+
         public DataManager data;
 
-        public AssociationAnalyzer() {
-            data = new DataManager();
-            mapFromNumberToItem = new Dictionary<int, Item>();
-            FrequentItemSets = new List<Item[]>();
-            GenerateFrequentItemSets(MAXITEMSETSIZE,MINSUPPORT, CommonItems(COMMONITEMSTOTRACK));
-        }
+        private List<Tuple<long, long>> rules;
 
-        public int getItemSetsCount()
-        {
-            return FrequentItemSets.Count;
+        public AssociationAnalyzer(DataManager data,int itemsToEvaluate,double minSup,double minConfidence,int maxItemSetSize) {
+            this.data = data;
+            this.itemsToEvaluate = itemsToEvaluate;
+            minSupport = minSup;
+            this.minConfidence = minConfidence;
+            this.maxItemSetSize = maxItemSetSize;
+
+            mapFromNumberToItem = new Dictionary<long, Item>();
+            frequentItemSetToSupport = new Dictionary<long, int>();
+
+            GenerateFrequentItemSets(CommonItems());
         }
-        public void GenerateFrequentItemSets(int maxItemsetSize, double minSup, Item[] itemsToEvaluate)
+        private void ApGenRules(long kItemSet,List<long> itemSets) {
+
+        }
+        private void AprioriRuleGeneration(List<List<long>> frequentItemSets) {
+
+        }
+        private void RemoveNonFrequentItemSetsFromCandidateSet(List<long> candidateSet) {
+
+        }
+        private List<long> AprioriGen(List<long> frequentItemSets) {
+            return null;
+        }
+        private List<List<long>> GenerateFrequentItemSetsApriori(Item[] frequentOneItemSets) {
+            return null;
+        }
+        public List<Item[]> GenerateFrequentItemSets(Item[] frequentOneItemSets)
         {
+            List<Item[]> FrequentItemSets = new List<Item[]>();
             int itemSet = 1;
             string x = "";
-            //Item[] commonItems = CommonItems(28);
-            for (int i = 0; i < maxItemsetSize; i++)
+            for (int i = 0; i < maxItemSetSize; i++)
             {
                 x += "1";
             }
-            for (int i = maxItemsetSize; i < itemsToEvaluate.Length; i++)
+            for (int i = maxItemSetSize; i < frequentOneItemSets.Length; i++)
             {
                 x += "0";
             }
@@ -45,7 +64,7 @@ namespace Modelo
             for (int i = itemSet; i <= maxNum; i++)
             {
                 int tot1 = CountSetBits(i);
-                if (tot1 <= maxItemsetSize)
+                if (tot1 <= maxItemSetSize)
                 {
                     int itemSetAppears = 0;
                     for (int j = 0; j < data.listOfAllTransactions.Count; j++)
@@ -60,7 +79,7 @@ namespace Modelo
                         itemSetAppears += res == i ? 1 : 0;
                     }
 
-                    if (itemSetAppears >= minSup * data.getTransactionsCount())
+                    if (itemSetAppears >= minSupport * data.getTransactionsCount())
                     {
                         Item[] ComItemSet = new Item[tot1];
                         string bin = Convert.ToString(i, 2);
@@ -77,20 +96,9 @@ namespace Modelo
 
                 }
             }
+            return FrequentItemSets;
         }
-
-        //CODE PROVIDED BY https://www.geeksforgeeks.org/count-set-bits-in-an-integer/
-        public int CountSetBits(int n)
-        {
-            int count = 0;
-            while (n > 0)
-            {
-                n &= (n - 1);
-                count++;
-            }
-            return count;
-        }
-        public Item[] CommonItems(int top)
+        public Item[] CommonItems()
         {
             List<Item> commons = new List<Item>();
 
@@ -110,7 +118,7 @@ namespace Modelo
                     }
                 }
             }
-            Item[] comonItems = commons.OrderByDescending(c => dict[c]).Take(top).ToArray();
+            Item[] comonItems = commons.OrderByDescending(c => dict[c]).Take(itemsToEvaluate).ToArray();
 
             int cont = 0;
             foreach (Item a in comonItems)
@@ -119,6 +127,23 @@ namespace Modelo
                 mapFromNumberToItem.Add(cont++, a);
             }
             return comonItems;
+        }
+        //CODE PROVIDED BY https://www.geeksforgeeks.org/count-set-bits-in-an-integer/
+        public int CountSetBits(int n)
+        {
+            int count = 0;
+            while (n > 0)
+            {
+                n &= (n - 1);
+                count++;
+            }
+            return count;
+        }
+        private Item[] BinaryItemSetToObjectItemSet(long itemSet) {
+            return null;
+        }
+        private long ObjectItemSetToBinaryItemSet(Item[] itemSet) {
+            return 0;
         }
     }
 }

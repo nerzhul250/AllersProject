@@ -20,18 +20,10 @@ namespace AllersProject
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
 
-            AssociationAnalyzer aA = new AssociationAnalyzer();
+            AssociationAnalyzer aA = new AssociationAnalyzer(new DataManager("../../../Datos/"),28,0.05,0.05,3);
             Debug.WriteLine("ItsBeenASuccesThereAre " + aA.data.getTransactionsCount() + "Transactions!");
             Debug.WriteLine(aA.data.getCustomersCount() + "Customers!");
             Debug.WriteLine(aA.data.getItemsCount() + "Items!");
-            Debug.WriteLine(aA.getItemSetsCount() + "Common Item Sets!");
-            foreach (Item [] i in aA.FrequentItemSets)
-            {
-                foreach (Item it in i)
-                {
-                    Debug.WriteLine(it.ItemCode + " ");
-                }
-            }
         }
     }
 }
