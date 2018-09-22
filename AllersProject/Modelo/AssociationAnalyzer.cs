@@ -27,7 +27,7 @@ namespace Modelo
             this.maxItemSetSize = maxItemSetSize;
 
             mapFromNumberToItem = new Dictionary<long, Item>();
-            frequentItemSetToSupport = new Dictionary<long, int>();
+            itemSetToSupport = new Dictionary<long, int>();
 
             GenerateFrequentItemSets(CommonItems());
         }
