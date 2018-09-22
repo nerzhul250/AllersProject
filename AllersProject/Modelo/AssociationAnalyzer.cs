@@ -12,7 +12,7 @@ namespace Modelo
         private double minConfidence;
         private int itemsToEvaluate;
         private int maxItemSetSize;
-        private Dictionary<long, int> frequentItemSetToSupport;
+        private Dictionary<long, int> itemSetToSupport;
         private Dictionary<long, Item> mapFromNumberToItem;
 
         public DataManager data;
