@@ -41,9 +41,51 @@ namespace Modelo
 
         }
         private List<long> AprioriGen(List<long> frequentItemSets) {
+            List<long> candidates = new List<long>();
+            for(int i=0;i<frequentItemSets.Count(); i++)
+            {
+                long first = divideUntilTheSecondOne(frequentItemSets[i]);
+                for(int j = i+1; j < frequentItemSets.Count(); j++)
+                {
+                    long second = divideUntilTheSecondOne(frequentItemSets[j]);
+                    if(first== second)
+                    {
+                        candidates.Add(frequentItemSets[i] | frequentItemSets[j]);
+                    }
+
+                }
+            }
             return null;
         }
+        private long divideUntilTheSecondOne(long numb)
+        {
+            int ones = 0;
+            long toReturn = numb;
+            while (ones < 2|| toReturn==0)
+            {
+                if (toReturn % 2 == 0)
+                {
+                    toReturn /= 2;
+                }
+                else
+                {
+                    ones++;
+                    if (ones == 1)
+                    {
+                        toReturn--;
+                        toReturn /= 2;
+                    }
+                }
+            }
+            return toReturn;
+        }
         private List<List<long>> GenerateFrequentItemSetsApriori(Item[] frequentOneItemSets) {
+            List<long> frequentSubsets = new List<long>();
+            Item[] common = CommonItems();
+            for(int i = 0; i < common.Length; i++)
+            {
+                
+            }
             return null;
         }
         public List<Item[]> GenerateFrequentItemSets(Item[] frequentOneItemSets)
