@@ -43,8 +43,37 @@ namespace Modelo
         private void AprioriRuleGeneration(List<List<long>> frequentItemSets) {
 
         }
+        //STEVEN
         private void RemoveNonFrequentItemSetsFromCandidateSet(List<long> candidateSet) {
-
+            List<Transaction> transactions = data.listOfAllTransactions;
+            for(int i = 0; i < transactions.Count; i++)
+            {
+                Transaction t = transactions[i];
+                long binaryRepresentation = ObjectItemSetToBinaryItemSet(t.MapFromItemToQuantity.Keys.ToArray());
+                for(int j = 0; j < candidateSet.Count; j++)
+                {
+                    if((candidateSet[j]&binaryRepresentation)== candidateSet[j])
+                    {
+                        if (itemSetToSupport.ContainsKey(candidateSet[j]))
+                        {
+                            itemSetToSupport[candidateSet[j]] = 1 + itemSetToSupport[candidateSet[j]];
+                        }
+                        else
+                        {
+                            itemSetToSupport.Add(candidateSet[j], 1);
+                        }
+                    }
+                }
+            }
+            double minimunSupport = transactions.Count * minSupport;
+            for(int i = 0; i < candidateSet.Count; i++)
+            {
+                if (itemSetToSupport[candidateSet[i]] <minimunSupport)
+                {
+                    candidateSet.RemoveAt(i);
+                    i--;
+                }
+            }
         }
         private List<long> AprioriGen(List<long> frequentItemSets) {
             List<long> candidates = new List<long>();
@@ -85,14 +114,28 @@ namespace Modelo
             }
             return toReturn;
         }
+        //STEVEN
         private List<List<long>> GenerateFrequentItemSetsApriori(Item[] frequentOneItemSets) {
-            List<long> frequentSubsets = new List<long>();
+            List<long> frequentKSubsets = new List<long>();
+            List<List<long>> toreturn = new List<List<long>>();
             Item[] common = CommonItems();
             for(int i = 0; i < common.Length; i++)
             {
-                
+                frequentKSubsets.Add(common[i].Number);
             }
-            return null;
+            while (frequentKSubsets.Count != 0)
+            {
+                List<long> toAdd = new List<long>();
+                for (int j = 0; j < frequentKSubsets.Count; j++)
+                {
+                    toAdd.Add(frequentKSubsets[j]);
+                }
+                toreturn.Add(toAdd);
+                List<long> ck = AprioriGen(frequentKSubsets);
+                RemoveNonFrequentItemSetsFromCandidateSet(ck);
+                frequentKSubsets = ck;
+            }
+            return toreturn;
         }
         public List<Item[]> GenerateFrequentItemSets(Item[] frequentOneItemSets)
         {
