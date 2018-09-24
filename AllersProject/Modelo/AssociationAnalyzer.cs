@@ -192,7 +192,7 @@ namespace Modelo
         public Item[] CommonItems()
         {
             List<Item> commons = new List<Item>();
-
+            mapFromNumberToItem = new Dictionary<long, Item>();
             Dictionary<Item, int> dict = new Dictionary<Item, int>();
             foreach (Transaction t in data.listOfAllTransactions)
             {

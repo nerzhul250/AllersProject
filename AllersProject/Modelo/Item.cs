@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Modelo
 {
-    public class Item
+    public class Item:IComparable
     {
         public string ItemCode { get; set; }
         private string itemName;
@@ -21,6 +21,14 @@ namespace Modelo
 
         public void setPrice(int price) {
             this.price = price;
+        }
+
+        public int CompareTo(object obj)
+        {
+            Item alv = (Item)obj;
+            if (alv.ItemCode == ItemCode)
+                return 0;
+            return -1;
         }
     }
 }

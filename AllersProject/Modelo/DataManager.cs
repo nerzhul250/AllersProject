@@ -12,7 +12,7 @@ namespace Modelo
     {
         private String dataRoute;
 
-        private Dictionary<string, Item> mapFromItemCodeToItem;
+        public Dictionary<string, Item> mapFromItemCodeToItem;
         private Dictionary<string, Customer> mapFromCustomerIdToCustomer;
         internal List<Transaction> listOfAllTransactions;
 
