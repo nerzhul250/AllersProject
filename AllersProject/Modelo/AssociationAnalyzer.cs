@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +30,12 @@ namespace Modelo
             mapFromNumberToItem = new Dictionary<long, Item>();
             itemSetToSupport = new Dictionary<long, int>();
 
-            GenerateFrequentItemSets(CommonItems());
+            List<Item[]> testing=GenerateFrequentItemSets(CommonItems());
+            foreach (Item[] it in testing) {
+                foreach (Item i in it) {
+                    Debug.WriteLine(i.ItemCode);
+                }
+            }
         }
         private void ApGenRules(long kItemSet,List<long> itemSets) {
 
