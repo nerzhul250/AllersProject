@@ -29,13 +29,7 @@ namespace Modelo
 
             mapFromNumberToItem = new Dictionary<long, Item>();
             itemSetToSupport = new Dictionary<long, int>();
-
-            List<Item[]> testing=GenerateFrequentItemSets(CommonItems());
-            foreach (Item[] it in testing) {
-                foreach (Item i in it) {
-                    Debug.WriteLine(i.ItemCode);
-                }
-            }
+            
         }
         private void ApGenRules(long kItemSet,List<long> itemSets) {
 
