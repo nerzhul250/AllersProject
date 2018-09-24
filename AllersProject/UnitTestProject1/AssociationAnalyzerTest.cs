@@ -128,9 +128,24 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestCommonItems()
         {
-            AssociationAnalyzer alv = new AssociationAnalyzer(new DataManager("../../../Datos/Escenario1/"), 3, 0.2, 0.2, 3);
+            AssociationAnalyzer alv = new AssociationAnalyzer(new DataManager("../../../Datos/Escenario1/"), 2, 0.2, 0.2, 3);
+            Item[] comunes = alv.CommonItems();
+            //for ( int i=0; i<comunes.Length; i++)
+            //{
+            //Debug.Write(comunes[i].ItemCode +",");
+            //}
+            Assert.AreEqual("1", comunes[0].ItemCode);
+            Assert.AreEqual("2", comunes[1].ItemCode);
 
-            Debug.Write(alv.CommonItems());
+            alv = new AssociationAnalyzer(new DataManager("../../../Datos/Escenario2/"), 3, 0.2, 0.2, 3);
+            comunes = alv.CommonItems();
+            for (int i = 0; i < comunes.Length; i++)
+            {
+                Debug.Write(comunes[i].ItemCode + ",");
+            }
+            Assert.AreEqual("2", comunes[0].ItemCode);
+            Assert.AreEqual("4", comunes[1].ItemCode);
+            Assert.AreEqual("3", comunes[2].ItemCode);
         }
     }
 }
