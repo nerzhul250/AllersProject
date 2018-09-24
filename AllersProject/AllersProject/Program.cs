@@ -24,6 +24,9 @@ namespace AllersProject
             Debug.WriteLine("ItsBeenASuccesThereAre " + aA.data.getTransactionsCount() + "Transactions!");
             Debug.WriteLine(aA.data.getCustomersCount() + "Customers!");
             Debug.WriteLine(aA.data.getItemsCount() + "Items!");
+            //Debug.WriteLine("EMPEZANDO------------------------");
+            //Debug.WriteLine(aA.GenerateFrequentItemSetsApriori(aA.CommonItems()).Count);
+            //Debug.WriteLine("TERMINANDO------------------------");
         }
     }
 }

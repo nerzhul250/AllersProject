@@ -115,10 +115,10 @@ namespace Modelo
             return toReturn;
         }
         //STEVEN
-        private List<List<long>> GenerateFrequentItemSetsApriori(Item[] frequentOneItemSets) {
+        public List<List<long>> GenerateFrequentItemSetsApriori(Item[] frequentOneItemSets) {
             List<long> frequentKSubsets = new List<long>();
             List<List<long>> toreturn = new List<List<long>>();
-            Item[] common = CommonItems();
+            Item[] common = frequentOneItemSets;
             for(int i = 0; i < common.Length; i++)
             {
                 frequentKSubsets.Add(common[i].Number);
