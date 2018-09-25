@@ -11,7 +11,7 @@ namespace Modelo
         public string ItemCode { get; set; }
         private string itemName;
         private int price;
-        public int Number { get; set; }
+        public long Number { get; set; }
 
         public Item(string ic, string ina) {
             ItemCode = ic;

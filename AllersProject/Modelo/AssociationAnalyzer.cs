@@ -13,23 +13,35 @@ namespace Modelo
         private double minConfidence;
         private int itemsToEvaluate;
         private int maxItemSetSize;
-        private Dictionary<long, int> itemSetToSupport;
-        private Dictionary<long, Item> mapFromNumberToItem;
 
-        public DataManager data;
-
+        private List<long> binaryTransactions;
         private List<Tuple<long, long>> rules;
+        private Dictionary<long, int> itemSetToSupport;
+
+        private Dictionary<int, Item> mapFromBinaryPositionToItem;
 
         public AssociationAnalyzer(DataManager data,int itemsToEvaluate,double minSup,double minConfidence,int maxItemSetSize) {
-            this.data = data;
             this.itemsToEvaluate = itemsToEvaluate;
             minSupport = minSup;
             this.minConfidence = minConfidence;
             this.maxItemSetSize = maxItemSetSize;
 
-            mapFromNumberToItem = new Dictionary<long, Item>();
+            CommonItems(data);
+            binaryTransactions = new List<long>();
+
+            for (int i = 0; i < data.listOfAllTransactions.Count; i++)
+            {
+                Transaction act = data.listOfAllTransactions[i];
+                long num = 0;
+                foreach (Item item in act.MapFromItemToQuantity.Keys)
+                {
+                    num += item.Number;
+                }
+                if (num!=0) {
+                    binaryTransactions.Add(num);
+                }
+            }
             itemSetToSupport = new Dictionary<long, int>();
-            
         }
         private void ApGenRules(long kItemSet,List<long> itemSets) {
 
@@ -38,12 +50,10 @@ namespace Modelo
 
         }
         //STEVEN
-        private void RemoveNonFrequentItemSetsFromCandidateSet(List<long> candidateSet) {
-            List<Transaction> transactions = data.listOfAllTransactions;
-            for(int i = 0; i < transactions.Count; i++)
+        private List<long> RemoveNonFrequentItemSetsFromCandidateSet(List<long> candidateSet) {
+            for(int i = 0; i < binaryTransactions.Count; i++)
             {
-                Transaction t = transactions[i];
-                long binaryRepresentation = ObjectItemSetToBinaryItemSet(t.MapFromItemToQuantity.Keys.ToArray());
+                long binaryRepresentation = binaryTransactions[i];
                 for(int j = 0; j < candidateSet.Count; j++)
                 {
                     if((candidateSet[j]&binaryRepresentation)== candidateSet[j])
@@ -59,7 +69,7 @@ namespace Modelo
                     }
                 }
             }
-            double minimunSupport = transactions.Count * minSupport;
+            double minimunSupport = binaryTransactions.Count * minSupport;
             for(int i = 0; i < candidateSet.Count; i++)
             {
                 if (itemSetToSupport[candidateSet[i]] <minimunSupport)
@@ -68,6 +78,7 @@ namespace Modelo
                     i--;
                 }
             }
+            return candidateSet;
         }
         private List<long> AprioriGen(List<long> frequentItemSets) {
             List<long> candidates = new List<long>();
@@ -81,10 +92,9 @@ namespace Modelo
                     {
                         candidates.Add(frequentItemSets[i] | frequentItemSets[j]);
                     }
-
                 }
             }
-            return null;
+            return candidates;
         }
         private long divideUntilTheSecondOne(long numb)
         {
@@ -109,15 +119,14 @@ namespace Modelo
             return toReturn;
         }
         //STEVEN
-        public List<List<long>> GenerateFrequentItemSetsApriori(Item[] frequentOneItemSets) {
+        public List<List<long>> GenerateFrequentItemSetsApriori() {
             List<long> frequentKSubsets = new List<long>();
             List<List<long>> toreturn = new List<List<long>>();
-            Item[] common = frequentOneItemSets;
-            for(int i = 0; i < common.Length; i++)
+            foreach(int pos in mapFromBinaryPositionToItem.Keys)
             {
-                frequentKSubsets.Add(common[i].Number);
+                frequentKSubsets.Add((long)Math.Pow(2,pos));
             }
-            while (frequentKSubsets.Count != 0)
+            while (frequentKSubsets.Count != 0 && CountSetBits(frequentKSubsets[0])<maxItemSetSize)
             {
                 List<long> toAdd = new List<long>();
                 for (int j = 0; j < frequentKSubsets.Count; j++)
@@ -131,7 +140,7 @@ namespace Modelo
             }
             return toreturn;
         }
-        public List<Item[]> GenerateFrequentItemSets(Item[] frequentOneItemSets)
+        public List<Item[]> GenerateFrequentItemSets()
         {
             List<Item[]> FrequentItemSets = new List<Item[]>();
             int itemSet = 1;
@@ -140,40 +149,36 @@ namespace Modelo
             {
                 x += "1";
             }
-            for (int i = maxItemSetSize; i < frequentOneItemSets.Length; i++)
+            for (int i = maxItemSetSize; i < itemsToEvaluate; i++)
             {
                 x += "0";
             }
 
             long maxNum = Convert.ToInt64(x, 2);
-            for (int i = itemSet; i <= maxNum; i++)
+            for (long i = itemSet; i <= maxNum; i++)
             {
                 int tot1 = CountSetBits(i);
                 if (tot1 <= maxItemSetSize)
                 {
                     int itemSetAppears = 0;
-                    for (int j = 0; j < data.listOfAllTransactions.Count; j++)
+                    for (int j = 0; j < binaryTransactions.Count; j++)
                     {
-                        Transaction act = data.listOfAllTransactions[j];
-                        int num = 0;
-                        foreach (Item item in act.MapFromItemToQuantity.Keys)
-                        {
-                            num += item.Number;
-                        }
-                        int res = num & i;
+                        long res = binaryTransactions[j] & i;
                         itemSetAppears += res == i ? 1 : 0;
                     }
 
-                    if (itemSetAppears >= minSupport * data.getTransactionsCount())
+                    if (itemSetAppears >= minSupport * binaryTransactions.Count)
                     {
                         Item[] ComItemSet = new Item[tot1];
-                        string bin = Convert.ToString(i, 2);
+                        char[] charArray = Convert.ToString(i, 2).ToCharArray();
+                        Array.Reverse(charArray);
+                        string bin = new string(charArray);
                         int pos = 0;
                         for (int j = 0; j < bin.Length; j++)
                         {
                             if (bin[j] == '1')
                             {
-                                ComItemSet[pos++] = mapFromNumberToItem[bin.Length - 1 - j];
+                                ComItemSet[pos++] = mapFromBinaryPositionToItem[j];
                             }
                         }
                         FrequentItemSets.Add(ComItemSet);
@@ -183,10 +188,10 @@ namespace Modelo
             }
             return FrequentItemSets;
         }
-        public Item[] CommonItems()
+        public void CommonItems(DataManager data)
         {
             List<Item> commons = new List<Item>();
-            mapFromNumberToItem = new Dictionary<long, Item>();
+            mapFromBinaryPositionToItem = new Dictionary<int, Item>();
             Dictionary<Item, int> dict = new Dictionary<Item, int>();
             foreach (Transaction t in data.listOfAllTransactions)
             {
@@ -204,17 +209,15 @@ namespace Modelo
                 }
             }
             Item[] comonItems = commons.OrderByDescending(c => dict[c]).Take(itemsToEvaluate).ToArray();
-
             int cont = 0;
             foreach (Item a in comonItems)
             {
-                a.Number = (int)Math.Pow(2, cont);
-                mapFromNumberToItem.Add(cont++, a);
+                a.Number = (long)Math.Pow(2, cont);
+                mapFromBinaryPositionToItem.Add(cont++, a);
             }
-            return comonItems;
         }
         //CODE PROVIDED BY https://www.geeksforgeeks.org/count-set-bits-in-an-integer/
-        public int CountSetBits(int n)
+        public int CountSetBits(long n)
         {
             int count = 0;
             while (n > 0)
@@ -225,10 +228,28 @@ namespace Modelo
             return count;
         }
         private Item[] BinaryItemSetToObjectItemSet(long itemSet) {
-            return null;
+            List<Item> items = new List<Item>();
+            char[] charArray = Convert.ToString(itemSet, 2).ToCharArray();
+            Array.Reverse(charArray);
+            string binaryString = new string(charArray);
+            for (int i = 0;i<binaryString.Length; i++)
+            {
+                if (binaryString[i].Equals("1")) {
+                    items.Add(mapFromBinaryPositionToItem[i]);
+                }
+            }
+            return items.ToArray();
         }
         private long ObjectItemSetToBinaryItemSet(Item[] itemSet) {
-            return 0;
+            long num = 0;
+            foreach(Item i in itemSet)
+            {
+                num += i.Number;
+            }
+            return num;
+        }
+        public List<long> getBinaryTransactions() {
+            return binaryTransactions;
         }
     }
 }
