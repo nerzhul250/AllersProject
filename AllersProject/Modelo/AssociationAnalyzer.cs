@@ -44,10 +44,30 @@ namespace Modelo
             itemSetToSupport = new Dictionary<long, int>();
         }
         private void ApGenRules(long kItemSet,List<long> itemSets) {
-
+            string kString = kItemSet + "";
+            int k = kString.Length;
+            int m = itemSets.Count;
+            if(k>m+1)
+            {
+                List<long>itemSetsMmas1 = AprioriGen(itemSets);
+                foreach(long itemS in itemSetsMmas1)
+                {
+                    var confi = itemSetToSupport[kItemSet]/(itemSetToSupport[kItemSet-itemS]);
+                    if (confi >= minConfidence)
+                    {
+                        //retorna?
+                    }
+                    else
+                        itemSetsMmas1.Remove(itemS);
+                }
+            }
         }
         private void AprioriRuleGeneration(List<List<long>> frequentItemSets) {
-
+            
+            foreach (List<long> itemset in frequentItemSets)
+            {
+                ApGenRules(itemset[0], itemset);
+            }
         }
         //STEVEN
         private List<long> RemoveNonFrequentItemSetsFromCandidateSet(List<long> candidateSet) {
