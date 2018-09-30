@@ -15,7 +15,7 @@ namespace Modelo
         private int maxItemSetSize;
 
         private List<long> binaryTransactions;
-        private List<Tuple<long, long>> rules;
+        private List<Tuple<List<long>, long>> rules;
         private Dictionary<long, int> itemSetToSupport;
 
         private Dictionary<int, Item> mapFromBinaryPositionToItem;
@@ -43,30 +43,36 @@ namespace Modelo
             }
             itemSetToSupport = new Dictionary<long, int>();
         }
-        private void ApGenRules(long kItemSet,List<long> itemSets) {
-            string kString = kItemSet + "";
-            int k = kString.Length;
-            int m = itemSets.Count;
+        private void ApGenRules(List<long> kItemSet, Tuple<List<long>, List<long>> itemSets) {
+            int k = kItemSet.Count;
+            int m = itemSets.Item2.Count;
             if(k>m+1)
             {
-                List<long>itemSetsMmas1 = AprioriGen(itemSets);
+                List<long>itemSetsMmas1 = AprioriGen(itemSets.Item1);
                 foreach(long itemS in itemSetsMmas1)
                 {
-                    var confi = itemSetToSupport[kItemSet]/(itemSetToSupport[kItemSet-itemS]);
+                    var confi = kItemSet.Count/(kItemSet.Count-(itemSetToSupport[itemS]));
                     if (confi >= minConfidence)
                     {
-                        //retorna?
+                        // posible error, itemS es un set, no un item
+                        //necesito restarle itemS a kitemset y añadirlo a las reglas
+                        kItemSet.Remove(itemS);
+                        rules.Add(new Tuple<List<long>,long>(kItemSet,itemS));
                     }
                     else
                         itemSetsMmas1.Remove(itemS);
                 }
+                //paso una regla o una lista de items
+                ApGenRules(kItemSet, new Tuple<List<long>,List<long>>(kItemSet,itemSetsMmas1));
             }
         }
         private void AprioriRuleGeneration(List<List<long>> frequentItemSets) {
+            rules = new List<Tuple<List<long>, long>>();
             
             foreach (List<long> itemset in frequentItemSets)
             {
-                ApGenRules(itemset[0], itemset);
+                Tuple<List<long>, List<long>> iConseq = new Tuple<List<long>, List<long>>(itemset,new List<long>());
+                ApGenRules(itemset, iConseq);
             }
         }
         //STEVEN
