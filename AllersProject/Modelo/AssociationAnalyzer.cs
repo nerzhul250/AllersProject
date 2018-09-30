@@ -15,7 +15,7 @@ namespace Modelo
         private int maxItemSetSize;
 
         private List<long> binaryTransactions;
-        private List<Tuple<List<long>, long>> rules;
+        private List<Tuple<long, long>> rules;
         private Dictionary<long, int> itemSetToSupport;
 
         private Dictionary<int, Item> mapFromBinaryPositionToItem;
@@ -43,6 +43,11 @@ namespace Modelo
             }
             itemSetToSupport = new Dictionary<long, int>();
         }
+
+        /**Método auxiliar del Apriori R G
+         * entra un conjunto de items y una regla que va de todos los elementos al conjunto vacío (en listas)
+         * <pos>se añaden las reglas que cumplen con el mínimo de confianza (en setBinarios)</pos>
+         * */
         private void ApGenRules(List<long> kItemSet, Tuple<List<long>, List<long>> itemSets) {
             int k = kItemSet.Count;
             int m = itemSets.Item2.Count;
@@ -54,20 +59,27 @@ namespace Modelo
                     var confi = kItemSet.Count/(kItemSet.Count-(itemSetToSupport[itemS]));
                     if (confi >= minConfidence)
                     {
-                        // posible error, itemS es un set, no un item
-                        //necesito restarle itemS a kitemset y añadirlo a las reglas
-                        kItemSet.Remove(itemS);
-                        rules.Add(new Tuple<List<long>,long>(kItemSet,itemS));
+                        Item[] complement = BinaryItemSetToObjectItemSet(itemS);
+                        for(int i = 0; i< complement.Length; i++)
+                        {
+                        kItemSet.Remove(complement[i].Number);
+                        }
+                        Item[] toItemSet = new Item[kItemSet.Count];
+                        for (int i = 0; i < toItemSet.Length; i++)
+                        {
+                            toItemSet[i] = BinaryItemSetToObjectItemSet(kItemSet[i])[0];
+                        }
+                        long bin = ObjectItemSetToBinaryItemSet(toItemSet);
+                        rules.Add(new Tuple<long,long>(bin,itemS));
                     }
                     else
                         itemSetsMmas1.Remove(itemS);
                 }
-                //paso una regla o una lista de items
                 ApGenRules(kItemSet, new Tuple<List<long>,List<long>>(kItemSet,itemSetsMmas1));
             }
         }
         private void AprioriRuleGeneration(List<List<long>> frequentItemSets) {
-            rules = new List<Tuple<List<long>, long>>();
+            rules = new List<Tuple<long, long>>();
             
             foreach (List<long> itemset in frequentItemSets)
             {
