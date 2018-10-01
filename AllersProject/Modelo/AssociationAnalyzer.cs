@@ -25,6 +25,7 @@ namespace Modelo
             minSupport = minSup;
             this.minConfidence = minConfidence;
             this.maxItemSetSize = maxItemSetSize;
+            rules = new List<Tuple<long, long>>();
 
             CommonItems(data);
             binaryTransactions = new List<long>();
@@ -37,7 +38,8 @@ namespace Modelo
                 {
                     num += item.Number;
                 }
-                if (num!=0) {
+                if (num != 0)
+                {
                     binaryTransactions.Add(num);
                 }
             }
@@ -56,7 +58,7 @@ namespace Modelo
                     List<long> toRemove = new List<long>();
                     foreach (long h in itemSets)
                     {
-                        double conf = itemSetToSupport[kItemSet] / itemSetToSupport[kItemSet ^ h];
+                        double conf = (double)itemSetToSupport[kItemSet] / itemSetToSupport[kItemSet ^ h];
                         if (conf >= minConfidence)
                         {
                             rules.Add(new Tuple<long, long>(kItemSet ^ h, h));
@@ -75,7 +77,7 @@ namespace Modelo
                 }
             }
         }
-        private void AprioriRuleGeneration(List<List<long>> frequentItemSets) {
+        public void AprioriRuleGeneration(List<List<long>> frequentItemSets) {
             rules = new List<Tuple<long, long>>();
             foreach (List<long> itemset in frequentItemSets)
             {
@@ -141,6 +143,7 @@ namespace Modelo
                 long[] f = divideUntilTheSecondOne(frequentItemSets[i]);
                 long f1 = f[0];
                 long f2 = f[1];
+                Debug.WriteLine("la" + i);
                 for(int j = i+1; j < frequentItemSets.Count(); j++)
                 {
                     long[] s= divideUntilTheSecondOne(frequentItemSets[j]);
@@ -149,6 +152,8 @@ namespace Modelo
                     if((f1==s1&& f2==s2)|| CountSetBits(frequentItemSets[0])==1)
                     {
                         candidates.Add(frequentItemSets[i] | frequentItemSets[j]);
+  
+
                     }
                 }
             }
@@ -189,6 +194,7 @@ namespace Modelo
             }
             while (frequentKSubsets.Count != 0 && CountSetBits(frequentKSubsets[0])<maxItemSetSize)
             {
+                Debug.WriteLine("ho");
                 List<long> toAdd = new List<long>();
                 for (int j = 0; j < frequentKSubsets.Count; j++)
                 {
