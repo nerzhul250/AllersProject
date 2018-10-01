@@ -20,6 +20,12 @@ namespace UnitTestProject1
             asso.itemSetToSupport.Add(1, 6);
         }
 
+        private void setupEscenario2()
+        {
+            DataManager data = new DataManager("../../../DatosTests/Escenario1/");
+            asso = new AssociationAnalyzer(data, 6, 0, 0.35, 0);
+        }
+
         
         [TestMethod]
         public void TestGenerateFIS()
@@ -148,6 +154,17 @@ namespace UnitTestProject1
             Assert.AreEqual(asso.rules.Count, 1);
             Assert.AreEqual(asso.rules[0].Item1, 4);
             Assert.AreEqual(asso.rules[0].Item2, 1);
+        }
+
+        [TestMethod]
+        public void testApioriGen()
+        {
+            setupEscenario2();
+          List<long> res =  asso.AprioriGen(new List<long> { 44, 28, 110001, 49, 41, 26, 50 });
+            Assert.AreEqual(res.Count, 3);
+            Assert.Equals(res[0], 45);
+            Assert.Equals(res[1], 30);
+            Assert.Equals(res[2], 51);
         }
 
        

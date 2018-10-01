@@ -51,7 +51,7 @@ namespace Modelo
             int k = CountSetBits(kItemSet);
             int m = CountSetBits(itemSets[0]);
             if (k>=m+1) {
-                foreach (int h in itemSets) {
+                foreach (long h in itemSets) {
                     double conf = itemSetToSupport[kItemSet] / itemSetToSupport[kItemSet^h];
                     if (conf >= minConfidence) {
                         rules.Add(new Tuple<long, long>(kItemSet ^ h, h));
@@ -112,7 +112,7 @@ namespace Modelo
             }
             return candidateSet;
         }
-        private List<long> AprioriGen(List<long> frequentItemSets) {
+        public List<long> AprioriGen(List<long> frequentItemSets) {
             List<long> candidates = new List<long>();
             for(int i=0;i<frequentItemSets.Count(); i++)
             {
