@@ -26,6 +26,33 @@ namespace UnitTestProject1
             asso = new AssociationAnalyzer(data, 6, 0, 0.35, 0);
         }
 
+        private void setupEscenario3()
+        {
+            DataManager data = new DataManager("../../../DatosTests/Escenario1/");
+            asso = new AssociationAnalyzer(data, 4, 0.5, 0, 3);
+            asso.mapFromBinaryPositionToItem = new Dictionary<int, Item>();
+            asso.mapFromBinaryPositionToItem.Add(1, new Item("120", "Alcohol"));
+            asso.mapFromBinaryPositionToItem.Add(2, new Item("130", "Manzana"));
+            asso.mapFromBinaryPositionToItem.Add(4, new Item("200", "Pera"));
+            asso.mapFromBinaryPositionToItem.Add(8, new Item("300", "Papa"));
+
+            asso.binaryTransactions = new List<long>
+            {
+                3, 12, 6, 1, 8, 15, 12, 14, 9, 14
+            };
+        }
+
+        private void setupEscenario4()
+        {
+            DataManager data = new DataManager("../../../DatosTests/Escenario1/");
+            asso = new AssociationAnalyzer(data, 6, 0.5, 0, 3);
+
+            asso.binaryTransactions = new List<long>
+            {
+                39, 60, 8, 56, 56, 56, 35, 42, 51, 27, 54, 63, 1, 32
+            };
+        }
+
         
         [TestMethod]
         public void TestGenerateFIS()
@@ -170,7 +197,25 @@ namespace UnitTestProject1
         [TestMethod]
         public void testGenerateFrequentItemSetsApiori()
         {
-                
+            setupEscenario3();
+            List<List<long>> freq = asso.GenerateFrequentItemSetsApriori();
+            Assert.AreEqual(freq.Count, 1);
+            Assert.AreEqual(freq[0].Count, 1);
+            Assert.AreEqual(freq[0][0], 12);
+        }
+
+        [TestMethod]
+        public void testRemoveNonFrequentItemSets()
+        {
+            setupEscenario4();
+            List<long> res = asso.RemoveNonFrequentItemSetsFromCandidateSet(new List<long>
+            {
+                36, 24, 20
+            });
+
+            Assert.AreEqual(res.Count, 2);
+            Assert.AreEqual(res[0], 24);
+            Assert.AreEqual(res[1], 20);
         }
 
        
