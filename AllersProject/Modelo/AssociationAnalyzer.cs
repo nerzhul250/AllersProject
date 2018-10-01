@@ -132,7 +132,7 @@ namespace Modelo
         {
             int ones = 0;
             long toReturn = numb;
-            while (ones < 2|| toReturn==0)
+            while (ones < 2&& toReturn!=0)
             {
                 if (toReturn % 2 == 0)
                 {
