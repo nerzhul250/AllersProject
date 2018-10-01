@@ -146,25 +146,31 @@ namespace UnitTestProject1
             
         }
 
-        [TestMethod]
-        public void testApGenRules()
-        {
-            setupEscenario1();
-            asso.ApGenRules(5, new List<long> {4,  1});
-            Assert.AreEqual(asso.rules.Count, 1);
-            Assert.AreEqual(asso.rules[0].Item1, 4);
-            Assert.AreEqual(asso.rules[0].Item2, 1);
-        }
+        //[TestMethod]
+        //public void testApGenRules()
+        //{
+        //    setupEscenario1();
+        //    asso.ApGenRules(5, new List<long> {4,  1});
+        //    Assert.AreEqual(asso.rules.Count, 1);
+        //    Assert.AreEqual(asso.rules[0].Item1, 4);
+        //    Assert.AreEqual(asso.rules[0].Item2, 1);
+        //}
 
         [TestMethod]
         public void testApioriGen()
         {
             setupEscenario2();
-          List<long> res =  asso.AprioriGen(new List<long> { 44, 28, 110001, 49, 41, 26, 50 });
+          List<long> res =  asso.AprioriGen(new List<long> { 44, 28, 49, 41, 26, 50 });
             Assert.AreEqual(res.Count, 3);
-            Assert.Equals(res[0], 45);
-            Assert.Equals(res[1], 30);
-            Assert.Equals(res[2], 51);
+            Assert.AreEqual(res[0], 45);
+            Assert.AreEqual(res[1], 30);
+            Assert.AreEqual(res[2], 51);
+        }
+
+        [TestMethod]
+        public void testGenerateFrequentItemSetsApiori()
+        {
+                
         }
 
        
