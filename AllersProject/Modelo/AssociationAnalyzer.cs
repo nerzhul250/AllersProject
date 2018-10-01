@@ -14,9 +14,9 @@ namespace Modelo
         private int itemsToEvaluate;
         private int maxItemSetSize;
 
-        private List<long> binaryTransactions;
+        public List<long> binaryTransactions { get; set; }
         private List<Tuple<long, long>> rules;
-        private Dictionary<long, int> itemSetToSupport;
+        public Dictionary<long, int> itemSetToSupport { get; set; }
 
         private Dictionary<int, Item> mapFromBinaryPositionToItem;
 
@@ -43,7 +43,6 @@ namespace Modelo
             }
             itemSetToSupport = new Dictionary<long, int>();
         }
-
         /**Método auxiliar del Apriori R G
          * entra un conjunto de items y una regla que va de todos los elementos al conjunto vacío (en listas)
          * <pos>se añaden las reglas que cumplen con el mínimo de confianza (en setBinarios)</pos>
