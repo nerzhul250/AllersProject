@@ -125,6 +125,7 @@ namespace Modelo
             return candidateSet;
         }
         public List<long> AprioriGen(List<long> frequentItemSets) {
+            int no = 0;
             List<long> candidates = new List<long>();
             for(int i=0;i<frequentItemSets.Count(); i++)
             {
