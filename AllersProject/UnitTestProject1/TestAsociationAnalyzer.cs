@@ -26,6 +26,33 @@ namespace UnitTestProject1
             asso = new AssociationAnalyzer(data, 6, 0, 0.35, 0);
         }
 
+        private void setupEscenario3()
+        {
+            DataManager data = new DataManager("../../../DatosTests/Escenario1/");
+            asso = new AssociationAnalyzer(data, 4, 0.5, 0, 3);
+            asso.mapFromBinaryPositionToItem = new Dictionary<int, Item>();
+            asso.mapFromBinaryPositionToItem.Add(1, new Item("120", "Alcohol"));
+            asso.mapFromBinaryPositionToItem.Add(2, new Item("130", "Manzana"));
+            asso.mapFromBinaryPositionToItem.Add(4, new Item("200", "Pera"));
+            asso.mapFromBinaryPositionToItem.Add(8, new Item("300", "Papa"));
+
+            asso.binaryTransactions = new List<long>
+            {
+                3, 12, 6, 1, 8, 15, 12, 14, 9, 14
+            };
+        }
+
+        private void setupEscenario4()
+        {
+            DataManager data = new DataManager("../../../DatosTests/Escenario1/");
+            asso = new AssociationAnalyzer(data, 6, 0.5, 0, 3);
+
+            asso.binaryTransactions = new List<long>
+            {
+                39, 60, 8, 56, 56, 56, 35, 42, 51, 27, 54, 63, 1, 32
+            };
+        }
+
         
         [TestMethod]
         public void TestGenerateFIS()
@@ -146,25 +173,49 @@ namespace UnitTestProject1
             
         }
 
-        [TestMethod]
-        public void testApGenRules()
-        {
-            setupEscenario1();
-            asso.ApGenRules(5, new List<long> {4,  1});
-            Assert.AreEqual(asso.rules.Count, 1);
-            Assert.AreEqual(asso.rules[0].Item1, 4);
-            Assert.AreEqual(asso.rules[0].Item2, 1);
-        }
+        //[TestMethod]
+        //public void testApGenRules()
+        //{
+        //    setupEscenario1();
+        //    asso.ApGenRules(5, new List<long> {4,  1});
+        //    Assert.AreEqual(asso.rules.Count, 1);
+        //    Assert.AreEqual(asso.rules[0].Item1, 4);
+        //    Assert.AreEqual(asso.rules[0].Item2, 1);
+        //}
 
         [TestMethod]
         public void testApioriGen()
         {
             setupEscenario2();
-          List<long> res =  asso.AprioriGen(new List<long> { 44, 28, 110001, 49, 41, 26, 50 });
+          List<long> res =  asso.AprioriGen(new List<long> { 44, 28, 49, 41, 26, 50 });
             Assert.AreEqual(res.Count, 3);
-            Assert.Equals(res[0], 45);
-            Assert.Equals(res[1], 30);
-            Assert.Equals(res[2], 51);
+            Assert.AreEqual(res[0], 45);
+            Assert.AreEqual(res[1], 30);
+            Assert.AreEqual(res[2], 51);
+        }
+
+        [TestMethod]
+        public void testGenerateFrequentItemSetsApiori()
+        {
+            setupEscenario3();
+            List<List<long>> freq = asso.GenerateFrequentItemSetsApriori();
+            Assert.AreEqual(freq.Count, 1);
+            Assert.AreEqual(freq[0].Count, 1);
+            Assert.AreEqual(freq[0][0], 12);
+        }
+
+        [TestMethod]
+        public void testRemoveNonFrequentItemSets()
+        {
+            setupEscenario4();
+            List<long> res = asso.RemoveNonFrequentItemSetsFromCandidateSet(new List<long>
+            {
+                36, 24, 20
+            });
+
+            Assert.AreEqual(res.Count, 2);
+            Assert.AreEqual(res[0], 24);
+            Assert.AreEqual(res[1], 20);
         }
 
        

@@ -18,7 +18,7 @@ namespace Modelo
         public List<Tuple<long, long>> rules { get; set; }
         public Dictionary<long, int> itemSetToSupport { get; set; }
 
-        private Dictionary<int, Item> mapFromBinaryPositionToItem;
+        public Dictionary<int, Item> mapFromBinaryPositionToItem { get; set; }
 
         public AssociationAnalyzer(DataManager data,int itemsToEvaluate,double minSup,double minConfidence,int maxItemSetSize) {
             this.itemsToEvaluate = itemsToEvaluate;
@@ -94,7 +94,7 @@ namespace Modelo
             }
         }
         //STEVEN
-        private List<long> RemoveNonFrequentItemSetsFromCandidateSet(List<long> candidateSet) {
+        public List<long> RemoveNonFrequentItemSetsFromCandidateSet(List<long> candidateSet) {
             for(int i = 0; i < binaryTransactions.Count; i++)
             {
                 long binaryRepresentation = binaryTransactions[i];
