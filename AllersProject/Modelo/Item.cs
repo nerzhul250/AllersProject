@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Modelo
 {
-    public class Item:IComparable
+    public class Item
     {
         public string ItemCode { get; set; }
-        private string itemName;
+        public string itemName { get; set; }
         private int price;
         public long Number { get; set; }
 
@@ -23,12 +23,12 @@ namespace Modelo
             this.price = price;
         }
 
-        public int CompareTo(object obj)
-        {
-            Item alv = (Item)obj;
-            if (alv.ItemCode == ItemCode)
-                return 0;
-            return -1;
-        }
+        //public int CompareTo(object obj)
+        //{
+        //    Item alv = (Item)obj;
+        //    if (alv.ItemCode == ItemCode)
+        //        return 0;
+        //    return -1;
+        //}
     }
 }

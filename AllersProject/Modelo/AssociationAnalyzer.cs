@@ -292,20 +292,18 @@ namespace Modelo
             }
             return count;
         }
-        private Item[] BinaryItemSetToObjectItemSet(long itemSet) {
+        public List<Item> BinaryItemSetToObjectItemSet(long itemSet) {
             List<Item> items = new List<Item>();
-            char[] charArray = Convert.ToString(itemSet, 2).ToCharArray();
-            Array.Reverse(charArray);
-            string binaryString = new string(charArray);
+            string binaryString = Convert.ToString(itemSet, 2);
             for (int i = 0;i<binaryString.Length; i++)
             {
-                if (binaryString[i].Equals("1")) {
+                if (binaryString[binaryString.Length-1-i]=='1') {
                     items.Add(mapFromBinaryPositionToItem[i]);
                 }
             }
-            return items.ToArray();
+            return items;
         }
-        private long ObjectItemSetToBinaryItemSet(Item[] itemSet) {
+        public long ObjectItemSetToBinaryItemSet(Item[] itemSet) {
             long num = 0;
             foreach(Item i in itemSet)
             {
