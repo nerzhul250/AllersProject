@@ -116,11 +116,15 @@ namespace Modelo
             List<long> candidates = new List<long>();
             for(int i=0;i<frequentItemSets.Count(); i++)
             {
-                long first = divideUntilTheSecondOne(frequentItemSets[i]);
+                long[] f = divideUntilTheSecondOne(frequentItemSets[i]);
+                long f1 = f[0];
+                long f2 = f[1];
                 for(int j = i+1; j < frequentItemSets.Count(); j++)
                 {
-                    long second = divideUntilTheSecondOne(frequentItemSets[j]);
-                    if(first== second)
+                    long[] s= divideUntilTheSecondOne(frequentItemSets[j]);
+                    long s1 = s[0];
+                    long s2 = s[1];
+                    if(f1==s1&& f2==s2)
                     {
                         candidates.Add(frequentItemSets[i] | frequentItemSets[j]);
                     }
@@ -128,15 +132,17 @@ namespace Modelo
             }
             return candidates;
         }
-        private long divideUntilTheSecondOne(long numb)
+        private long[] divideUntilTheSecondOne(long numb)
         {
             int ones = 0;
+            int numberOfDivisions = 0;
             long toReturn = numb;
             while (ones < 2&& toReturn!=0)
             {
                 if (toReturn % 2 == 0)
                 {
                     toReturn /= 2;
+                    numberOfDivisions++;
                 }
                 else
                 {
@@ -145,10 +151,11 @@ namespace Modelo
                     {
                         toReturn--;
                         toReturn /= 2;
+                        numberOfDivisions++;
                     }
                 }
             }
-            return toReturn;
+            return new long[] { toReturn,numberOfDivisions };
         }
         //STEVEN
         public List<List<long>> GenerateFrequentItemSetsApriori() {
