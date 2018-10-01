@@ -18,7 +18,7 @@ namespace Modelo
         public List<Tuple<long, long>> rules { get; set; }
         public Dictionary<long, int> itemSetToSupport { get; set; }
 
-        private Dictionary<int, Item> mapFromBinaryPositionToItem;
+        public Dictionary<int, Item> mapFromBinaryPositionToItem { get; set; }
 
         public AssociationAnalyzer(DataManager data,int itemsToEvaluate,double minSup,double minConfidence,int maxItemSetSize) {
             this.itemsToEvaluate = itemsToEvaluate;
@@ -48,19 +48,31 @@ namespace Modelo
          * <pos>se añaden las reglas que cumplen con el mínimo de confianza (en setBinarios)</pos>
          * */
         public void ApGenRules(long kItemSet, List<long> itemSets) {
-            int k = CountSetBits(kItemSet);
-            int m = CountSetBits(itemSets[0]);
-            if (k>=m+1) {
-                foreach (int h in itemSets) {
-                    double conf = itemSetToSupport[kItemSet] / itemSetToSupport[kItemSet^h];
-                    if (conf >= minConfidence) {
-                        rules.Add(new Tuple<long, long>(kItemSet ^ h, h));
-                    } else {
-                        itemSets.Remove(h);
+            if (itemSets.Count()!=0) {
+                int k = CountSetBits(kItemSet);
+                int m = CountSetBits(itemSets[0]);
+                if (k >= m + 1)
+                {
+                    List<long> toRemove = new List<long>();
+                    foreach (long h in itemSets)
+                    {
+                        double conf = itemSetToSupport[kItemSet] / itemSetToSupport[kItemSet ^ h];
+                        if (conf >= minConfidence)
+                        {
+                            rules.Add(new Tuple<long, long>(kItemSet ^ h, h));
+                        }
+                        else
+                        {
+                            toRemove.Add(h);
+                        }
                     }
+                    foreach (long r in toRemove)
+                    {
+                        itemSets.Remove(r);
+                    }
+                    itemSets = AprioriGen(itemSets);
+                    ApGenRules(kItemSet, itemSets);
                 }
-                itemSets = AprioriGen(itemSets);
-                ApGenRules(kItemSet,itemSets);
             }
         }
         private void AprioriRuleGeneration(List<List<long>> frequentItemSets) {
@@ -82,7 +94,7 @@ namespace Modelo
             }
         }
         //STEVEN
-        private List<long> RemoveNonFrequentItemSetsFromCandidateSet(List<long> candidateSet) {
+        public List<long> RemoveNonFrequentItemSetsFromCandidateSet(List<long> candidateSet) {
             for(int i = 0; i < binaryTransactions.Count; i++)
             {
                 long binaryRepresentation = binaryTransactions[i];
@@ -101,7 +113,7 @@ namespace Modelo
                     }
                 }
             }
-            double minimunSupport = binaryTransactions.Count * minSupport;
+            double minimunSupport =( binaryTransactions.Count * minSupport);
             for(int i = 0; i < candidateSet.Count; i++)
             {
                 if (itemSetToSupport[candidateSet[i]] <minimunSupport)
@@ -112,15 +124,19 @@ namespace Modelo
             }
             return candidateSet;
         }
-        private List<long> AprioriGen(List<long> frequentItemSets) {
+        public List<long> AprioriGen(List<long> frequentItemSets) {
             List<long> candidates = new List<long>();
             for(int i=0;i<frequentItemSets.Count(); i++)
             {
-                long first = divideUntilTheSecondOne(frequentItemSets[i]);
+                long[] f = divideUntilTheSecondOne(frequentItemSets[i]);
+                long f1 = f[0];
+                long f2 = f[1];
                 for(int j = i+1; j < frequentItemSets.Count(); j++)
                 {
-                    long second = divideUntilTheSecondOne(frequentItemSets[j]);
-                    if(first== second)
+                    long[] s= divideUntilTheSecondOne(frequentItemSets[j]);
+                    long s1 = s[0];
+                    long s2 = s[1];
+                    if(f1==s1&& f2==s2)
                     {
                         candidates.Add(frequentItemSets[i] | frequentItemSets[j]);
                     }
@@ -128,15 +144,17 @@ namespace Modelo
             }
             return candidates;
         }
-        private long divideUntilTheSecondOne(long numb)
+        private long[] divideUntilTheSecondOne(long numb)
         {
             int ones = 0;
+            int numberOfDivisions = 0;
             long toReturn = numb;
-            while (ones < 2|| toReturn==0)
+            while (ones < 2&& toReturn!=0)
             {
                 if (toReturn % 2 == 0)
                 {
                     toReturn /= 2;
+                    numberOfDivisions++;
                 }
                 else
                 {
@@ -145,10 +163,11 @@ namespace Modelo
                     {
                         toReturn--;
                         toReturn /= 2;
+                        numberOfDivisions++;
                     }
                 }
             }
-            return toReturn;
+            return new long[] { toReturn,numberOfDivisions };
         }
         //STEVEN
         public List<List<long>> GenerateFrequentItemSetsApriori() {
