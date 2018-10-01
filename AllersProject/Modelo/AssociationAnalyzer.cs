@@ -48,43 +48,38 @@ namespace Modelo
          * entra un conjunto de items y una regla que va de todos los elementos al conjunto vacío (en listas)
          * <pos>se añaden las reglas que cumplen con el mínimo de confianza (en setBinarios)</pos>
          * */
-        private void ApGenRules(List<long> kItemSet, Tuple<List<long>, List<long>> itemSets) {
-            int k = kItemSet.Count;
-            int m = itemSets.Item2.Count;
-            if(k>m+1)
-            {
-                List<long>itemSetsMmas1 = AprioriGen(itemSets.Item1);
-                foreach(long itemS in itemSetsMmas1)
-                {
-                    var confi = kItemSet.Count/(kItemSet.Count-(itemSetToSupport[itemS]));
-                    if (confi >= minConfidence)
-                    {
-                        Item[] complement = BinaryItemSetToObjectItemSet(itemS);
-                        for(int i = 0; i< complement.Length; i++)
-                        {
-                        kItemSet.Remove(complement[i].Number);
-                        }
-                        Item[] toItemSet = new Item[kItemSet.Count];
-                        for (int i = 0; i < toItemSet.Length; i++)
-                        {
-                            toItemSet[i] = BinaryItemSetToObjectItemSet(kItemSet[i])[0];
-                        }
-                        long bin = ObjectItemSetToBinaryItemSet(toItemSet);
-                        rules.Add(new Tuple<long,long>(bin,itemS));
+        private void ApGenRules(long kItemSet, List<long> itemSets) {
+            int k = CountSetBits(kItemSet);
+            int m = CountSetBits(itemSets[0]);
+            if (k>=m+1) {
+                foreach (int h in itemSets) {
+                    double conf = itemSetToSupport[kItemSet] / itemSetToSupport[kItemSet^h];
+                    if (conf >= minConfidence) {
+                        rules.Add(new Tuple<long, long>(kItemSet ^ h, h));
+                    } else {
+                        itemSets.Remove(h);
                     }
-                    else
-                        itemSetsMmas1.Remove(itemS);
                 }
-                ApGenRules(kItemSet, new Tuple<List<long>,List<long>>(kItemSet,itemSetsMmas1));
+                itemSets = AprioriGen(itemSets);
+                ApGenRules(kItemSet,itemSets);
             }
         }
         private void AprioriRuleGeneration(List<List<long>> frequentItemSets) {
             rules = new List<Tuple<long, long>>();
-            
             foreach (List<long> itemset in frequentItemSets)
             {
-                Tuple<List<long>, List<long>> iConseq = new Tuple<List<long>, List<long>>(itemset,new List<long>());
-                ApGenRules(itemset, iConseq);
+                foreach (long fItemSet in itemset)
+                {
+                    List<long> H = new List<long>();
+                    String b = Convert.ToString(fItemSet,2);
+                    for (int i = 0; i < b.Length; i++)
+                    {
+                        if (b[b.Length-1-i]=='1') {
+                            H.Add((long)Math.Pow(2,i));
+                        }
+                    }
+                    ApGenRules(fItemSet,H);
+                }
             }
         }
         //STEVEN
