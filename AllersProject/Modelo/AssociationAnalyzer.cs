@@ -136,7 +136,7 @@ namespace Modelo
                     long[] s= divideUntilTheSecondOne(frequentItemSets[j]);
                     long s1 = s[0];
                     long s2 = s[1];
-                    if(f1==s1&& f2==s2)
+                    if((f1==s1&& f2==s2)|| CountSetBits(frequentItemSets[0])==1)
                     {
                         candidates.Add(frequentItemSets[i] | frequentItemSets[j]);
                     }
