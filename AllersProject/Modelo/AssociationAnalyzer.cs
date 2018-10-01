@@ -51,13 +51,17 @@ namespace Modelo
             int k = CountSetBits(kItemSet);
             int m = CountSetBits(itemSets[0]);
             if (k>=m+1) {
+                List<long> toRemove = new List<long>();
                 foreach (long h in itemSets) {
                     double conf = itemSetToSupport[kItemSet] / itemSetToSupport[kItemSet^h];
                     if (conf >= minConfidence) {
                         rules.Add(new Tuple<long, long>(kItemSet ^ h, h));
                     } else {
-                        itemSets.Remove(h);
+                        toRemove.Add(h);
                     }
+                }
+                foreach (long r in toRemove) {
+                    itemSets.Remove(r);
                 }
                 itemSets = AprioriGen(itemSets);
                 ApGenRules(kItemSet,itemSets);
