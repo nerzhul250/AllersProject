@@ -143,7 +143,6 @@ namespace Modelo
                 long[] f = divideUntilTheSecondOne(frequentItemSets[i]);
                 long f1 = f[0];
                 long f2 = f[1];
-                Debug.WriteLine("la" + i);
                 for(int j = i+1; j < frequentItemSets.Count(); j++)
                 {
                     long[] s= divideUntilTheSecondOne(frequentItemSets[j]);
@@ -194,7 +193,6 @@ namespace Modelo
             }
             while (frequentKSubsets.Count != 0 && CountSetBits(frequentKSubsets[0])<maxItemSetSize)
             {
-                Debug.WriteLine("ho");
                 List<long> toAdd = new List<long>();
                 for (int j = 0; j < frequentKSubsets.Count; j++)
                 {

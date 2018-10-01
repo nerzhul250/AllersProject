@@ -20,23 +20,33 @@ namespace AllersProject
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
             DataManager data = new DataManager("../../../Datos/");
-            AssociationAnalyzer aA = new AssociationAnalyzer(data,63,0.0005,0.005,63);
+            AssociationAnalyzer aA = new AssociationAnalyzer(data,1,0.0005,0.005,1);
             Debug.WriteLine("ItsBeenASuccesThereAre " + data.getTransactionsCount() + "Transactions!");
             Debug.WriteLine(data.getCustomersCount() + "Customers!");
             Debug.WriteLine(data.getItemsCount() + "Items!");
             Debug.WriteLine(aA.getBinaryTransactions().Count + "binaryTransactions!");
             //aA.GenerateFrequentItemSets();
-            Debug.WriteLine("EMPEZANDO------------------------");
-            int starTime = DateTime.Now.Second;
+            Debug.WriteLine("EMPEZANDOApriori------------------------");
+            Stopwatch sw = Stopwatch.StartNew();
             List<List<long>>list = aA.GenerateFrequentItemSetsApriori();
-            Debug.WriteLine(list.Count);
+            Debug.WriteLine("Numero de listas: "+list.Count);
+            int sum = 0;
             foreach(List<long> lis in list)
             {
-                Debug.WriteLine(lis.Count());
+                sum += lis.Count();
             }
-            Debug.WriteLine(DateTime.Now.Second - starTime + "");
-
-            Debug.WriteLine("TERMINANDO------------------------");
+            Debug.WriteLine("Numero de conjuntos de items frecuentes: "+sum);
+            Debug.WriteLine("Tiempo de ejecucion en milisegundos "+sw.ElapsedMilliseconds);
+            sw.Stop();
+            Debug.WriteLine("TERMINANDOApriori------------------------");
+            //RARARARAR
+            Debug.WriteLine("EMPEZANDOBRUTE------------------------");
+            sw = Stopwatch.StartNew();
+            List<Item[]> items = aA.GenerateFrequentItemSets();
+            Debug.WriteLine("Numero de conjuntos de items frecuentes: " + items.Count);
+            Debug.WriteLine("Tiempo de ejecucion en milisegundos " + sw.ElapsedMilliseconds);
+            sw.Stop();
+            Debug.WriteLine("TERMINANDOBRUTE------------------------");
         }
     }
 }
