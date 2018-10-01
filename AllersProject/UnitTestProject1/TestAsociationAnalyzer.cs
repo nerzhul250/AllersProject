@@ -12,7 +12,8 @@ namespace UnitTestProject1
         AssociationAnalyzer asso;
         private void setupEscenario1()
         {
-            asso = new AssociationAnalyzer(null, 3, 0, 0.35, 0);
+            DataManager data = new DataManager("../../../DatosTests/Escenario1/");
+            asso = new AssociationAnalyzer(data, 3, 0, 0.35, 0);
             asso.binaryTransactions = new List<long> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             asso.itemSetToSupport.Add(5, 2);
             asso.itemSetToSupport.Add(4, 5);
@@ -23,8 +24,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestGenerateFIS()
         {
-            setupEscenario1();
-            DataManager data = new DataManager("../../../Datos/Escenario1/");
+            DataManager data = new DataManager("../../../DatosTests/Escenario1/");
             AssociationAnalyzer alv = new AssociationAnalyzer(data, 3, 0.4, 0.4, 2);
             Item[] items = new Item[3];
             items[0] = data.mapFromItemCodeToItem["1"];
