@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Modelo;
@@ -7,9 +8,22 @@ namespace UnitTestProject1
     [TestClass]
     public class UnitTest1
     {
+
+        AssociationAnalyzer asso;
+        private void setupEscenario1()
+        {
+            asso = new AssociationAnalyzer(null, 3, 0, 0.35, 0);
+            asso.binaryTransactions = new List<long> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            asso.itemSetToSupport.Add(5, 2);
+            asso.itemSetToSupport.Add(4, 5);
+            asso.itemSetToSupport.Add(1, 6);
+        }
+
+        
         [TestMethod]
         public void TestGenerateFIS()
         {
+            setupEscenario1();
             DataManager data = new DataManager("../../../Datos/Escenario1/");
             AssociationAnalyzer alv = new AssociationAnalyzer(data, 3, 0.4, 0.4, 2);
             Item[] items = new Item[3];
@@ -125,5 +139,17 @@ namespace UnitTestProject1
             Assert.AreEqual(freq[1], resultado[8][1]);
             
         }
+
+        [TestMethod]
+        public void testApGenRules()
+        {
+            setupEscenario1();
+            Tuple<List<long>, List<long> > tupla= new Tuple<List<long>, List<long>>(new List<long> { 5}, new List<long> { 1 });
+            asso.ApGenRules(5, tupla);
+        }
+
+       
+
+        
     }
 }
