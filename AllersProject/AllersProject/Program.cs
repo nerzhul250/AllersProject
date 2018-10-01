@@ -20,7 +20,7 @@ namespace AllersProject
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
             DataManager data = new DataManager("../../../Datos/");
-            AssociationAnalyzer aA = new AssociationAnalyzer(data,100, 0.05,0.05,3);
+            AssociationAnalyzer aA = new AssociationAnalyzer(data,63,0.0005,0.005,63);
             Debug.WriteLine("ItsBeenASuccesThereAre " + data.getTransactionsCount() + "Transactions!");
             Debug.WriteLine(data.getCustomersCount() + "Customers!");
             Debug.WriteLine(data.getItemsCount() + "Items!");
