@@ -48,19 +48,31 @@ namespace Modelo
          * <pos>se añaden las reglas que cumplen con el mínimo de confianza (en setBinarios)</pos>
          * */
         public void ApGenRules(long kItemSet, List<long> itemSets) {
-            int k = CountSetBits(kItemSet);
-            int m = CountSetBits(itemSets[0]);
-            if (k>=m+1) {
-                foreach (long h in itemSets) {
-                    double conf = itemSetToSupport[kItemSet] / itemSetToSupport[kItemSet^h];
-                    if (conf >= minConfidence) {
-                        rules.Add(new Tuple<long, long>(kItemSet ^ h, h));
-                    } else {
-                        itemSets.Remove(h);
+            if (itemSets.Count()!=0) {
+                int k = CountSetBits(kItemSet);
+                int m = CountSetBits(itemSets[0]);
+                if (k >= m + 1)
+                {
+                    List<long> toRemove = new List<long>();
+                    foreach (long h in itemSets)
+                    {
+                        double conf = itemSetToSupport[kItemSet] / itemSetToSupport[kItemSet ^ h];
+                        if (conf >= minConfidence)
+                        {
+                            rules.Add(new Tuple<long, long>(kItemSet ^ h, h));
+                        }
+                        else
+                        {
+                            toRemove.Add(h);
+                        }
                     }
+                    foreach (long r in toRemove)
+                    {
+                        itemSets.Remove(r);
+                    }
+                    itemSets = AprioriGen(itemSets);
+                    ApGenRules(kItemSet, itemSets);
                 }
-                itemSets = AprioriGen(itemSets);
-                ApGenRules(kItemSet,itemSets);
             }
         }
         private void AprioriRuleGeneration(List<List<long>> frequentItemSets) {
