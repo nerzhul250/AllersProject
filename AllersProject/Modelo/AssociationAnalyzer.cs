@@ -116,7 +116,16 @@ namespace Modelo
             double minimunSupport =( binaryTransactions.Count * minSupport);
             for(int i = 0; i < candidateSet.Count; i++)
             {
+                if (itemSetToSupport.ContainsKey(candidateSet[i]))
+                {
                 if (itemSetToSupport[candidateSet[i]] <minimunSupport)
+                {
+                    candidateSet.RemoveAt(i);
+                    i--;
+                }
+
+                }
+                else
                 {
                     candidateSet.RemoveAt(i);
                     i--;
