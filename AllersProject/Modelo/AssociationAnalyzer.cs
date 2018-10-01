@@ -15,7 +15,7 @@ namespace Modelo
         private int maxItemSetSize;
 
         public List<long> binaryTransactions { get; set; }
-        private List<Tuple<long, long>> rules;
+        public List<Tuple<long, long>> rules { get; set; }
         public Dictionary<long, int> itemSetToSupport { get; set; }
 
         private Dictionary<int, Item> mapFromBinaryPositionToItem;
@@ -47,7 +47,7 @@ namespace Modelo
          * entra un conjunto de items y una regla que va de todos los elementos al conjunto vacío (en listas)
          * <pos>se añaden las reglas que cumplen con el mínimo de confianza (en setBinarios)</pos>
          * */
-        private void ApGenRules(long kItemSet, List<long> itemSets) {
+        public void ApGenRules(long kItemSet, List<long> itemSets) {
             int k = CountSetBits(kItemSet);
             int m = CountSetBits(itemSets[0]);
             if (k>=m+1) {

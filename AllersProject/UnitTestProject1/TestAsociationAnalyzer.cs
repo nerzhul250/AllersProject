@@ -144,8 +144,10 @@ namespace UnitTestProject1
         public void testApGenRules()
         {
             setupEscenario1();
-            Tuple<List<long>, List<long> > tupla= new Tuple<List<long>, List<long>>(new List<long> { 5}, new List<long> { 1 });
-            asso.ApGenRules(5, tupla);
+            asso.ApGenRules(5, new List<long> {4,  1});
+            Assert.AreEqual(asso.rules.Count, 1);
+            Assert.AreEqual(asso.rules[0].Item1, 4);
+            Assert.AreEqual(asso.rules[0].Item2, 1);
         }
 
        
