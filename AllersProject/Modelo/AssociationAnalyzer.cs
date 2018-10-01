@@ -113,7 +113,7 @@ namespace Modelo
                     }
                 }
             }
-            int minimunSupport =(int)( binaryTransactions.Count * minSupport);
+            double minimunSupport =( binaryTransactions.Count * minSupport);
             for(int i = 0; i < candidateSet.Count; i++)
             {
                 if (itemSetToSupport[candidateSet[i]] <minimunSupport)
