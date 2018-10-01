@@ -201,6 +201,7 @@ namespace UnitTestProject1
             List<List<long>> freq = asso.GenerateFrequentItemSetsApriori();
             Assert.AreEqual(freq.Count, 1);
             Assert.AreEqual(freq[0].Count, 1);
+
             Assert.AreEqual(freq[0][0], 12);
         }
 
