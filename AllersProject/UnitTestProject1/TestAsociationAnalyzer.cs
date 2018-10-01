@@ -45,7 +45,7 @@ namespace UnitTestProject1
         private void setupEscenario4()
         {
             DataManager data = new DataManager("../../../DatosTests/Escenario1/");
-            asso = new AssociationAnalyzer(data, 6, 0.5, 0, 3);
+            asso = new AssociationAnalyzer(data, 6, 0.3, 0, 3);
 
             asso.binaryTransactions = new List<long>
             {
@@ -210,12 +210,12 @@ namespace UnitTestProject1
             setupEscenario4();
             List<long> res = asso.RemoveNonFrequentItemSetsFromCandidateSet(new List<long>
             {
-                36, 24, 20
+                36, 24, 40
             });
 
             Assert.AreEqual(res.Count, 2);
             Assert.AreEqual(res[0], 24);
-            Assert.AreEqual(res[1], 20);
+            Assert.AreEqual(res[1], 40);
         }
 
        
