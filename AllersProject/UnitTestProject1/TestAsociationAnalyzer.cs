@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Numerics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Modelo;
 namespace UnitTestProject1
@@ -13,7 +14,7 @@ namespace UnitTestProject1
         private void setupEscenario1()
         {
             asso = new AssociationAnalyzerApriori(3, 0, 0.35, 0);
-            asso.binaryTransactions = new List<long> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            asso.binaryTransactions = new List<BigInteger> {1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             asso.totalNumberOfTransactions = asso.binaryTransactions.Count;
             asso.itemSetToSupport.Add(5, 2);
             asso.itemSetToSupport.Add(4, 5);
@@ -34,7 +35,7 @@ namespace UnitTestProject1
             asso.mapFromBinaryPositionToItem.Add(2, new Item("200", "Pera"));
             asso.mapFromBinaryPositionToItem.Add(3, new Item("300", "Papa"));
 
-            asso.binaryTransactions = new List<long>
+            asso.binaryTransactions = new List<BigInteger>
             {
                 3, 12, 6, 1, 8, 15, 12, 14, 9, 14
             };
@@ -45,7 +46,7 @@ namespace UnitTestProject1
         {
             asso = new AssociationAnalyzerApriori(6, 0.3, 0, 3);
 
-            asso.binaryTransactions = new List<long>
+            asso.binaryTransactions = new List<BigInteger>
             {
                 39, 60, 8, 56, 56, 56, 35, 42, 51, 27, 54, 63, 1, 32
             };
@@ -55,7 +56,7 @@ namespace UnitTestProject1
         private void setupEscenario5()
         {
             asso = new AssociationAnalyzerApriori(4, 0, 0.35, 3);
-            asso.binaryTransactions = new List<long>();
+            asso.binaryTransactions = new List<BigInteger>();
             for (int i = 0; i < 100; i++)
             {
                 asso.binaryTransactions.Add(i + 1);
@@ -196,21 +197,21 @@ namespace UnitTestProject1
         public void testAprioriRuleGeneration()
         {
             setupEscenario5();
-            asso.AprioriRuleGeneration(new List<List<long>>
+            asso.AprioriRuleGeneration(new List<List<BigInteger>>
             {
-                new List<long>{
+                new List<BigInteger>{
                     10, 3
                 },
-                new List<long>
+                new List<BigInteger>
                 {
                     14, 11
                 }
 
             });
-            List<Tuple<long, long>> asos = asso.rules;
+            List<Tuple<BigInteger, BigInteger>> asos = asso.rules;
 
             Assert.AreEqual(asos.Count, 10);
-            Tuple<long, long> act = asos[0];
+            Tuple<BigInteger, BigInteger> act = asos[0];
             Assert.AreEqual(act.Item1, 8);
             Assert.AreEqual(act.Item2, 2);
 
@@ -258,7 +259,7 @@ namespace UnitTestProject1
         public void testApGenRules()
         {
             setupEscenario1();
-            LinkedList<long> ha = new LinkedList<long>();
+            LinkedList<BigInteger> ha = new LinkedList<BigInteger>();
             ha.AddFirst(4);
             ha.AddFirst(1);
             asso.ApGenRules(5, ha);
@@ -271,16 +272,16 @@ namespace UnitTestProject1
         public void testApioriGen()
         {
             setupEscenario2();
-            LinkedList<long> ha = new LinkedList<long>();
+            LinkedList<BigInteger> ha = new LinkedList<BigInteger>();
             ha.AddLast(44);
             ha.AddLast(28);
             ha.AddLast(49);
             ha.AddLast(41);
             ha.AddLast(26);
             ha.AddLast(50);
-            LinkedList<long> res = asso.AprioriGen(ha);
+            LinkedList<BigInteger> res = asso.AprioriGen(ha);
             Assert.AreEqual(res.Count, 3);
-            LinkedListNode<long> fis = res.First;
+            LinkedListNode<BigInteger> fis = res.First;
             Assert.AreEqual(fis.Value, 45);
             fis=fis.Next;
             Assert.AreEqual(fis.Value, 30);
@@ -292,7 +293,7 @@ namespace UnitTestProject1
         public void testGenerateFrequentItemSetsApiori()
         {
             setupEscenario3();
-            List<List<long>> freq = asso.GenerateFrequentItemSetsApriori();
+            List<List<BigInteger>> freq = asso.GenerateFrequentItemSetsApriori();
             Assert.AreEqual(freq.Count, 2);
             Assert.AreEqual(freq[0].Count, 4);
             Assert.AreEqual(freq[1].Count, 1);
@@ -305,12 +306,12 @@ namespace UnitTestProject1
         public void testRemoveNonFrequentItemSets()
         {
             setupEscenario4();
-            LinkedList<long> ha = new LinkedList<long>();
+            LinkedList<BigInteger> ha = new LinkedList<BigInteger>();
             ha.AddFirst(36);
             ha.AddFirst(24);
             ha.AddFirst(40);
-            LinkedList<long> res = asso.RemoveNonFrequentItemSetsFromCandidateSet(ha);
-            LinkedListNode<long> fis = res.First;
+            LinkedList<BigInteger> res = asso.RemoveNonFrequentItemSetsFromCandidateSet(ha);
+            LinkedListNode<BigInteger> fis = res.First;
             Assert.AreEqual(res.Count, 2);
             Assert.AreEqual(fis.Value, 40);
             fis = fis.Next;

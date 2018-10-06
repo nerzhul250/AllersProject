@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,9 +16,9 @@ namespace Modelo
         private int maxItemSetSize;
         public int totalNumberOfTransactions { get; set; }
 
-        public List<long> binaryTransactions { get; set; }
-        public List<Tuple<long, long>> rules { get; set; }
-        public Dictionary<long, int> itemSetToSupport { get; set; }
+        public List<BigInteger> binaryTransactions { get; set; }
+        public List<Tuple<BigInteger, BigInteger>> rules { get; set; }
+        public Dictionary<BigInteger, int> itemSetToSupport { get; set; }
         public Dictionary<int, Item> mapFromBinaryPositionToItem { get; set; }
 
         public AssociationAnalyzerApriori(DataManager data,int itemsToEvaluate,double minSup,double minConfidence,int maxItemSetSize) {
@@ -25,16 +26,16 @@ namespace Modelo
             minSupport = minSup;
             this.minConfidence = minConfidence;
             this.maxItemSetSize = maxItemSetSize;
-            rules = new List<Tuple<long, long>>();
-            itemSetToSupport = new Dictionary<long, int>();
+            rules = new List<Tuple<BigInteger, BigInteger>>();
+            itemSetToSupport = new Dictionary<BigInteger, int>();
 
             CommonItems(data);
-            binaryTransactions = new List<long>();
+            binaryTransactions = new List<BigInteger>();
 
             for (int i = 0; i < data.listOfAllTransactions.Count; i++)
             {
                 Transaction act = data.listOfAllTransactions[i];
-                long num = 0;
+                BigInteger num = 0;
                 foreach (Item item in act.MapFromItemToQuantity.Keys)
                 {
                     num += item.Number;
@@ -51,20 +52,20 @@ namespace Modelo
             minSupport = minSup;
             this.minConfidence = minConfidence;
             this.maxItemSetSize = maxItemSetSize;
-            rules = new List<Tuple<long, long>>();
-            itemSetToSupport = new Dictionary<long, int>();
+            rules = new List<Tuple<BigInteger, BigInteger>>();
+            itemSetToSupport = new Dictionary<BigInteger, int>();
         }
         /**Método auxiliar del Apriori R G
          * entra un conjunto de items y una regla que va de todos los elementos al conjunto vacío (en listas)
          * <pos>se añaden las reglas que cumplen con el mínimo de confianza (en setBinarios)</pos>
          * */
-        public void ApGenRules(long kItemSet, LinkedList<long> itemSets) {
+        public void ApGenRules(BigInteger kItemSet, LinkedList<BigInteger> itemSets) {
             if (itemSets.Count!=0) {
                 int k = CountSetBits(kItemSet);
                 int m = CountSetBits(itemSets.First.Value);
                 if (k >= m + 1)
                 {
-                    LinkedListNode<long> h = itemSets.First;
+                    LinkedListNode<BigInteger> h = itemSets.First;
                     while (h!=null) {
                         //bool contains = itemSetToSupport.ContainsKey(kItemSet) && itemSetToSupport.ContainsKey(kItemSet ^ h.Value);
                         double conf = 0;
@@ -72,12 +73,12 @@ namespace Modelo
                         if(contains)conf= (double)itemSetToSupport[kItemSet] / itemSetToSupport[kItemSet ^ h.Value];
                         if (contains && conf >= minConfidence)
                         {
-                            rules.Add(new Tuple<long, long>(kItemSet ^ h.Value, h.Value));
+                            rules.Add(new Tuple<BigInteger, BigInteger>(kItemSet ^ h.Value, h.Value));
                             h = h.Next;
                         }
                         else
                         {
-                            LinkedListNode<long> toRemove = h;
+                            LinkedListNode<BigInteger> toRemove = h;
                             h = h.Next;
                             itemSets.Remove(toRemove);
                         }
@@ -87,18 +88,18 @@ namespace Modelo
                 }
             }
         }
-        public void AprioriRuleGeneration(List<List<long>> frequentItemSets) {
-            rules = new List<Tuple<long, long>>();
-            foreach (List<long> itemset in frequentItemSets)
+        public void AprioriRuleGeneration(List<List<BigInteger>> frequentItemSets) {
+            rules = new List<Tuple<BigInteger, BigInteger>>();
+            foreach (List<BigInteger> itemset in frequentItemSets)
             {
-                foreach (long fItemSet in itemset)
+                foreach (BigInteger fItemSet in itemset)
                 {
-                    LinkedList<long> H = new LinkedList<long>();
-                    String b = Convert.ToString(fItemSet,2);
+                    LinkedList<BigInteger> H = new LinkedList<BigInteger>();
+                    String b = fItemSet.ToBinaryString();
                     for (int i = 0; i < b.Length; i++)
                     {
                         if (b[b.Length-1-i]=='1') {
-                            H.AddLast((long)Math.Pow(2,i));
+                            H.AddLast(BigInteger.Pow(2,i));
                         }
                     }
                     ApGenRules(fItemSet,H);
@@ -106,12 +107,12 @@ namespace Modelo
             }
         }
         //STEVEN
-        public LinkedList<long> RemoveNonFrequentItemSetsFromCandidateSet(LinkedList<long> candidateSet) {
+        public LinkedList<BigInteger> RemoveNonFrequentItemSetsFromCandidateSet(LinkedList<BigInteger> candidateSet) {
             Stopwatch sw = Stopwatch.StartNew();
-            LinkedListNode<long> cani;
+            LinkedListNode<BigInteger> cani;
             for (int i = 0; i < binaryTransactions.Count; i++)
             {
-                long binaryRepresentation = binaryTransactions[i];
+                BigInteger binaryRepresentation = binaryTransactions[i];
                 cani = candidateSet.First;
                 while (cani!=null) {
                     if ((cani.Value & binaryRepresentation) == cani.Value)
@@ -135,7 +136,7 @@ namespace Modelo
                 {
                     if (itemSetToSupport[cani.Value] < minimunSupport)
                     {
-                        LinkedListNode<long> toRemove = cani;
+                        LinkedListNode<BigInteger> toRemove = cani;
                         cani = cani.Next;
                         candidateSet.Remove(toRemove);
                     }
@@ -145,7 +146,7 @@ namespace Modelo
                 }
                 else
                 {
-                    LinkedListNode<long> toRemove = cani;
+                    LinkedListNode<BigInteger> toRemove = cani;
                     cani = cani.Next;
                     candidateSet.Remove(toRemove);
                 }
@@ -154,19 +155,19 @@ namespace Modelo
             sw.Stop();
             return candidateSet;
         }
-        public LinkedList<long> AprioriGen(LinkedList<long> frequentItemSets) {
-            LinkedList<long> candidates = new LinkedList<long>();
-            LinkedListNode<long> fis = frequentItemSets.First;
+        public LinkedList<BigInteger> AprioriGen(LinkedList<BigInteger> frequentItemSets) {
+            LinkedList<BigInteger> candidates = new LinkedList<BigInteger>();
+            LinkedListNode<BigInteger> fis = frequentItemSets.First;
             while (fis != null)
             {
-                long[] f = divideUntilTheSecondOne(fis.Value);
-                long f1 = f[0];
-                long f2 = f[1];
-                LinkedListNode<long> fis2 = fis.Next;
+                BigInteger[] f = divideUntilTheSecondOne(fis.Value);
+                BigInteger f1 = f[0];
+                BigInteger f2 = f[1];
+                LinkedListNode<BigInteger> fis2 = fis.Next;
                 while (fis2!=null) {
-                    long[] s = divideUntilTheSecondOne(fis2.Value);
-                    long s1 = s[0];
-                    long s2 = s[1];
+                    BigInteger[] s = divideUntilTheSecondOne(fis2.Value);
+                    BigInteger s1 = s[0];
+                    BigInteger s2 = s[1];
                     if ((f1 == s1 && f2 == s2) || CountSetBits(frequentItemSets.First.Value) == 1)
                     {
                         candidates.AddLast(fis.Value | fis2.Value);
@@ -177,11 +178,11 @@ namespace Modelo
             } 
             return candidates;
         }
-        private long[] divideUntilTheSecondOne(long numb)
+        private BigInteger[] divideUntilTheSecondOne(BigInteger numb)
         {
             int ones = 0;
             int numberOfDivisions = 0;
-            long toReturn = numb;
+            BigInteger toReturn = numb;
             while (ones < 2&& toReturn!=0)
             {
                 if (toReturn % 2 == 0)
@@ -199,25 +200,25 @@ namespace Modelo
                     }
                 }
             }
-            return new long[] { toReturn,numberOfDivisions };
+            return new BigInteger[] { toReturn,numberOfDivisions };
         }
         //STEVEN
-        public List<List<long>> GenerateFrequentItemSetsApriori() {
-            List<long> frequentKSubsets = new List<long>();
-            List<List<long>> toreturn = new List<List<long>>();
+        public List<List<BigInteger>> GenerateFrequentItemSetsApriori() {
+            List<BigInteger> frequentKSubsets = new List<BigInteger>();
+            List<List<BigInteger>> toreturn = new List<List<BigInteger>>();
             foreach(int pos in mapFromBinaryPositionToItem.Keys)
             {
-                frequentKSubsets.Add((long)Math.Pow(2,pos));
+                frequentKSubsets.Add(BigInteger.Pow(2,pos));
             }
             while (frequentKSubsets.Count != 0 && CountSetBits(frequentKSubsets[0])<maxItemSetSize)
             {
-                List<long> toAdd = new List<long>();
+                List<BigInteger> toAdd = new List<BigInteger>();
                 for (int j = 0; j < frequentKSubsets.Count; j++)
                 {
                     toAdd.Add(frequentKSubsets[j]);
                 }
                 toreturn.Add(toAdd);
-                LinkedList<long> ck = AprioriGen(new LinkedList<long>(frequentKSubsets));
+                LinkedList<BigInteger> ck = AprioriGen(new LinkedList<BigInteger>(frequentKSubsets));
                 RemoveNonFrequentItemSetsFromCandidateSet(ck);
                 frequentKSubsets = ck.ToList();
             }
@@ -237,8 +238,8 @@ namespace Modelo
                 x += "0";
             }
 
-            long maxNum = Convert.ToInt64(x, 2);
-            for (long i = itemSet; i <= maxNum; i++)
+            BigInteger maxNum = Convert.ToInt64(x, 2);
+            for (BigInteger i = itemSet; i <= maxNum; i++)
             {
                 int tot1 = CountSetBits(i);
                 if (tot1 <= maxItemSetSize)
@@ -246,14 +247,14 @@ namespace Modelo
                     int itemSetAppears = 0;
                     for (int j = 0; j < binaryTransactions.Count; j++)
                     {
-                        long res = binaryTransactions[j] & i;
+                        BigInteger res = binaryTransactions[j] & i;
                         itemSetAppears += res == i ? 1 : 0;
                     }
 
                     if (itemSetAppears >= minSupport * totalNumberOfTransactions)
                     {
                         Item[] ComItemSet = new Item[tot1];
-                        char[] charArray = Convert.ToString(i, 2).ToCharArray();
+                        char[] charArray = i.ToBinaryString().ToCharArray();
                         Array.Reverse(charArray);
                         string bin = new string(charArray);
                         int pos = 0;
@@ -296,13 +297,13 @@ namespace Modelo
             int cont = 0;
             foreach (Item a in comonItems)
             {
-                a.Number = (long)Math.Pow(2, cont);
+                a.Number = BigInteger.Pow(2, cont);
                 itemSetToSupport.Add(a.Number,dict[a]);
                 mapFromBinaryPositionToItem.Add(cont++, a);
             }
         }
         //CODE PROVIDED BY https://www.geeksforgeeks.org/count-set-bits-in-an-integer/
-        public int CountSetBits(long n)
+        public int CountSetBits(BigInteger n)
         {
             int count = 0;
             while (n > 0)
@@ -312,9 +313,9 @@ namespace Modelo
             }
             return count;
         }
-        public List<Item> BinaryItemSetToObjectItemSet(long itemSet) {
+        public List<Item> BinaryItemSetToObjectItemSet(BigInteger itemSet) {
             List<Item> items = new List<Item>();
-            string binaryString = Convert.ToString(itemSet, 2);
+            string binaryString = itemSet.ToBinaryString();
             for (int i = 0;i<binaryString.Length; i++)
             {
                 if (binaryString[binaryString.Length-1-i]=='1') {
@@ -323,15 +324,15 @@ namespace Modelo
             }
             return items;
         }
-        public long ObjectItemSetToBinaryItemSet(Item[] itemSet) {
-            long num = 0;
+        public BigInteger ObjectItemSetToBinaryItemSet(Item[] itemSet) {
+            BigInteger num = 0;
             foreach(Item i in itemSet)
             {
                 num += i.Number;
             }
             return num;
         }
-        public List<long> getBinaryTransactions() {
+        public List<BigInteger> getBinaryTransactions() {
             return binaryTransactions;
         }
     }

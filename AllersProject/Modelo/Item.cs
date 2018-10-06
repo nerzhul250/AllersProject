@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,7 +12,7 @@ namespace Modelo
         public string ItemCode { get; set; }
         public string itemName { get; set; }
         private int price;
-        public long Number { get; set; }
+        public BigInteger Number { get; set; }
 
         public Item(string ic, string ina) {
             ItemCode = ic;
