@@ -13,11 +13,11 @@ namespace Modelo
         private double minConfidence;
         private int itemsToEvaluate;
         private int maxItemSetSize;
+        public int totalNumberOfTransactions { get; set; }
 
         public List<long> binaryTransactions { get; set; }
         public List<Tuple<long, long>> rules { get; set; }
         public Dictionary<long, int> itemSetToSupport { get; set; }
-
         public Dictionary<int, Item> mapFromBinaryPositionToItem { get; set; }
 
         public AssociationAnalyzer(DataManager data,int itemsToEvaluate,double minSup,double minConfidence,int maxItemSetSize) {
@@ -26,6 +26,7 @@ namespace Modelo
             this.minConfidence = minConfidence;
             this.maxItemSetSize = maxItemSetSize;
             rules = new List<Tuple<long, long>>();
+            itemSetToSupport = new Dictionary<long, int>();
 
             CommonItems(data);
             binaryTransactions = new List<long>();
@@ -43,6 +44,14 @@ namespace Modelo
                     binaryTransactions.Add(num);
                 }
             }
+        }
+        public AssociationAnalyzer(int itemsToEvaluate, double minSup, double minConfidence, int maxItemSetSize)
+        {
+            this.itemsToEvaluate = itemsToEvaluate;
+            minSupport = minSup;
+            this.minConfidence = minConfidence;
+            this.maxItemSetSize = maxItemSetSize;
+            rules = new List<Tuple<long, long>>();
             itemSetToSupport = new Dictionary<long, int>();
         }
         /**Método auxiliar del Apriori R G
@@ -57,8 +66,11 @@ namespace Modelo
                 {
                     LinkedListNode<long> h = itemSets.First;
                     while (h!=null) {
-                        double conf = (double)itemSetToSupport[kItemSet] / itemSetToSupport[kItemSet ^ h.Value];
-                        if (conf >= minConfidence)
+                        //bool contains = itemSetToSupport.ContainsKey(kItemSet) && itemSetToSupport.ContainsKey(kItemSet ^ h.Value);
+                        double conf = 0;
+                        bool contains = true;
+                        if(contains)conf= (double)itemSetToSupport[kItemSet] / itemSetToSupport[kItemSet ^ h.Value];
+                        if (contains && conf >= minConfidence)
                         {
                             rules.Add(new Tuple<long, long>(kItemSet ^ h.Value, h.Value));
                             h = h.Next;
@@ -116,7 +128,7 @@ namespace Modelo
                     cani=cani.Next;
                 }
             }
-            double minimunSupport =( binaryTransactions.Count * minSupport);
+            double minimunSupport =( totalNumberOfTransactions * minSupport);
             cani = candidateSet.First;
             while (cani!=null) {
                 if (itemSetToSupport.ContainsKey(cani.Value))
@@ -143,7 +155,6 @@ namespace Modelo
             return candidateSet;
         }
         public LinkedList<long> AprioriGen(LinkedList<long> frequentItemSets) {
-            Stopwatch sw = Stopwatch.StartNew();
             LinkedList<long> candidates = new LinkedList<long>();
             LinkedListNode<long> fis = frequentItemSets.First;
             while (fis != null)
@@ -164,8 +175,6 @@ namespace Modelo
                 }
                 fis = fis.Next;
             } 
-            Debug.WriteLine(sw.ElapsedMilliseconds+"Apriori");
-            sw.Stop();
             return candidates;
         }
         private long[] divideUntilTheSecondOne(long numb)
@@ -241,7 +250,7 @@ namespace Modelo
                         itemSetAppears += res == i ? 1 : 0;
                     }
 
-                    if (itemSetAppears >= minSupport * binaryTransactions.Count)
+                    if (itemSetAppears >= minSupport * totalNumberOfTransactions)
                     {
                         Item[] ComItemSet = new Item[tot1];
                         char[] charArray = Convert.ToString(i, 2).ToCharArray();
@@ -267,6 +276,7 @@ namespace Modelo
             List<Item> commons = new List<Item>();
             mapFromBinaryPositionToItem = new Dictionary<int, Item>();
             Dictionary<Item, int> dict = new Dictionary<Item, int>();
+            totalNumberOfTransactions = data.listOfAllTransactions.Count;
             foreach (Transaction t in data.listOfAllTransactions)
             {
                 foreach (Item i in t.MapFromItemToQuantity.Keys)
@@ -287,6 +297,7 @@ namespace Modelo
             foreach (Item a in comonItems)
             {
                 a.Number = (long)Math.Pow(2, cont);
+                itemSetToSupport.Add(a.Number,dict[a]);
                 mapFromBinaryPositionToItem.Add(cont++, a);
             }
         }

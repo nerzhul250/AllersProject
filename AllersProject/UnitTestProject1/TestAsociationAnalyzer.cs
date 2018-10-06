@@ -12,24 +12,22 @@ namespace UnitTestProject1
         AssociationAnalyzer asso;
         private void setupEscenario1()
         {
-            DataManager data = new DataManager("../../../DatosTests/Escenario1/");
-            asso = new AssociationAnalyzer(data, 3, 0, 0.35, 0);
+            asso = new AssociationAnalyzer(3, 0, 0.35, 0);
             asso.binaryTransactions = new List<long> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            asso.totalNumberOfTransactions = asso.binaryTransactions.Count;
             asso.itemSetToSupport.Add(5, 2);
             asso.itemSetToSupport.Add(4, 5);
             asso.itemSetToSupport.Add(1, 6);
         }
 
         private void setupEscenario2()
-        {
-            DataManager data = new DataManager("../../../DatosTests/Escenario1/");
-            asso = new AssociationAnalyzer(data, 6, 0, 0.35, 0);
+        { 
+            asso = new AssociationAnalyzer(6, 0, 0.35, 0);
         }
 
         private void setupEscenario3()
         {
-            DataManager data = new DataManager("../../../DatosTests/Escenario1/");
-            asso = new AssociationAnalyzer(data, 4, 0.5, 0, 3);
+            asso = new AssociationAnalyzer(4, 0.5, 0, 3);
             asso.mapFromBinaryPositionToItem = new Dictionary<int, Item>();
             asso.mapFromBinaryPositionToItem.Add(0, new Item("120", "Alcohol"));
             asso.mapFromBinaryPositionToItem.Add(1, new Item("130", "Manzana"));
@@ -40,28 +38,29 @@ namespace UnitTestProject1
             {
                 3, 12, 6, 1, 8, 15, 12, 14, 9, 14
             };
+            asso.totalNumberOfTransactions = asso.binaryTransactions.Count;
         }
 
         private void setupEscenario4()
         {
-            DataManager data = new DataManager("../../../DatosTests/Escenario1/");
-            asso = new AssociationAnalyzer(data, 6, 0.3, 0, 3);
+            asso = new AssociationAnalyzer(6, 0.3, 0, 3);
 
             asso.binaryTransactions = new List<long>
             {
                 39, 60, 8, 56, 56, 56, 35, 42, 51, 27, 54, 63, 1, 32
             };
+            asso.totalNumberOfTransactions = asso.binaryTransactions.Count;
         }
 
         private void setupEscenario5()
         {
-            DataManager data = new DataManager("../../../DatosTests/Escenario1/");
-            asso = new AssociationAnalyzer(data, 4, 0, 0.35, 3);
+            asso = new AssociationAnalyzer(4, 0, 0.35, 3);
             asso.binaryTransactions = new List<long>();
             for (int i = 0; i < 100; i++)
             {
                 asso.binaryTransactions.Add(i + 1);
             }
+            asso.totalNumberOfTransactions = asso.binaryTransactions.Count;
             asso.itemSetToSupport.Add(8, 70);
             asso.itemSetToSupport.Add(12, 50);
             asso.itemSetToSupport.Add(4, 80);
@@ -73,12 +72,7 @@ namespace UnitTestProject1
             asso.itemSetToSupport.Add(10, 58);
             asso.itemSetToSupport.Add(6, 66);
             asso.itemSetToSupport.Add(3, 60);
-
-
-
         }
-
-        
         //[TestMethod]
         public void TestGenerateFIS()
         {

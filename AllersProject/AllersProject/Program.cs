@@ -20,20 +20,19 @@ namespace AllersProject
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
             DataManager data = new DataManager("../../../Datos/");
-            AssociationAnalyzer aA = new AssociationAnalyzer(data,63,0.0005,0.005,63);
+            AssociationAnalyzer aA = new AssociationAnalyzer(data,63,0.01,0.05,63);
             Debug.WriteLine("ItsBeenASuccesThereAre " + data.getTransactionsCount() + "Transactions!");
             Debug.WriteLine(data.getCustomersCount() + "Customers!");
             Debug.WriteLine(data.getItemsCount() + "Items!");
             Debug.WriteLine(aA.getBinaryTransactions().Count + "binaryTransactions!");
-            //aA.GenerateFrequentItemSets();
             Debug.WriteLine("EMPEZANDOApriori------------------------");
             Stopwatch sw = Stopwatch.StartNew();
-            List<List<long>>list = aA.GenerateFrequentItemSetsApriori();
-            Debug.WriteLine("Numero de listas: "+list.Count);
+            List<List<long>> list = aA.GenerateFrequentItemSetsApriori();
+            Debug.WriteLine("Numero de listas: " + list.Count);
             int sum = 0;
-            foreach(List<long> lis in list)
+            foreach (List<long> lis in list)
             {
-                Debug.WriteLine("Conjuntos de items frecuentes con "+aA.CountSetBits(lis[0])+" Items ");
+                Debug.WriteLine("Conjuntos de items frecuentes con " + aA.CountSetBits(lis[0]) + " Items ");
                 for (int i = 0; i < lis.Count(); i++)
                 {
                     String a = "";
@@ -46,8 +45,27 @@ namespace AllersProject
                 }
                 sum += lis.Count();
             }
-            Debug.WriteLine("Numero de conjuntos de items frecuentes: "+sum);
-            Debug.WriteLine("Tiempo de ejecucion en milisegundos "+sw.ElapsedMilliseconds);
+            Debug.WriteLine("Numero de conjuntos de items frecuentes: " + sum);
+            Debug.WriteLine("Tiempo de ejecucion en milisegundos " + sw.ElapsedMilliseconds);
+            Debug.WriteLine("REGLAS------------------>");
+            aA.AprioriRuleGeneration(list);
+            foreach (Tuple<long,long> rule in aA.rules)
+            {
+                String a = "";
+                List<Item> items = aA.BinaryItemSetToObjectItemSet(rule.Item1);
+                for (int j = 0; j < items.Count(); j++)
+                {
+                    a = a + "//" + items[j].itemName;
+                }
+                Debug.WriteLine(a+"---->");
+                a = "";
+                List<Item> items2 = aA.BinaryItemSetToObjectItemSet(rule.Item2);
+                for (int j = 0; j < items2.Count(); j++)
+                {
+                    a = a + "//" + items2[j].itemName;
+                }
+                Debug.WriteLine(a + "//");
+            }
             sw.Stop();
             Debug.WriteLine("TERMINANDOApriori------------------------");
             //RARARARAR
