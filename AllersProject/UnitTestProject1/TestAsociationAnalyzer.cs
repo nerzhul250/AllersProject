@@ -264,7 +264,10 @@ namespace UnitTestProject1
         public void testApGenRules()
         {
             setupEscenario1();
-            asso.ApGenRules(5, new List<long> {4, 1});
+            LinkedList<long> ha = new LinkedList<long>();
+            ha.AddFirst(4);
+            ha.AddFirst(1);
+            asso.ApGenRules(5, ha);
             Assert.AreEqual(asso.rules.Count, 1);
             Assert.AreEqual(asso.rules[0].Item1, 4);
             Assert.AreEqual(asso.rules[0].Item2, 1);
@@ -274,11 +277,21 @@ namespace UnitTestProject1
         public void testApioriGen()
         {
             setupEscenario2();
-            List<long> res = asso.AprioriGen(new List<long> { 44, 28, 49, 41, 26, 50 });
+            LinkedList<long> ha = new LinkedList<long>();
+            ha.AddLast(44);
+            ha.AddLast(28);
+            ha.AddLast(49);
+            ha.AddLast(41);
+            ha.AddLast(26);
+            ha.AddLast(50);
+            LinkedList<long> res = asso.AprioriGen(ha);
             Assert.AreEqual(res.Count, 3);
-            Assert.AreEqual(res[0], 45);
-            Assert.AreEqual(res[1], 30);
-            Assert.AreEqual(res[2], 51);
+            LinkedListNode<long> fis = res.First;
+            Assert.AreEqual(fis.Value, 45);
+            fis=fis.Next;
+            Assert.AreEqual(fis.Value, 30);
+            fis = fis.Next;
+            Assert.AreEqual(fis.Value, 51);
         }
 
         [TestMethod]
@@ -298,14 +311,16 @@ namespace UnitTestProject1
         public void testRemoveNonFrequentItemSets()
         {
             setupEscenario4();
-            List<long> res = asso.RemoveNonFrequentItemSetsFromCandidateSet(new List<long>
-            {
-                36, 24, 40
-            });
-
+            LinkedList<long> ha = new LinkedList<long>();
+            ha.AddFirst(36);
+            ha.AddFirst(24);
+            ha.AddFirst(40);
+            LinkedList<long> res = asso.RemoveNonFrequentItemSetsFromCandidateSet(ha);
+            LinkedListNode<long> fis = res.First;
             Assert.AreEqual(res.Count, 2);
-            Assert.AreEqual(res[0], 24);
-            Assert.AreEqual(res[1], 40);
+            Assert.AreEqual(fis.Value, 40);
+            fis = fis.Next;
+            Assert.AreEqual(fis.Value, 24);
         }
 
 

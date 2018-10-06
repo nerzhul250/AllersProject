@@ -49,28 +49,26 @@ namespace Modelo
          * entra un conjunto de items y una regla que va de todos los elementos al conjunto vacío (en listas)
          * <pos>se añaden las reglas que cumplen con el mínimo de confianza (en setBinarios)</pos>
          * */
-        public void ApGenRules(long kItemSet, List<long> itemSets) {
-            if (itemSets.Count()!=0) {
+        public void ApGenRules(long kItemSet, LinkedList<long> itemSets) {
+            if (itemSets.Count!=0) {
                 int k = CountSetBits(kItemSet);
-                int m = CountSetBits(itemSets[0]);
+                int m = CountSetBits(itemSets.First.Value);
                 if (k >= m + 1)
                 {
-                    List<long> toRemove = new List<long>();
-                    foreach (long h in itemSets)
-                    {
-                        double conf = (double)itemSetToSupport[kItemSet] / itemSetToSupport[kItemSet ^ h];
+                    LinkedListNode<long> h = itemSets.First;
+                    while (h!=null) {
+                        double conf = (double)itemSetToSupport[kItemSet] / itemSetToSupport[kItemSet ^ h.Value];
                         if (conf >= minConfidence)
                         {
-                            rules.Add(new Tuple<long, long>(kItemSet ^ h, h));
+                            rules.Add(new Tuple<long, long>(kItemSet ^ h.Value, h.Value));
+                            h = h.Next;
                         }
                         else
                         {
-                            toRemove.Add(h);
+                            LinkedListNode<long> toRemove = h;
+                            h = h.Next;
+                            itemSets.Remove(toRemove);
                         }
-                    }
-                    foreach (long r in toRemove)
-                    {
-                        itemSets.Remove(r);
                     }
                     itemSets = AprioriGen(itemSets);
                     ApGenRules(kItemSet, itemSets);
@@ -83,12 +81,12 @@ namespace Modelo
             {
                 foreach (long fItemSet in itemset)
                 {
-                    List<long> H = new List<long>();
+                    LinkedList<long> H = new LinkedList<long>();
                     String b = Convert.ToString(fItemSet,2);
                     for (int i = 0; i < b.Length; i++)
                     {
                         if (b[b.Length-1-i]=='1') {
-                            H.Add((long)Math.Pow(2,i));
+                            H.AddLast((long)Math.Pow(2,i));
                         }
                     }
                     ApGenRules(fItemSet,H);
@@ -96,66 +94,78 @@ namespace Modelo
             }
         }
         //STEVEN
-        public List<long> RemoveNonFrequentItemSetsFromCandidateSet(List<long> candidateSet) {
-            for(int i = 0; i < binaryTransactions.Count; i++)
+        public LinkedList<long> RemoveNonFrequentItemSetsFromCandidateSet(LinkedList<long> candidateSet) {
+            Stopwatch sw = Stopwatch.StartNew();
+            LinkedListNode<long> cani;
+            for (int i = 0; i < binaryTransactions.Count; i++)
             {
                 long binaryRepresentation = binaryTransactions[i];
-                for(int j = 0; j < candidateSet.Count; j++)
-                {
-                    if((candidateSet[j]&binaryRepresentation)== candidateSet[j])
+                cani = candidateSet.First;
+                while (cani!=null) {
+                    if ((cani.Value & binaryRepresentation) == cani.Value)
                     {
-                        if (itemSetToSupport.ContainsKey(candidateSet[j]))
+                        if (itemSetToSupport.ContainsKey(cani.Value))
                         {
-                            itemSetToSupport[candidateSet[j]] = 1 + itemSetToSupport[candidateSet[j]];
+                            itemSetToSupport[cani.Value] = 1 + itemSetToSupport[cani.Value];
                         }
                         else
                         {
-                            itemSetToSupport.Add(candidateSet[j], 1);
+                            itemSetToSupport.Add(cani.Value, 1);
                         }
                     }
+                    cani=cani.Next;
                 }
             }
             double minimunSupport =( binaryTransactions.Count * minSupport);
-            for(int i = 0; i < candidateSet.Count; i++)
-            {
-                if (itemSetToSupport.ContainsKey(candidateSet[i]))
+            cani = candidateSet.First;
+            while (cani!=null) {
+                if (itemSetToSupport.ContainsKey(cani.Value))
                 {
-                if (itemSetToSupport[candidateSet[i]] <minimunSupport)
-                {
-                    candidateSet.RemoveAt(i);
-                    i--;
-                }
-
+                    if (itemSetToSupport[cani.Value] < minimunSupport)
+                    {
+                        LinkedListNode<long> toRemove = cani;
+                        cani = cani.Next;
+                        candidateSet.Remove(toRemove);
+                    }
+                    else {
+                        cani = cani.Next;
+                    }
                 }
                 else
                 {
-                    candidateSet.RemoveAt(i);
-                    i--;
+                    LinkedListNode<long> toRemove = cani;
+                    cani = cani.Next;
+                    candidateSet.Remove(toRemove);
                 }
             }
+            Debug.WriteLine(sw.ElapsedMilliseconds+"Remove");
+            sw.Stop();
             return candidateSet;
         }
-        public List<long> AprioriGen(List<long> frequentItemSets) {
-            int no = 0;
-            List<long> candidates = new List<long>();
-            for(int i=0;i<frequentItemSets.Count(); i++)
+        public LinkedList<long> AprioriGen(LinkedList<long> frequentItemSets) {
+            Stopwatch sw = Stopwatch.StartNew();
+            LinkedList<long> candidates = new LinkedList<long>();
+            LinkedListNode<long> fis = frequentItemSets.First;
+            while (fis != null)
             {
-                long[] f = divideUntilTheSecondOne(frequentItemSets[i]);
+                long[] f = divideUntilTheSecondOne(fis.Value);
                 long f1 = f[0];
                 long f2 = f[1];
-                for(int j = i+1; j < frequentItemSets.Count(); j++)
-                {
-                    long[] s= divideUntilTheSecondOne(frequentItemSets[j]);
+                LinkedListNode<long> fis2 = fis.Next;
+                while (fis2!=null) {
+                    long[] s = divideUntilTheSecondOne(fis2.Value);
                     long s1 = s[0];
                     long s2 = s[1];
-                    if((f1==s1&& f2==s2)|| CountSetBits(frequentItemSets[0])==1)
+                    if ((f1 == s1 && f2 == s2) || CountSetBits(frequentItemSets.First.Value) == 1)
                     {
-                        candidates.Add(frequentItemSets[i] | frequentItemSets[j]);
-  
-
+                        candidates.AddLast(fis.Value | fis2.Value);
                     }
+                    fis2 = fis2.Next;
                 }
-            }
+                fis = fis.Next;
+            } 
+            Debug.WriteLine(sw.ElapsedMilliseconds+"Apriori");
+            sw.Stop();
             return candidates;
         }
         private long[] divideUntilTheSecondOne(long numb)
@@ -167,7 +177,7 @@ namespace Modelo
             {
                 if (toReturn % 2 == 0)
                 {
-                    toReturn /= 2;
+                    toReturn=toReturn >> 1;
                     numberOfDivisions++;
                 }
                 else
@@ -175,8 +185,7 @@ namespace Modelo
                     ones++;
                     if (ones == 1)
                     {
-                        toReturn--;
-                        toReturn /= 2;
+                        toReturn=toReturn>>1;
                         numberOfDivisions++;
                     }
                 }
@@ -199,9 +208,9 @@ namespace Modelo
                     toAdd.Add(frequentKSubsets[j]);
                 }
                 toreturn.Add(toAdd);
-                List<long> ck = AprioriGen(frequentKSubsets);
+                LinkedList<long> ck = AprioriGen(new LinkedList<long>(frequentKSubsets));
                 RemoveNonFrequentItemSetsFromCandidateSet(ck);
-                frequentKSubsets = ck;
+                frequentKSubsets = ck.ToList();
             }
             return toreturn;
         }
