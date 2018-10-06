@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Modelo
 {
-    public class AssociationAnalyzer
+    public class AssociationAnalyzerApriori
     {
         private double minSupport;
         private double minConfidence;
@@ -20,7 +20,7 @@ namespace Modelo
         public Dictionary<long, int> itemSetToSupport { get; set; }
         public Dictionary<int, Item> mapFromBinaryPositionToItem { get; set; }
 
-        public AssociationAnalyzer(DataManager data,int itemsToEvaluate,double minSup,double minConfidence,int maxItemSetSize) {
+        public AssociationAnalyzerApriori(DataManager data,int itemsToEvaluate,double minSup,double minConfidence,int maxItemSetSize) {
             this.itemsToEvaluate = itemsToEvaluate;
             minSupport = minSup;
             this.minConfidence = minConfidence;
@@ -45,7 +45,7 @@ namespace Modelo
                 }
             }
         }
-        public AssociationAnalyzer(int itemsToEvaluate, double minSup, double minConfidence, int maxItemSetSize)
+        public AssociationAnalyzerApriori(int itemsToEvaluate, double minSup, double minConfidence, int maxItemSetSize)
         {
             this.itemsToEvaluate = itemsToEvaluate;
             minSupport = minSup;

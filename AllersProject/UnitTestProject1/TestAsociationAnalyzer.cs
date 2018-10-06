@@ -9,10 +9,10 @@ namespace UnitTestProject1
     public class UnitTest1
     {
 
-        AssociationAnalyzer asso;
+        AssociationAnalyzerApriori asso;
         private void setupEscenario1()
         {
-            asso = new AssociationAnalyzer(3, 0, 0.35, 0);
+            asso = new AssociationAnalyzerApriori(3, 0, 0.35, 0);
             asso.binaryTransactions = new List<long> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             asso.totalNumberOfTransactions = asso.binaryTransactions.Count;
             asso.itemSetToSupport.Add(5, 2);
@@ -22,12 +22,12 @@ namespace UnitTestProject1
 
         private void setupEscenario2()
         { 
-            asso = new AssociationAnalyzer(6, 0, 0.35, 0);
+            asso = new AssociationAnalyzerApriori(6, 0, 0.35, 0);
         }
 
         private void setupEscenario3()
         {
-            asso = new AssociationAnalyzer(4, 0.5, 0, 3);
+            asso = new AssociationAnalyzerApriori(4, 0.5, 0, 3);
             asso.mapFromBinaryPositionToItem = new Dictionary<int, Item>();
             asso.mapFromBinaryPositionToItem.Add(0, new Item("120", "Alcohol"));
             asso.mapFromBinaryPositionToItem.Add(1, new Item("130", "Manzana"));
@@ -43,7 +43,7 @@ namespace UnitTestProject1
 
         private void setupEscenario4()
         {
-            asso = new AssociationAnalyzer(6, 0.3, 0, 3);
+            asso = new AssociationAnalyzerApriori(6, 0.3, 0, 3);
 
             asso.binaryTransactions = new List<long>
             {
@@ -54,7 +54,7 @@ namespace UnitTestProject1
 
         private void setupEscenario5()
         {
-            asso = new AssociationAnalyzer(4, 0, 0.35, 3);
+            asso = new AssociationAnalyzerApriori(4, 0, 0.35, 3);
             asso.binaryTransactions = new List<long>();
             for (int i = 0; i < 100; i++)
             {
@@ -77,7 +77,7 @@ namespace UnitTestProject1
         public void TestGenerateFIS()
         {
             DataManager data = new DataManager("../../../DatosTests/Escenario1/");
-            AssociationAnalyzer alv = new AssociationAnalyzer(data, 3, 0.4, 0.4, 2);
+            AssociationAnalyzerApriori alv = new AssociationAnalyzerApriori(data, 3, 0.4, 0.4, 2);
             Item[] items = new Item[3];
             items[0] = data.mapFromItemCodeToItem["1"];
             items[1] = data.mapFromItemCodeToItem["2"];
@@ -103,7 +103,7 @@ namespace UnitTestProject1
             Assert.AreEqual(freq[0], resultado[2][0]);
             Assert.AreEqual(freq[1], resultado[2][1]);
 
-            alv = new AssociationAnalyzer(new DataManager("../../../Datos/Escenario1/"), 4, 0.3, 0.3, 2);
+            alv = new AssociationAnalyzerApriori(new DataManager("../../../Datos/Escenario1/"), 4, 0.3, 0.3, 2);
             items = new Item[3];
             items[0] = data.mapFromItemCodeToItem["1"];
             items[1] = data.mapFromItemCodeToItem["2"];
@@ -137,7 +137,7 @@ namespace UnitTestProject1
             Assert.AreEqual(freq[0], resultado[4][0]);
             Assert.AreEqual(freq[1], resultado[4][1]);
 
-            alv = new AssociationAnalyzer(new DataManager("../../../Datos/Escenario2/"), 4, 0.3, 0.3, 2);
+            alv = new AssociationAnalyzerApriori(new DataManager("../../../Datos/Escenario2/"), 4, 0.3, 0.3, 2);
             items = new Item[4];
             items[0] = data.mapFromItemCodeToItem["1"];
             items[1] = data.mapFromItemCodeToItem["2"];
