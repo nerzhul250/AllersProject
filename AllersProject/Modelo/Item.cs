@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Modelo
 {
-    public class Item
+    public class Item : IEquatable<Item>
     {
         public string ItemCode { get; set; }
         public string itemName { get; set; }
@@ -24,12 +24,13 @@ namespace Modelo
             this.price = price;
         }
 
-        //public int CompareTo(object obj)
-        //{
-        //    Item alv = (Item)obj;
-        //    if (alv.ItemCode == ItemCode)
-        //        return 0;
-        //    return -1;
-        //}
+        public bool Equals(Item other)
+        {
+            return ItemCode.Equals(other.ItemCode);
+        }
+        public override int GetHashCode()
+        {
+            return ItemCode.GetHashCode();
+        }
     }
 }

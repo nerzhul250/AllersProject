@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Modelo
 {
-    class Customer
+    public class Customer : IEquatable<Customer>
     {
-        private string id;
+        public string id { get; set; }
         private string groupName;
         private string cityName;
         private string regionName;
@@ -20,6 +20,14 @@ namespace Modelo
             cityName = cn;
             regionName = rn;
             pymntGroup = pg;
+        }
+        public bool Equals(Customer other)
+        {
+            return id.Equals(other.id);
+        }
+        public override int GetHashCode()
+        {
+            return id.GetHashCode();
         }
     }
 }
