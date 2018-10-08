@@ -10,24 +10,45 @@ namespace Modelo
     {
         private int dimensionOfDataPoints;
         private int numberOfClusters;
-        private List<double[]> dataPoints;
+        private List<Dictionary<int,double>> dataPoints;
         private int numberOfIterations;
         private int minimumNumberOfItemsPerCustomer;
-        private Dictionary<double[], Customer> mapFromDataPointToCustomer;
+        private Dictionary<Dictionary<int,double>, Customer> mapFromDataPointToCustomer;
+        //mejor? o unico?
+        private Dictionary<Customer, Dictionary<int,double>> mapFromCustomerToDataPoint;
+        private Dictionary<int, Item> mapFromDimensionToItem;
         private List<Cluster> clusters;
 
-        public SimilarityAnalysisKMeans ()
+        public SimilarityAnalysisKMeans (DataManager data, int dodp, int k, int noi, int mnoi)
         {
-
+                int i = 0;
+            foreach(Transaction c in data.listOfAllTransactions)
+            {
+                Customer cust = c.customer;
+                Dictionary<Item, int> items = c.MapFromItemToQuantity;
+                foreach ( KeyValuePair<Item,int> item in items)
+                {
+                    if (!mapFromDimensionToItem.ContainsValue(item.Key))
+                    {
+                        mapFromDimensionToItem.Add(i,item.Key);
+                        i++;
+                    }
+                    
+                }
+            }
+            dimensionOfDataPoints = dodp;
+            numberOfClusters = k;
+            numberOfIterations = noi;
+            minimumNumberOfItemsPerCustomer = mnoi;
         }
 
-        public double AngularDistance (double[] x, double[] y)
+        public double AngularDistance (Dictionary<int,double> x, Dictionary<int,double> y)
         {
             //los double son las cantidades de cada item?
             return 0.0;
         }
 
-        public List<Tuple<Customer, double[], int>> GiveCustomers ()
+        public List<Tuple<Customer, Dictionary<int,double>, int>> GiveCustomers ()
         {
             //Give o get?
             return null;
@@ -35,7 +56,7 @@ namespace Modelo
         public void Kmeans ()
         {
             //no debería entrar por parámetro la cantidad de centroides?
-            int k = 4;
+            
         }
     }
 }
