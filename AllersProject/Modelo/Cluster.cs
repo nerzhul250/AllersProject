@@ -16,23 +16,27 @@ namespace Modelo
         {
 
         }
-
-
+        
         public void AddDataPoint(double[] dp)
         {
-
+            if(dp != null)
+            cluster.Add(dp);
         }
         public void RemoveAll ()
         {
-
+            cluster = new HashSet<double[]>();
+            centroid = null;
+            id = -1;
         }
         public void ComputeNewCentroid ()
         {
-
+            
         }
-        public Boolean ContainsDataPoint (double[] dp)
+        public Boolean ContainsDataPoint(double[] dp)
         {
-
+            // out dp es correcto?
+            if (cluster.TryGetValue(dp, out dp))
+            return true;
             return false;
         }
     }

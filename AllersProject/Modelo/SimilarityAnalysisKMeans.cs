@@ -23,16 +23,19 @@ namespace Modelo
 
         public double AngularDistance (double[] x, double[] y)
         {
+            //los double son las cantidades de cada item?
             return 0.0;
         }
 
         public List<Tuple<Customer, double[], int>> GiveCustomers ()
         {
+            //Give o get?
             return null;
         }
         public void Kmeans ()
         {
-
+            //no debería entrar por parámetro la cantidad de centroides?
+            int k = 4;
         }
     }
 }
