@@ -19,10 +19,10 @@ namespace Estructura
         {
             Raiz = new Nodo(null, null);
             ultimoListaEnlazada = new Dictionary<string, Nodo>();
-            constructFPTree(Transactions, minSup);
+            ConstructFPTree(Transactions, minSup);
         }
 
-        public void constructFPTree (List<List<String>> Transactions, int minSup)
+        public void ConstructFPTree (List<List<String>> Transactions, int minSup)
         {
             //Guarda, para cada producto (El string es el identificador del producto) el numero de veces que aparece en las transacciones.
             Dictionary<string, int> numberOfOcurrances = new Dictionary<string, int>();
