@@ -22,7 +22,7 @@ namespace Estructura
             ConstructFPTree(Transactions, minSup);
         }
 
-        public void ConstructFPTree (List<List<String>> Transactions, int minSup)
+        public void ConstructFPTree (List<List<String>> Transactions, double minSup)
         {
             //Guarda, para cada producto (El string es el identificador del producto) el numero de veces que aparece en las transacciones.
             Dictionary<string, int> numberOfOcurrances = new Dictionary<string, int>();
@@ -43,7 +43,7 @@ namespace Estructura
                 foreach(List<String> trans in Transactions)
                 {
                     trans.OrderBy(e => numberOfOcurrances[e]);
-                    Raiz.InsertarTransaccion(trans, ultimoListaEnlazada, minSup, numberOfOcurrances);
+                    Raiz.InsertarTransaccion(trans, ultimoListaEnlazada, (int) minSup * Transactions.Count + 1, numberOfOcurrances);
                 }
 
             }
