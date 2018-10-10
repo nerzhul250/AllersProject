@@ -44,17 +44,11 @@ namespace Estructura
 
 
             }
-            foreach (List<String> trans in Transactions)
+            foreach (List<string> trans in Transactions)
             {
-                trans.OrderByDescending(e => numberOfOcurrances[e]);
-                bool x = true;
-                Debug.WriteLine("---------------------------------");
-                for (int i = 0; i < trans.Count; i++)
-                {
-                    
-                    Debug.WriteLine(numberOfOcurrances[trans[i]]);
-                }
-                Raiz.InsertarTransaccion(trans, ultimoListaEnlazada, (int)(minSup * Transactions.Count) + 1, numberOfOcurrances);
+                List <string> ordered = trans.OrderByDescending(e => numberOfOcurrances[e]).ToList();
+                
+                Raiz.InsertarTransaccion(ordered, ultimoListaEnlazada, (int)Math.Ceiling(minSup * Transactions.Count), numberOfOcurrances);
             }
         }
     }
