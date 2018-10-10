@@ -9,15 +9,12 @@ namespace Modelo
 {
     public class AssociationAnalyzerFPGrowth
     {
-        public double MinSuport {get; set;}
-
         public List<List<String>> TransactionCodes { get; set; }
         
         public ArbolFP FPTree { get; set; }
 
         public AssociationAnalyzerFPGrowth (DataManager data, double minSupport)
         {
-            MinSuport = minSupport;
 
             List <List<String>> transactions = new List<List<string>>();
 

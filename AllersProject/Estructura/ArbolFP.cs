@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,9 +46,15 @@ namespace Estructura
             }
             foreach (List<String> trans in Transactions)
             {
-                trans.OrderBy(e => numberOfOcurrances[e]);
-
-                Raiz.InsertarTransaccion(trans, ultimoListaEnlazada, (int)minSup * Transactions.Count + 1, numberOfOcurrances);
+                trans.OrderByDescending(e => numberOfOcurrances[e]);
+                bool x = true;
+                Debug.WriteLine("---------------------------------");
+                for (int i = 0; i < trans.Count; i++)
+                {
+                    
+                    Debug.WriteLine(numberOfOcurrances[trans[i]]);
+                }
+                Raiz.InsertarTransaccion(trans, ultimoListaEnlazada, (int)(minSup * Transactions.Count) + 1, numberOfOcurrances);
             }
         }
     }

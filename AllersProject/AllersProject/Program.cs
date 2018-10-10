@@ -79,11 +79,14 @@ namespace AllersProject
             //Debug.WriteLine("TERMINANDOBRUTE------------------------");
 
             Debug.WriteLine("EMPEZANDO FP--------------");
-            AssociationAnalyzerFPGrowth asso = new AssociationAnalyzerFPGrowth(data, 0.5);
+            AssociationAnalyzerFPGrowth asso = new AssociationAnalyzerFPGrowth(data, 0.05);
+            int cont = 0;
             foreach (string hijo in asso.FPTree.Raiz.hijos.Keys)
             {
+                cont++;
                 Debug.WriteLine(hijo);
             }
+            Debug.WriteLine(cont);
             Debug.WriteLine("FIN FP-------------");
         }
     }
