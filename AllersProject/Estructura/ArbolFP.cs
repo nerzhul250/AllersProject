@@ -43,6 +43,7 @@ namespace Estructura
                 foreach(List<String> trans in Transactions)
                 {
                     trans.OrderBy(e => numberOfOcurrances[e]);
+
                     Raiz.InsertarTransaccion(trans, ultimoListaEnlazada, (int) minSup * Transactions.Count + 1, numberOfOcurrances);
                 }
 
