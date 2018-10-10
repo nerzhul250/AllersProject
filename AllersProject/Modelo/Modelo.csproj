@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssociationAnalyzerApriori.cs" />
+    <Compile Include="AssociationAnalyzerFPGrowth.cs" />
     <Compile Include="BigIntegerExtensions.cs" />
     <Compile Include="Cluster.cs" />
     <Compile Include="Customer.cs" />
@@ -56,6 +57,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Estructura\Estructura.csproj">
+      <Project>{2c18b16d-8afe-4b80-9182-ee57acad2a1a}</Project>
+      <Name>Estructura</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

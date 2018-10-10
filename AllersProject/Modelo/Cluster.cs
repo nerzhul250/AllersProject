@@ -35,7 +35,7 @@ namespace Modelo
         public Boolean ContainsDataPoint(double[] dp)
         {
             // out dp es correcto?
-            if (cluster.TryGetValue(dp, out dp))
+            //if (cluster.TryGetValue(dp, out dp))
             return true;
             return false;
         }

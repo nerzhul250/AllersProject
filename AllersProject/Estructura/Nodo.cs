@@ -41,7 +41,7 @@ namespace Estructura
          **/
         public void InsertarTransaccion(List<String> t, Dictionary<string, Nodo> listaEn, int minSup, Dictionary<string, int> supports)
         {
-            if (t.Count != 0 || supports[t[0]] >= minSup)
+            if (t.Count != 0 && supports[t[0]] >= minSup)
             {
                 string act = t[0];
                 t.RemoveAt(0);
