@@ -16,10 +16,16 @@ namespace Estructura
         //formada por el árbol de dicho item.
         public Dictionary<string, Nodo> ultimoListaEnlazada { get; set; }
 
+
+        //Diccionario que para cada string (Representa el identificador de un elemento), apunta al primer elemento de la lista enlazada 
+        //formada por el árbol de dicho item.
+        public Dictionary<string, Nodo> primeroListaEnlazada { get; set; }
+
         public ArbolFP(List<List<String>> Transactions, double minSup)
         {
             Raiz = new Nodo(null, null);
             ultimoListaEnlazada = new Dictionary<string, Nodo>();
+            primeroListaEnlazada = new Dictionary<string, Nodo>();
             ConstructFPTree(Transactions, minSup);
         }
 
@@ -48,7 +54,7 @@ namespace Estructura
             {
                 List <string> ordered = trans.OrderByDescending(e => numberOfOcurrances[e]).ToList();
                 
-                Raiz.InsertarTransaccion(ordered, ultimoListaEnlazada, (int)Math.Ceiling(minSup * Transactions.Count), numberOfOcurrances);
+                Raiz.InsertarTransaccion(ordered, ultimoListaEnlazada, primeroListaEnlazada, (int)Math.Ceiling(minSup * Transactions.Count), numberOfOcurrances);
             }
         }
     }
