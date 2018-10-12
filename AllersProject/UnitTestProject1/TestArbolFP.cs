@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace UnitTestProject1
 {
     [TestClass]
-    class TestArbolFP
+    public class TestArbolFP
     {
         ArbolFP prueba;
 
