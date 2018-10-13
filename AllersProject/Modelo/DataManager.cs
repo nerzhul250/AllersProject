@@ -118,9 +118,10 @@ namespace Modelo
             while ((auxiliarLine = sr.ReadLine()) != null)
             {
                 string[] auxiliarLineInArray = auxiliarLine.Split(';');
-                Item a = new Item(auxiliarLineInArray[0], auxiliarLineInArray[1]);
-                mapFromItemCodeToItem.Add(auxiliarLineInArray[0], a);
-
+                if (!mapFromItemCodeToItem.ContainsKey(auxiliarLineInArray[0])) {
+                    Item a = new Item(auxiliarLineInArray[0], auxiliarLineInArray[1]);
+                    mapFromItemCodeToItem.Add(auxiliarLineInArray[0], a);
+                }
             }
         }
     }

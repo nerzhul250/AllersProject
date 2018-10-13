@@ -10,9 +10,8 @@ namespace Modelo
     {
         private string tid;
         private DateTime transactionDate;
-        private Customer customer;
         public Dictionary<Item, int> MapFromItemToQuantity { get; set; }
-
+        public Customer customer{ get; set; }
         public Transaction(string tid,DateTime date,Customer cus,Object[,] itemCode_Quantity) {
             MapFromItemToQuantity = new Dictionary<Item, int>();
             this.tid = tid;

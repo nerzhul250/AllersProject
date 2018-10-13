@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Numerics;
+using Estructura;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Modelo;
 namespace UnitTestProject1
@@ -9,59 +11,58 @@ namespace UnitTestProject1
     public class UnitTest1
     {
 
-        AssociationAnalyzer asso;
+        AssociationAnalyzerApriori asso;
         private void setupEscenario1()
         {
-            DataManager data = new DataManager("../../../DatosTests/Escenario1/");
-            asso = new AssociationAnalyzer(data, 3, 0, 0.35, 0);
-            asso.binaryTransactions = new List<long> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            asso = new AssociationAnalyzerApriori(3, 0, 0.35, 0);
+            asso.binaryTransactions = new List<BigInteger> {1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            asso.totalNumberOfTransactions = asso.binaryTransactions.Count;
             asso.itemSetToSupport.Add(5, 2);
             asso.itemSetToSupport.Add(4, 5);
             asso.itemSetToSupport.Add(1, 6);
         }
 
         private void setupEscenario2()
-        {
-            DataManager data = new DataManager("../../../DatosTests/Escenario1/");
-            asso = new AssociationAnalyzer(data, 6, 0, 0.35, 0);
+        { 
+            asso = new AssociationAnalyzerApriori(6, 0, 0.35, 0);
         }
 
         private void setupEscenario3()
         {
-            DataManager data = new DataManager("../../../DatosTests/Escenario1/");
-            asso = new AssociationAnalyzer(data, 4, 0.5, 0, 3);
+            asso = new AssociationAnalyzerApriori(4, 0.5, 0, 3);
             asso.mapFromBinaryPositionToItem = new Dictionary<int, Item>();
             asso.mapFromBinaryPositionToItem.Add(0, new Item("120", "Alcohol"));
             asso.mapFromBinaryPositionToItem.Add(1, new Item("130", "Manzana"));
             asso.mapFromBinaryPositionToItem.Add(2, new Item("200", "Pera"));
             asso.mapFromBinaryPositionToItem.Add(3, new Item("300", "Papa"));
 
-            asso.binaryTransactions = new List<long>
+            asso.binaryTransactions = new List<BigInteger>
             {
                 3, 12, 6, 1, 8, 15, 12, 14, 9, 14
             };
+            asso.totalNumberOfTransactions = asso.binaryTransactions.Count;
         }
 
         private void setupEscenario4()
         {
-            DataManager data = new DataManager("../../../DatosTests/Escenario1/");
-            asso = new AssociationAnalyzer(data, 6, 0.3, 0, 3);
+            asso = new AssociationAnalyzerApriori(6, 0.3, 0, 3);
 
-            asso.binaryTransactions = new List<long>
+            asso.binaryTransactions = new List<BigInteger>
             {
                 39, 60, 8, 56, 56, 56, 35, 42, 51, 27, 54, 63, 1, 32
             };
+            asso.totalNumberOfTransactions = asso.binaryTransactions.Count;
         }
 
         private void setupEscenario5()
         {
-            DataManager data = new DataManager("../../../DatosTests/Escenario1/");
-            asso = new AssociationAnalyzer(data, 4, 0, 0.35, 3);
-            asso.binaryTransactions = new List<long>();
+            asso = new AssociationAnalyzerApriori(4, 0, 0.35, 3);
+            asso.binaryTransactions = new List<BigInteger>();
             for (int i = 0; i < 100; i++)
             {
                 asso.binaryTransactions.Add(i + 1);
             }
+            asso.totalNumberOfTransactions = asso.binaryTransactions.Count;
             asso.itemSetToSupport.Add(8, 70);
             asso.itemSetToSupport.Add(12, 50);
             asso.itemSetToSupport.Add(4, 80);
@@ -73,17 +74,12 @@ namespace UnitTestProject1
             asso.itemSetToSupport.Add(10, 58);
             asso.itemSetToSupport.Add(6, 66);
             asso.itemSetToSupport.Add(3, 60);
-
-
-
         }
-
-        
         //[TestMethod]
         public void TestGenerateFIS()
         {
             DataManager data = new DataManager("../../../DatosTests/Escenario1/");
-            AssociationAnalyzer alv = new AssociationAnalyzer(data, 3, 0.4, 0.4, 2);
+            AssociationAnalyzerApriori alv = new AssociationAnalyzerApriori(data, 3, 0.4, 0.4, 2);
             Item[] items = new Item[3];
             items[0] = data.mapFromItemCodeToItem["1"];
             items[1] = data.mapFromItemCodeToItem["2"];
@@ -109,7 +105,7 @@ namespace UnitTestProject1
             Assert.AreEqual(freq[0], resultado[2][0]);
             Assert.AreEqual(freq[1], resultado[2][1]);
 
-            alv = new AssociationAnalyzer(new DataManager("../../../Datos/Escenario1/"), 4, 0.3, 0.3, 2);
+            alv = new AssociationAnalyzerApriori(new DataManager("../../../Datos/Escenario1/"), 4, 0.3, 0.3, 2);
             items = new Item[3];
             items[0] = data.mapFromItemCodeToItem["1"];
             items[1] = data.mapFromItemCodeToItem["2"];
@@ -143,7 +139,7 @@ namespace UnitTestProject1
             Assert.AreEqual(freq[0], resultado[4][0]);
             Assert.AreEqual(freq[1], resultado[4][1]);
 
-            alv = new AssociationAnalyzer(new DataManager("../../../Datos/Escenario2/"), 4, 0.3, 0.3, 2);
+            alv = new AssociationAnalyzerApriori(new DataManager("../../../Datos/Escenario2/"), 4, 0.3, 0.3, 2);
             items = new Item[4];
             items[0] = data.mapFromItemCodeToItem["1"];
             items[1] = data.mapFromItemCodeToItem["2"];
@@ -202,21 +198,21 @@ namespace UnitTestProject1
         public void testAprioriRuleGeneration()
         {
             setupEscenario5();
-            asso.AprioriRuleGeneration(new List<List<long>>
+            asso.AprioriRuleGeneration(new List<List<BigInteger>>
             {
-                new List<long>{
+                new List<BigInteger>{
                     10, 3
                 },
-                new List<long>
+                new List<BigInteger>
                 {
                     14, 11
                 }
 
             });
-            List<Tuple<long, long>> asos = asso.rules;
+            List<Tuple<BigInteger, BigInteger>> asos = asso.rules;
 
             Assert.AreEqual(asos.Count, 10);
-            Tuple<long, long> act = asos[0];
+            Tuple<BigInteger, BigInteger> act = asos[0];
             Assert.AreEqual(act.Item1, 8);
             Assert.AreEqual(act.Item2, 2);
 
@@ -264,7 +260,10 @@ namespace UnitTestProject1
         public void testApGenRules()
         {
             setupEscenario1();
-            asso.ApGenRules(5, new List<long> {4, 1});
+            LinkedList<BigInteger> ha = new LinkedList<BigInteger>();
+            ha.AddFirst(4);
+            ha.AddFirst(1);
+            asso.ApGenRules(5, ha);
             Assert.AreEqual(asso.rules.Count, 1);
             Assert.AreEqual(asso.rules[0].Item1, 4);
             Assert.AreEqual(asso.rules[0].Item2, 1);
@@ -274,18 +273,28 @@ namespace UnitTestProject1
         public void testApioriGen()
         {
             setupEscenario2();
-            List<long> res = asso.AprioriGen(new List<long> { 44, 28, 49, 41, 26, 50 });
+            LinkedList<BigInteger> ha = new LinkedList<BigInteger>();
+            ha.AddLast(44);
+            ha.AddLast(28);
+            ha.AddLast(49);
+            ha.AddLast(41);
+            ha.AddLast(26);
+            ha.AddLast(50);
+            LinkedList<BigInteger> res = asso.AprioriGen(ha);
             Assert.AreEqual(res.Count, 3);
-            Assert.AreEqual(res[0], 45);
-            Assert.AreEqual(res[1], 30);
-            Assert.AreEqual(res[2], 51);
+            LinkedListNode<BigInteger> fis = res.First;
+            Assert.AreEqual(fis.Value, 45);
+            fis=fis.Next;
+            Assert.AreEqual(fis.Value, 30);
+            fis = fis.Next;
+            Assert.AreEqual(fis.Value, 51);
         }
 
         [TestMethod]
         public void testGenerateFrequentItemSetsApiori()
         {
             setupEscenario3();
-            List<List<long>> freq = asso.GenerateFrequentItemSetsApriori();
+            List<List<BigInteger>> freq = asso.GenerateFrequentItemSetsApriori();
             Assert.AreEqual(freq.Count, 2);
             Assert.AreEqual(freq[0].Count, 4);
             Assert.AreEqual(freq[1].Count, 1);
@@ -298,18 +307,102 @@ namespace UnitTestProject1
         public void testRemoveNonFrequentItemSets()
         {
             setupEscenario4();
-            List<long> res = asso.RemoveNonFrequentItemSetsFromCandidateSet(new List<long>
-            {
-                36, 24, 40
-            });
-
+            LinkedList<BigInteger> ha = new LinkedList<BigInteger>();
+            ha.AddFirst(36);
+            ha.AddFirst(24);
+            ha.AddFirst(40);
+            LinkedList<BigInteger> res = asso.RemoveNonFrequentItemSetsFromCandidateSet(ha);
+            LinkedListNode<BigInteger> fis = res.First;
             Assert.AreEqual(res.Count, 2);
-            Assert.AreEqual(res[0], 24);
-            Assert.AreEqual(res[1], 40);
+            Assert.AreEqual(fis.Value, 40);
+            fis = fis.Next;
+            Assert.AreEqual(fis.Value, 24);
         }
 
 
 
+
+
+
+        ArbolFP prueba;
+
+        private void setEscenario1()
+        {
+            List<List<string>> transacc = new List<List<string>>();
+            List<string> tranUniq = new List<string> { "b", "a", "c" };
+            transacc.Add(tranUniq);
+            List<string> tranUniq2 = new List<string> { "c", "a", "d" };
+            transacc.Add(tranUniq2);
+            List<string> tranUniq3 = new List<string> { "a", "d" };
+            transacc.Add(tranUniq3);
+            List<string> tranUniq4 = new List<string> { "c", "e" };
+            transacc.Add(tranUniq4);
+            List<string> tranUniq5 = new List<string> { "b", "f" };
+            transacc.Add(tranUniq5);
+            List<string> tranUniq6 = new List<string> { "d", "c" };
+            transacc.Add(tranUniq6);
+            prueba = new ArbolFP(transacc, 0.5);
+        }
+
+
+
+
+        [TestMethod]
+        public void testNewFP()
+        {
+            setEscenario1();
+            Nodo raiz = prueba.Raiz;
+            Assert.AreEqual(raiz.hijos.Count, 2);
+            Nodo prim = raiz.hijos["a"];
+            Nodo sec = raiz.hijos["c"];
+
+            Assert.AreEqual(prim.Padre, raiz);
+            Assert.AreEqual(sec.Padre, raiz);
+            Assert.AreEqual(sec.Ocurrencia, 4);
+            Assert.AreEqual(prim.Ocurrencia, 1);
+
+            Assert.AreEqual(prim.hijos.Count, 1);
+            Nodo prim2 = prim.hijos["d"];
+            Assert.AreEqual(prim2.Ocurrencia, 1);
+            Assert.AreEqual(prim2.Padre, prim);
+
+            Assert.AreEqual(sec.hijos.Count, 2);
+            Nodo sec1 = sec.hijos["d"];
+            Nodo sec2 = sec.hijos["a"];
+            Assert.AreEqual(sec1.Ocurrencia, 1);
+            Assert.AreEqual(sec2.Ocurrencia, 2);
+            Assert.AreEqual(sec1.Padre, sec);
+            Assert.AreEqual(sec2.Padre, sec);
+
+            Assert.AreEqual(prim2.hijos.Count, 0);
+            Assert.AreEqual(sec1.hijos.Count, 0);
+
+            Assert.AreEqual(sec2.hijos.Count, 1);
+            Nodo sec21 = sec2.hijos["d"];
+            Assert.AreEqual(sec21.Ocurrencia, 1);
+            Assert.AreEqual(sec21.Padre, sec2);
+
+            Assert.AreEqual(sec21.hijos.Count, 0);
+
+            Dictionary<string, Nodo> listaEn = prueba.primeroListaEnlazada;
+            Nodo A1 = listaEn["a"];
+            Assert.AreEqual(A1, sec2);
+            Nodo A2 = A1.Siguiente;
+            Assert.AreEqual(A2, prim);
+            Assert.IsNull(A2.Siguiente);
+
+            Nodo C1 = listaEn["c"];
+            Assert.AreEqual(C1, sec);
+            Assert.IsNull(C1.Siguiente);
+
+            Nodo D1 = listaEn["d"];
+            Assert.AreEqual(D1, sec21);
+            Nodo D2 = D1.Siguiente;
+            Assert.AreEqual(D2, prim2);
+            Nodo D3 = D2.Siguiente;
+            Assert.AreEqual(D3, sec1);
+            Assert.IsNull(D3.Siguiente);
+        }
 
     }
 }
