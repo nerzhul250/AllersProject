@@ -44,18 +44,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssociationAnalyzerApriori.cs" />
-    <Compile Include="AssociationAnalyzerFPGrowth.cs" />
-    <Compile Include="Cluster.cs" />
-    <Compile Include="Customer.cs" />
-    <Compile Include="DataManager.cs" />
-    <Compile Include="DataPoint.cs" />
-    <Compile Include="FPNode.cs" />
-    <Compile Include="FPTree.cs" />
-    <Compile Include="Item.cs" />
+    <Compile Include="machineLearningAlgorithms\AssociationAnalyzerApriori.cs" />
+    <Compile Include="machineLearningAlgorithms\AssociationAnalyzerFPGrowth.cs" />
+    <Compile Include="structures\Cluster.cs" />
+    <Compile Include="dataManaging\Customer.cs" />
+    <Compile Include="dataManaging\DataManager.cs" />
+    <Compile Include="structures\DataPoint.cs" />
+    <Compile Include="structures\FPNode.cs" />
+    <Compile Include="structures\FPTree.cs" />
+    <Compile Include="dataManaging\Item.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimilarityAnalysisKMeans.cs" />
-    <Compile Include="Transaction.cs" />
+    <Compile Include="machineLearningAlgorithms\SimilarityAnalysisKMeans.cs" />
+    <Compile Include="dataManaging\Transaction.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -65,6 +65,9 @@
       <Project>{4cb4ebcc-ab20-474f-9576-e25efbbdddc1}</Project>
       <Name>Extensions</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
