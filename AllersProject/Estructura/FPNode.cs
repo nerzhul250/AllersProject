@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Estructura
 {
-    public class Node
+    public class FPNode
     {
         //Numero de veces que se pasa por el nodo.
         public int Ocurrencia { get; set; }
@@ -16,22 +16,22 @@ namespace Estructura
         public string Identificador { get; set; }
 
         //El siguiente nodo que contiene el mismo identificador dentro de la lista enlazada.
-        public Node Siguiente { get; set; }
+        public FPNode Siguiente { get; set; }
 
         //Indica el nodo padre del nodo actual en el Árbol FP.
-        public Node Padre { get; set; }
+        public FPNode Padre { get; set; }
 
         //Dictionary con los hijos del nodo actual;
-        public Dictionary<string, Node> hijos;
+        public Dictionary<string, FPNode> hijos;
 
         //Constructor de la instancia Nodo. Recibe por parametro el identificador del producto representado en el nado y de su padre.
-        public Node(string Ident, Node Padre)
+        public FPNode(string Ident, FPNode Padre)
         {
             Ocurrencia = 1;
             Identificador = Ident;
             Siguiente = null;
             this.Padre = Padre;
-            hijos = new Dictionary<string, Node>();
+            hijos = new Dictionary<string, FPNode>();
         }
 
         /**Método para insertar una nueva transacción desde este nodo. t es una Lista de strings con los identificadores de cada producto
@@ -40,7 +40,7 @@ namespace Estructura
          * item tiene un soporte inferior al minSup. Se asume que t ya está ordenado. minSup es el minimo de VECES que debe aparecer en TODAS
          * las transacciones.
          **/
-        public void InsertarTransaccion(List<String> t, Dictionary<string, Node> listaEn, Dictionary<string, Node> listaEnPrim, int minSup, Dictionary<string, int> supports)
+        public void InsertarTransaccion(List<String> t, Dictionary<string, FPNode> listaEn, Dictionary<string, FPNode> listaEnPrim, int minSup, Dictionary<string, int> supports)
         {
             if (t.Count != 0 && supports[t[0]] >= minSup)
             {
@@ -48,13 +48,13 @@ namespace Estructura
                 t.RemoveAt(0);
                 if (hijos.ContainsKey(act))
                 {
-                    Node hijo = hijos[act];
+                    FPNode hijo = hijos[act];
                     hijo.Ocurrencia++;
                     hijo.InsertarTransaccion(t, listaEn, listaEnPrim, minSup, supports);
                 }
                 else
                 {
-                    Node nuev = new Node(act, this);
+                    FPNode nuev = new FPNode(act, this);
                     hijos.Add(act, nuev);
                     if (listaEn.ContainsKey(act))
                     {
@@ -72,7 +72,7 @@ namespace Estructura
             }
         }
 
-        public void InsertarTransaccion(List<String> t, Dictionary<string, Node> listaEn, Dictionary<string, Node> listaEnPrim, int minSup, Dictionary<string, int> supports, int times)
+        public void InsertarTransaccion(List<String> t, Dictionary<string, FPNode> listaEn, Dictionary<string, FPNode> listaEnPrim, int minSup, Dictionary<string, int> supports, int times)
         {
             if (t.Count != 0 && supports[t[0]] >= minSup)
             {
@@ -80,13 +80,13 @@ namespace Estructura
                 t.RemoveAt(0);
                 if (hijos.ContainsKey(act))
                 {
-                    Node hijo = hijos[act];
+                    FPNode hijo = hijos[act];
                     hijo.Ocurrencia+=times;
                     hijo.InsertarTransaccion(t, listaEn, listaEnPrim, minSup, supports, times);
                 }
                 else
                 {
-                    Node nuev = new Node(act, this);
+                    FPNode nuev = new FPNode(act, this);
                     hijos.Add(act, nuev);
                     hijos[act].Ocurrencia = times;
                     if (listaEn.ContainsKey(act))

@@ -60,10 +60,10 @@ namespace UnitTestProject1
         public void testNewFP()
         {
             setEscenario1();
-            Node raiz = prueba.Raiz;
+            FPNode raiz = prueba.Raiz;
             Assert.AreEqual(raiz.hijos.Count, 2);
-            Node prim = raiz.hijos["a"];
-            Node sec = raiz.hijos["c"];
+            FPNode prim = raiz.hijos["a"];
+            FPNode sec = raiz.hijos["c"];
 
             Assert.AreEqual(prim.Padre, raiz);
             Assert.AreEqual(sec.Padre, raiz);
@@ -71,13 +71,13 @@ namespace UnitTestProject1
             Assert.AreEqual(prim.Ocurrencia, 1);
 
             Assert.AreEqual(prim.hijos.Count, 1);
-            Node prim2 = prim.hijos["d"];
+            FPNode prim2 = prim.hijos["d"];
             Assert.AreEqual(prim2.Ocurrencia, 1);
             Assert.AreEqual(prim2.Padre, prim);
 
             Assert.AreEqual(sec.hijos.Count, 2);
-            Node sec1 = sec.hijos["d"];
-            Node sec2 = sec.hijos["a"];
+            FPNode sec1 = sec.hijos["d"];
+            FPNode sec2 = sec.hijos["a"];
             Assert.AreEqual(sec1.Ocurrencia, 1);
             Assert.AreEqual(sec2.Ocurrencia, 2);
             Assert.AreEqual(sec1.Padre, sec);
@@ -87,28 +87,28 @@ namespace UnitTestProject1
             Assert.AreEqual(sec1.hijos.Count, 0);
 
             Assert.AreEqual(sec2.hijos.Count, 1);
-            Node sec21 = sec2.hijos["d"];
+            FPNode sec21 = sec2.hijos["d"];
             Assert.AreEqual(sec21.Ocurrencia, 1);
             Assert.AreEqual(sec21.Padre, sec2);
 
             Assert.AreEqual(sec21.hijos.Count, 0);
 
-            Dictionary<string, Node> listaEn = prueba.primeroListaEnlazada;
-            Node A1 = listaEn["a"];
+            Dictionary<string, FPNode> listaEn = prueba.primeroListaEnlazada;
+            FPNode A1 = listaEn["a"];
             Assert.AreEqual(A1, sec2);
-            Node A2 = A1.Siguiente;
+            FPNode A2 = A1.Siguiente;
             Assert.AreEqual(A2, prim);
             Assert.IsNull(A2.Siguiente);
 
-            Node C1 = listaEn["c"];
+            FPNode C1 = listaEn["c"];
             Assert.AreEqual(C1, sec);
             Assert.IsNull(C1.Siguiente);
 
-            Node D1 = listaEn["d"];
+            FPNode D1 = listaEn["d"];
             Assert.AreEqual(D1, sec21);
-            Node D2 = D1.Siguiente;
+            FPNode D2 = D1.Siguiente;
             Assert.AreEqual(D2, prim2);
-            Node D3 = D2.Siguiente;
+            FPNode D3 = D2.Siguiente;
             Assert.AreEqual(D3, sec1);
             Assert.IsNull(D3.Siguiente);
 
@@ -128,10 +128,10 @@ namespace UnitTestProject1
         public void testNewFPDict()
         {
             setEscenario2();
-            Node raiz = prueba.Raiz;
+            FPNode raiz = prueba.Raiz;
             Assert.AreEqual(raiz.hijos.Count, 2);
-            Node prim = raiz.hijos["a"];
-            Node sec = raiz.hijos["c"];
+            FPNode prim = raiz.hijos["a"];
+            FPNode sec = raiz.hijos["c"];
 
             Assert.AreEqual(prim.Padre, raiz);
             Assert.AreEqual(sec.Padre, raiz);
@@ -139,13 +139,13 @@ namespace UnitTestProject1
             Assert.AreEqual(prim.Ocurrencia, 1);
 
             Assert.AreEqual(prim.hijos.Count, 1);
-            Node prim2 = prim.hijos["d"];
+            FPNode prim2 = prim.hijos["d"];
             Assert.AreEqual(prim2.Ocurrencia, 1);
             Assert.AreEqual(prim2.Padre, prim);
 
             Assert.AreEqual(sec.hijos.Count, 2);
-            Node sec1 = sec.hijos["d"];
-            Node sec2 = sec.hijos["a"];
+            FPNode sec1 = sec.hijos["d"];
+            FPNode sec2 = sec.hijos["a"];
             Assert.AreEqual(sec1.Ocurrencia, 1);
             Assert.AreEqual(sec2.Ocurrencia, 2);
             Assert.AreEqual(sec1.Padre, sec);
@@ -155,28 +155,28 @@ namespace UnitTestProject1
             Assert.AreEqual(sec1.hijos.Count, 0);
 
             Assert.AreEqual(sec2.hijos.Count, 1);
-            Node sec21 = sec2.hijos["d"];
+            FPNode sec21 = sec2.hijos["d"];
             Assert.AreEqual(sec21.Ocurrencia, 1);
             Assert.AreEqual(sec21.Padre, sec2);
 
             Assert.AreEqual(sec21.hijos.Count, 0);
 
-            Dictionary<string, Node> listaEn = prueba.primeroListaEnlazada;
-            Node A1 = listaEn["a"];
+            Dictionary<string, FPNode> listaEn = prueba.primeroListaEnlazada;
+            FPNode A1 = listaEn["a"];
             Assert.AreEqual(A1, sec2);
-            Node A2 = A1.Siguiente;
+            FPNode A2 = A1.Siguiente;
             Assert.AreEqual(A2, prim);
             Assert.IsNull(A2.Siguiente);
 
-            Node C1 = listaEn["c"];
+            FPNode C1 = listaEn["c"];
             Assert.AreEqual(C1, sec);
             Assert.IsNull(C1.Siguiente);
 
-            Node D1 = listaEn["d"];
+            FPNode D1 = listaEn["d"];
             Assert.AreEqual(D1, sec21);
-            Node D2 = D1.Siguiente;
+            FPNode D2 = D1.Siguiente;
             Assert.AreEqual(D2, prim2);
-            Node D3 = D2.Siguiente;
+            FPNode D3 = D2.Siguiente;
             Assert.AreEqual(D3, sec1);
             Assert.IsNull(D3.Siguiente);
         }
