@@ -36,6 +36,7 @@ namespace Estructura
             items = new List<string>();
             this.minSup = minSup;
             ConstructFPTree(Transactions, minSup);
+            frequentsSupport = new Dictionary<List<string>, int>();
         }
 
         public FPTree()
