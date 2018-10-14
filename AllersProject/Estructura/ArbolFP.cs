@@ -21,12 +21,27 @@ namespace Estructura
         //formada por el árbol de dicho item.
         public Dictionary<string, Nodo> primeroListaEnlazada { get; set; }
 
+        //Lista con los items que están en el árbol.
+        public List<string> items { get; set; }
+
+        public double minSup { get; set; }
+
         public ArbolFP(List<List<String>> Transactions, double minSup)
         {
             Raiz = new Nodo(null, null);
             ultimoListaEnlazada = new Dictionary<string, Nodo>();
             primeroListaEnlazada = new Dictionary<string, Nodo>();
+            items = new List<string>();
+            this.minSup = minSup;
             ConstructFPTree(Transactions, minSup);
+        }
+
+        public ArbolFP()
+        {
+            Raiz = new Nodo(null, null);
+            ultimoListaEnlazada = new Dictionary<string, Nodo>();
+            primeroListaEnlazada = new Dictionary<string, Nodo>();
+            items = new List<string>();
         }
 
         public void ConstructFPTree(List<List<String>> Transactions, double minSup)
@@ -45,16 +60,105 @@ namespace Estructura
                     else
                     {
                         numberOfOcurrances.Add(ident, 1);
+                        items.Add(ident);
                     }
                 }
 
 
             }
+
+            items = items.OrderBy(i => numberOfOcurrances[i]).ToList();
+
             foreach (List<string> trans in Transactions)
             {
                 List <string> ordered = trans.OrderByDescending(e => numberOfOcurrances[e]).ToList();
                 
                 Raiz.InsertarTransaccion(ordered, ultimoListaEnlazada, primeroListaEnlazada, (int)Math.Ceiling(minSup * Transactions.Count), numberOfOcurrances);
+            }
+        }
+
+
+
+        public void ConstructFPTree(Dictionary<List<string>, int> Transactions, double minSup)
+        {
+            //Guarda, para cada producto (El string es el identificador del producto) el numero de veces que aparece en las transacciones.
+            Dictionary<string, int> numberOfOcurrances = new Dictionary<string, int>();
+
+            foreach (List<string> list in Transactions.Keys)
+            {
+                int times = Transactions[list];
+                foreach (string ident in list)
+                {
+                    if (numberOfOcurrances.ContainsKey(ident))
+                    {
+                        numberOfOcurrances[ident]+=times;
+                    }
+                    else
+                    {
+                        numberOfOcurrances.Add(ident, times);
+                        items.Add(ident);
+                    }
+                }
+
+
+            }
+
+            items = items.OrderByDescending(i => numberOfOcurrances[i]).ToList();
+
+            foreach (List<string> trans in Transactions.Keys)
+            {
+                List<string> ordered = trans.OrderByDescending(e => numberOfOcurrances[e]).ToList();
+
+                Raiz.InsertarTransaccion(ordered, ultimoListaEnlazada, primeroListaEnlazada, (int)Math.Ceiling(minSup * Transactions.Count), numberOfOcurrances, Transactions[trans]);
+            }
+        }
+
+        public List<List<string>> FindFrequentItemsets()
+        {
+            List < List<string> > frequents = new List<List<string>>();
+            FrequentItemSets(new List<string>(), frequents);
+
+            return frequents;
+
+        }
+
+        public void FrequentItemSets(List<string> frecuente, List<List<string>> frequents)
+        {
+            if (items.Count != 0)
+            {
+                for (int i = items.Count - 1; i >= 0 && primeroListaEnlazada.ContainsKey(items[i]); i--)
+                {
+                    List<string> frecuenteItem = new List<string>();
+                    foreach(string st in frecuente)
+                    {
+                        frecuenteItem.Add(st);
+                    }
+                    frecuenteItem.Add(items[i]);
+                    int tam = frecuenteItem.Count();
+                    if (tam > 1)
+                    {
+                        frequents.Add(frecuenteItem);
+                    }
+
+                    Dictionary<List <string>, int> transacc = new Dictionary<List<string>, int>();
+                    Nodo prim = primeroListaEnlazada[items[i]];
+                    while (prim != null)
+                    {
+                        int cont = prim.Ocurrencia;
+                        Nodo act = prim.Padre;
+                        List<string> transaccion = new List<string>();
+                        while (act.Identificador != null)
+                        {
+                            transaccion.Add(act.Identificador);
+                            act = act.Padre;
+                        }
+                        transacc.Add(transaccion, cont);
+                        prim = prim.Siguiente;
+                    }
+                    ArbolFP conditional = new ArbolFP();
+                    conditional.ConstructFPTree(transacc, minSup);
+                    conditional.FrequentItemSets(frecuenteItem, frequents);
+                }
             }
         }
     }

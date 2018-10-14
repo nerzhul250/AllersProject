@@ -72,5 +72,41 @@ namespace Estructura
             }
         }
 
+        public void InsertarTransaccion(List<String> t, Dictionary<string, Nodo> listaEn, Dictionary<string, Nodo> listaEnPrim, int minSup, Dictionary<string, int> supports, int times)
+        {
+            if (t.Count != 0 && supports[t[0]] >= minSup)
+            {
+                string act = t[0];
+                t.RemoveAt(0);
+                if (hijos.ContainsKey(act))
+                {
+                    Nodo hijo = hijos[act];
+                    hijo.Ocurrencia+=times;
+                    hijo.InsertarTransaccion(t, listaEn, listaEnPrim, minSup, supports, times);
+                }
+                else
+                {
+                    Nodo nuev = new Nodo(act, this);
+                    hijos.Add(act, nuev);
+                    hijos[act].Ocurrencia = times;
+                    if (listaEn.ContainsKey(act))
+                    {
+                        listaEn[act].Siguiente = nuev;
+                        listaEn[act] = nuev;
+                    }
+                    else
+                    {
+                        listaEn.Add(act, nuev);
+                        listaEnPrim.Add(act, nuev);
+                    }
+
+                    hijos[act].InsertarTransaccion(t, listaEn, listaEnPrim, minSup, supports, times);
+                }
+
+            }
+        }
+
+
+
     }
 }

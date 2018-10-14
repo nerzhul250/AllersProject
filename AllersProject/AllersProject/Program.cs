@@ -80,13 +80,15 @@ namespace AllersProject
 
             Debug.WriteLine("EMPEZANDO FP--------------");
             AssociationAnalyzerFPGrowth asso = new AssociationAnalyzerFPGrowth(data, 0.05);
-            int cont = 0;
-            foreach (string hijo in asso.FPTree.Raiz.hijos.Keys)
+            List<List<string>> frequents = asso.frequentItemSets();
+            foreach (List<string> l in frequents)
             {
-                cont++;
-                Debug.WriteLine(hijo);
+                Debug.WriteLine("FREQUENT");
+                foreach(string x in l)
+                {
+                    Debug.WriteLine(x);
+                }
             }
-            Debug.WriteLine(cont);
             Debug.WriteLine("FIN FP-------------");
         }
     }

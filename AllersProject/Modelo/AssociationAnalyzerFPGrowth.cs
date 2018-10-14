@@ -30,5 +30,10 @@ namespace Modelo
 
             FPTree = new ArbolFP(transactions, minSupport);
         }
+
+        public List<List<string>> frequentItemSets()
+        {
+            return FPTree.FindFrequentItemsets();
+        }
     }
 }
