@@ -7,6 +7,26 @@ using System.Threading.Tasks;
 
 namespace Estructura
 {
+    public class ListComparer : IEqualityComparer<List<string>>
+    {
+        public bool Equals(List<string> fis1, List<string> fis2)
+        {
+            if (fis1.Count != fis2.Count) return false;
+            fis1.Sort();
+            fis2.Sort();
+            bool e = true;
+            for (int i = 0; i < fis1.Count && e; i++)
+            {
+                e = fis1[i].Equals(fis2[i]);
+            }
+            return e;
+        }
+
+        public int GetHashCode(List<string> obj)
+        {
+            return obj[0].GetHashCode();
+        }
+    }
     public class FPTree
     {
         //La raiz del árbol, la cual tiene un valor de null.
@@ -36,7 +56,7 @@ namespace Estructura
             items = new List<string>();
             this.minSup = minSup;
             ConstructFPTree(Transactions, minSup);
-            frequentsSupport = new Dictionary<List<string>, int>();
+            frequentsSupport = new Dictionary<List<string>, int>(new ListComparer());
         }
 
         public FPTree()
