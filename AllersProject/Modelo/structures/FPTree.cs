@@ -7,6 +7,26 @@ using System.Threading.Tasks;
 
 namespace Estructura
 {
+    public class ListComparer : IEqualityComparer<List<string>>
+    {
+        public bool Equals(List<string> fis1, List<string> fis2)
+        {
+            if (fis1.Count != fis2.Count) return false;
+            fis1.Sort();
+            fis2.Sort();
+            bool e = true;
+            for (int i = 0; i < fis1.Count && e; i++)
+            {
+                e = fis1[i].Equals(fis2[i]);
+            }
+            return e;
+        }
+
+        public int GetHashCode(List<string> obj)
+        {
+            return obj[0].GetHashCode();
+        }
+    }
     public class FPTree
     {
         //La raiz del árbol, la cual tiene un valor de null.
@@ -26,6 +46,8 @@ namespace Estructura
 
         public double minSup { get; set; }
 
+        public Dictionary<List<string>, int> frequentsSupport;
+
         public FPTree(List<List<String>> Transactions, double minSup)
         {
             Raiz = new FPNode(null, null);
@@ -34,6 +56,7 @@ namespace Estructura
             items = new List<string>();
             this.minSup = minSup;
             ConstructFPTree(Transactions, minSup);
+            frequentsSupport = new Dictionary<List<string>, int>(new ListComparer());
         }
 
         public FPTree()
@@ -116,13 +139,13 @@ namespace Estructura
         public List<List<string>> FindFrequentItemsets()
         {
             List < List<string> > frequents = new List<List<string>>();
-            FrequentItemSets(new List<string>(), frequents);
+            FrequentItemSets(new List<string>(), frequents, frequentsSupport);
 
             return frequents;
 
         }
 
-        public void FrequentItemSets(List<string> frecuente, List<List<string>> frequents)
+        public void FrequentItemSets(List<string> frecuente, List<List<string>> frequents, Dictionary<List<string>, int> supports)
         {
             if (items.Count != 0)
             {
@@ -144,11 +167,12 @@ namespace Estructura
                     {
                         frequents.Add(frecuenteItem);
                     }
-
+                    int sup = 0;
                     Dictionary<List <string>, int> transacc = new Dictionary<List<string>, int>();
                     FPNode prim = primeroListaEnlazada[items[i]];
                     while (prim != null)
                     {
+                        sup += prim.Ocurrencia;
                         int cont = prim.Ocurrencia;
                         FPNode act = prim.Padre;
                         List<string> transaccion = new List<string>();
@@ -160,9 +184,10 @@ namespace Estructura
                         transacc.Add(transaccion, cont);
                         prim = prim.Siguiente;
                     }
+                    supports.Add(frecuenteItem, sup);
                     FPTree conditional = new FPTree();
                     conditional.ConstructFPTree(transacc, minSup);
-                    conditional.FrequentItemSets(frecuenteItem, frequents);
+                    conditional.FrequentItemSets(frecuenteItem, frequents, supports);
                 }
             }
         }
