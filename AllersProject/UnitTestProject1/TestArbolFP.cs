@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -110,6 +111,16 @@ namespace UnitTestProject1
             Nodo D3 = D2.Siguiente;
             Assert.AreEqual(D3, sec1);
             Assert.IsNull(D3.Siguiente);
+
+            List<List<string>> list = prueba.FindFrequentItemsets();
+            foreach (List<string> list2 in list)
+            {
+                Debug.WriteLine("AQUI");
+                foreach(string x in list2)
+                {
+                    Debug.Write(x + " ");
+                }
+            }
         }
 
 

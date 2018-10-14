@@ -67,7 +67,7 @@ namespace Estructura
 
             }
 
-            items = items.OrderBy(i => numberOfOcurrances[i]).ToList();
+            items = items.OrderByDescending(i => numberOfOcurrances[i]).ToList();
 
             foreach (List<string> trans in Transactions)
             {
@@ -126,7 +126,12 @@ namespace Estructura
         {
             if (items.Count != 0)
             {
-                for (int i = items.Count - 1; i >= 0 && primeroListaEnlazada.ContainsKey(items[i]); i--)
+                int j = items.Count - 1;
+                while (!primeroListaEnlazada.ContainsKey(items[j]))
+                {
+                    j--;
+                }
+                for (int i = j; i >= 0; i--)
                 {
                     List<string> frecuenteItem = new List<string>();
                     foreach(string st in frecuente)
