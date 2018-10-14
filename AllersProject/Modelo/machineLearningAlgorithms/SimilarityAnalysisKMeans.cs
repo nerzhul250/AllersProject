@@ -14,7 +14,7 @@ namespace Modelo
         private int numberOfIterations;
         private int minimumNumberOfItemsPerCustomer;
         private Dictionary<Customer, DataPoint> mapFromCustomerToDataPoint;
-        private Dictionary<Item, int> mapFromItemToDimension;
+        private Dictionary<int, Item> mapFromDimensionToItem;
         private List<Cluster> clusters;
         //cantidad máxima de un item o dimensión. La mayor cantidad de una casilla de los vectores
         private int maxQuantityItem;
@@ -24,16 +24,19 @@ namespace Modelo
             int posicionDimension = 0;
             int idDataP = 0;
             mapFromCustomerToDataPoint = new Dictionary<Customer, DataPoint>();
-            foreach(Transaction t in data.listOfAllTransactions)
+            mapFromDimensionToItem = new Dictionary<int, Item>();
+            Dictionary<Item, int> mapFromItemToDimension = new Dictionary<Item, int>();
+            foreach (Transaction t in data.listOfAllTransactions)
             {
                 Customer cust = t.customer;
                 Dictionary<Item, int> items = t.MapFromItemToQuantity;
                 foreach ( KeyValuePair<Item,int> item in items)
                 {
                     //genera los números de las dimensiones
-                    if (!mapFromItemToDimension.ContainsValue(posicionDimension))
+                    if (!mapFromItemToDimension.ContainsKey(item.Key))
                     {
                         mapFromItemToDimension.Add(item.Key,posicionDimension);
+                        mapFromDimensionToItem.Add(posicionDimension, item.Key);
                         posicionDimension++;
                     }
                     //agrega la cantidad del item al vector del cliente
@@ -57,12 +60,17 @@ namespace Modelo
 
         public double AngularDistance (double[] x, double[] y)
         {
-            double distance = 0;
+            double dotProduct = 0;
+            double magnitudeX = 0;
+            double magnitudeY = 0;
             for(int i=0; i< dimensionOfDataPoints; i++)
             {
-                distance += Math.Pow(x[i] - y[i],2);
+                dotProduct += x[i]*y[i];
+                magnitudeX += Math.Pow(x[i], 2);
+                magnitudeY += Math.Pow(y[i], 2);
             }
-            return Math.Sqrt(distance);
+            double similarity = dotProduct / (Math.Sqrt(magnitudeX) * Math.Sqrt(magnitudeY));
+            return Math.Acos(similarity)/Math.PI;
         }
 
         public void pruningDataPoints ()
