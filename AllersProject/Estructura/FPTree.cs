@@ -7,40 +7,40 @@ using System.Threading.Tasks;
 
 namespace Estructura
 {
-    public class ArbolFP
+    public class FPTree
     {
         //La raiz del árbol, la cual tiene un valor de null.
-        public Nodo Raiz { get; set; }
+        public Node Raiz { get; set; }
 
         //Diccionario que para cada string (Representa el identificador de un elemento), apunta al último elemento de la lista enlazada 
         //formada por el árbol de dicho item.
-        public Dictionary<string, Nodo> ultimoListaEnlazada { get; set; }
+        public Dictionary<string, Node> ultimoListaEnlazada { get; set; }
 
 
         //Diccionario que para cada string (Representa el identificador de un elemento), apunta al primer elemento de la lista enlazada 
         //formada por el árbol de dicho item.
-        public Dictionary<string, Nodo> primeroListaEnlazada { get; set; }
+        public Dictionary<string, Node> primeroListaEnlazada { get; set; }
 
         //Lista con los items que están en el árbol.
         public List<string> items { get; set; }
 
         public double minSup { get; set; }
 
-        public ArbolFP(List<List<String>> Transactions, double minSup)
+        public FPTree(List<List<String>> Transactions, double minSup)
         {
-            Raiz = new Nodo(null, null);
-            ultimoListaEnlazada = new Dictionary<string, Nodo>();
-            primeroListaEnlazada = new Dictionary<string, Nodo>();
+            Raiz = new Node(null, null);
+            ultimoListaEnlazada = new Dictionary<string, Node>();
+            primeroListaEnlazada = new Dictionary<string, Node>();
             items = new List<string>();
             this.minSup = minSup;
             ConstructFPTree(Transactions, minSup);
         }
 
-        public ArbolFP()
+        public FPTree()
         {
-            Raiz = new Nodo(null, null);
-            ultimoListaEnlazada = new Dictionary<string, Nodo>();
-            primeroListaEnlazada = new Dictionary<string, Nodo>();
+            Raiz = new Node(null, null);
+            ultimoListaEnlazada = new Dictionary<string, Node>();
+            primeroListaEnlazada = new Dictionary<string, Node>();
             items = new List<string>();
         }
 
@@ -146,11 +146,11 @@ namespace Estructura
                     }
 
                     Dictionary<List <string>, int> transacc = new Dictionary<List<string>, int>();
-                    Nodo prim = primeroListaEnlazada[items[i]];
+                    Node prim = primeroListaEnlazada[items[i]];
                     while (prim != null)
                     {
                         int cont = prim.Ocurrencia;
-                        Nodo act = prim.Padre;
+                        Node act = prim.Padre;
                         List<string> transaccion = new List<string>();
                         while (act.Identificador != null)
                         {
@@ -160,7 +160,7 @@ namespace Estructura
                         transacc.Add(transaccion, cont);
                         prim = prim.Siguiente;
                     }
-                    ArbolFP conditional = new ArbolFP();
+                    FPTree conditional = new FPTree();
                     conditional.ConstructFPTree(transacc, minSup);
                     conditional.FrequentItemSets(frecuenteItem, frequents);
                 }

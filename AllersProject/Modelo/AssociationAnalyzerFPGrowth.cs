@@ -11,7 +11,7 @@ namespace Modelo
     {
         public List<List<String>> TransactionCodes { get; set; }
         
-        public ArbolFP FPTree { get; set; }
+        public FPTree FPTree { get; set; }
 
         public AssociationAnalyzerFPGrowth (DataManager data, double minSupport)
         {
@@ -28,7 +28,7 @@ namespace Modelo
                 transactions.Add(items);
             }
 
-            FPTree = new ArbolFP(transactions, minSupport);
+            FPTree = new FPTree(transactions, minSupport);
         }
 
         public List<List<string>> frequentItemSets()
