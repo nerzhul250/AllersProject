@@ -10,53 +10,123 @@ namespace Modelo
     {
         private int dimensionOfDataPoints;
         private int numberOfClusters;
-        private List<Dictionary<int,double>> dataPoints;
+        private List<DataPoint> dataPoints;
         private int numberOfIterations;
         private int minimumNumberOfItemsPerCustomer;
-        private Dictionary<Dictionary<int,double>, Customer> mapFromDataPointToCustomer;
-        //mejor? o unico?
-        private Dictionary<Customer, Dictionary<int,double>> mapFromCustomerToDataPoint;
-        private Dictionary<int, Item> mapFromDimensionToItem;
+        private Dictionary<Customer, DataPoint> mapFromCustomerToDataPoint;
+        private Dictionary<Item, int> mapFromItemToDimension;
         private List<Cluster> clusters;
+        //cantidad máxima de un item o dimensión. La mayor cantidad de una casilla de los vectores
+        private int maxQuantityItem;
 
         public SimilarityAnalysisKMeans (DataManager data, int dodp, int k, int noi, int mnoi)
         {
-                int i = 0;
-            foreach(Transaction c in data.listOfAllTransactions)
+            int posicionDimension = 0;
+            int idDataP = 0;
+            mapFromCustomerToDataPoint = new Dictionary<Customer, DataPoint>();
+            foreach(Transaction t in data.listOfAllTransactions)
             {
-                Customer cust = c.customer;
-                Dictionary<Item, int> items = c.MapFromItemToQuantity;
+                Customer cust = t.customer;
+                Dictionary<Item, int> items = t.MapFromItemToQuantity;
                 foreach ( KeyValuePair<Item,int> item in items)
                 {
-                    if (!mapFromDimensionToItem.ContainsValue(item.Key))
+                    //genera los números de las dimensiones
+                    if (!mapFromItemToDimension.ContainsValue(posicionDimension))
                     {
-                        mapFromDimensionToItem.Add(i,item.Key);
-                        i++;
+                        mapFromItemToDimension.Add(item.Key,posicionDimension);
+                        posicionDimension++;
                     }
-                    
+                    //agrega la cantidad del item al vector del cliente
+                    if (!mapFromCustomerToDataPoint.ContainsKey(cust))
+                    {
+                        mapFromCustomerToDataPoint.Add(cust, new DataPoint(idDataP, new double[dodp]));
+                        idDataP++;
+                    }
+                    //posible nullpointer
+                        mapFromCustomerToDataPoint[cust].vector[mapFromItemToDimension[item.Key]] += item.Value;
+                    if (mapFromCustomerToDataPoint[cust].vector[mapFromItemToDimension[item.Key]] > maxQuantityItem)
+                        maxQuantityItem = (int) mapFromCustomerToDataPoint[cust].vector[mapFromItemToDimension[item.Key]];
                 }
             }
             dimensionOfDataPoints = dodp;
             numberOfClusters = k;
             numberOfIterations = noi;
             minimumNumberOfItemsPerCustomer = mnoi;
+            pruningDataPoints();
         }
 
-        public double AngularDistance (Dictionary<int,double> x, Dictionary<int,double> y)
+        public double AngularDistance (double[] x, double[] y)
         {
-            //los double son las cantidades de cada item?
-            return 0.0;
+            double distance = 0;
+            for(int i=0; i< dimensionOfDataPoints; i++)
+            {
+                distance += Math.Pow(x[i] - y[i],2);
+            }
+            return Math.Sqrt(distance);
         }
 
-        public List<Tuple<Customer, Dictionary<int,double>, int>> GiveCustomers ()
+        public void pruningDataPoints ()
         {
-            //Give o get?
+            foreach (KeyValuePair<Customer, DataPoint> customer in mapFromCustomerToDataPoint)
+            {
+                int cantItems = 0;
+                for (int i = 0; i < dimensionOfDataPoints; i++)
+                {
+                    if (customer.Value.vector[i] > 0)
+                        cantItems++;
+                }
+                //si arroja error, guardarlos en una lista y después eliminarlos
+                if (cantItems < minimumNumberOfItemsPerCustomer)
+                    mapFromCustomerToDataPoint.Remove(customer.Key);
+            }
+        }
+        public List<Tuple<Customer, DataPoint, int>> GetCustomers ()
+        {
             return null;
         }
         public void Kmeans ()
         {
-            //no debería entrar por parámetro la cantidad de centroides?
-            
+            clusters = new List<Cluster>();
+            for (int i = 0; i < numberOfClusters; i++)
+            {
+                double[] newCentroid = new double[dimensionOfDataPoints];
+                Random alv = new Random();
+                for (int j = 0; j < dimensionOfDataPoints; j++)
+                {
+                    newCentroid[j] = alv.Next(maxQuantityItem);
+                }
+                Cluster clus = new Cluster(newCentroid);
+                clusters.Add(clus);
+            }
+            for (int i = 0; i < numberOfIterations; i++)
+            {
+                foreach (KeyValuePair<Customer, DataPoint> customer in mapFromCustomerToDataPoint)
+                {
+                    double mDistance = Double.MaxValue;
+                    Cluster toEnter = null;
+                    foreach (Cluster clActual in clusters)
+                    {
+                        double dActual = AngularDistance(customer.Value.vector, clActual.centroid);
+                        if (dActual < mDistance)
+                        {
+                            mDistance = dActual;
+                            toEnter = clActual;
+                        }
+                    }
+                    toEnter.AddDataPoint(customer.Value);
+                }
+                bool changes = false;
+                foreach (Cluster cl in clusters)
+                {
+                    double[] centroidBefore = cl.centroid;
+                    cl.ComputeNewCentroid();
+                    if (AngularDistance(centroidBefore, cl.centroid) != 0)
+                        changes = true;
+                    cl.RemoveAll();
+                }
+                if(!changes)
+                break;
+            }
         }
     }
 }
