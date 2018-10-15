@@ -54,6 +54,7 @@
     <Compile Include="TestArbolFP.cs" />
     <Compile Include="TestAsociationAnalyzer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestSimilarityKMeans.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

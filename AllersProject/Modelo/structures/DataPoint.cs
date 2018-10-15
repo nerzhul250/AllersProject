@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Modelo
 {
-    class DataPoint : IEquatable<DataPoint>
+    public class DataPoint : IEquatable<DataPoint>
     {
         public int id { get; set; }
         public double[] vector { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Modelo
 {
-    class SimilarityAnalysisKMeans
+    public class SimilarityAnalysisKMeans
     {
         private int dimensionOfDataPoints;
         private int numberOfClusters;
@@ -15,7 +15,7 @@ namespace Modelo
         private int minimumNumberOfItemsPerCustomer;
         private Dictionary<Customer, DataPoint> mapFromCustomerToDataPoint;
         private Dictionary<int, Item> mapFromDimensionToItem;
-        private List<Cluster> clusters;
+        public List<Cluster> clusters { get; set; }
         //cantidad máxima de un item o dimensión. La mayor cantidad de una casilla de los vectores
         private int maxQuantityItem;
 
@@ -57,13 +57,22 @@ namespace Modelo
             minimumNumberOfItemsPerCustomer = mnoi;
             pruningDataPoints();
         }
-
+        
+        public SimilarityAnalysisKMeans(int numOfClus, int numOfIter, int dimOfDP, int maxQuant, Dictionary<Customer,DataPoint> mapCusToDP, Dictionary<int, Item>mapDimToIt)
+        {
+            numberOfClusters = numOfClus;
+            numberOfIterations = numOfIter;
+            dimensionOfDataPoints = dimOfDP;
+            maxQuantityItem = maxQuant;
+            mapFromCustomerToDataPoint= mapCusToDP;
+            mapFromDimensionToItem = mapDimToIt;
+        }
         public double AngularDistance (double[] x, double[] y)
         {
             double dotProduct = 0;
             double magnitudeX = 0;
             double magnitudeY = 0;
-            for(int i=0; i< dimensionOfDataPoints; i++)
+            for(int i=0; i< x.Length; i++)
             {
                 dotProduct += x[i]*y[i];
                 magnitudeX += Math.Pow(x[i], 2);
@@ -95,10 +104,10 @@ namespace Modelo
         public void Kmeans ()
         {
             clusters = new List<Cluster>();
+                Random alv = new Random();
             for (int i = 0; i < numberOfClusters; i++)
             {
                 double[] newCentroid = new double[dimensionOfDataPoints];
-                Random alv = new Random();
                 for (int j = 0; j < dimensionOfDataPoints; j++)
                 {
                     newCentroid[j] = alv.Next(maxQuantityItem);
@@ -124,16 +133,21 @@ namespace Modelo
                     toEnter.AddDataPoint(customer.Value);
                 }
                 bool changes = false;
+                List<Cluster> aEliminar = new List<Cluster>();
                 foreach (Cluster cl in clusters)
                 {
                     double[] centroidBefore = cl.centroid;
-                    cl.ComputeNewCentroid();
-                    if (AngularDistance(centroidBefore, cl.centroid) != 0)
+                    if (cl.ComputeNewCentroid())
+                        aEliminar.Add(cl);
+                    if (AngularDistance(centroidBefore, cl.centroid) != 0 && !changes)
                         changes = true;
-                    cl.RemoveAll();
                 }
-                if(!changes)
-                break;
+                foreach (Cluster ae in aEliminar)
+                    clusters.Remove(ae);
+                if (!changes)
+                    break;
+                else if(i < numberOfIterations-1)
+                    clusters.ForEach(x => x.RemoveAll());
             }
         }
     }
