@@ -46,6 +46,8 @@ namespace Estructura
 
         public double minSup { get; set; }
 
+        public int minSupInt { get; set; }
+
         public Dictionary<List<string>, int> frequentsSupport;
 
         public FPTree(List<List<String>> Transactions, double minSup)
@@ -92,6 +94,8 @@ namespace Estructura
 
             items = items.OrderByDescending(i => numberOfOcurrances[i]).ToList();
 
+            minSupInt = (int)Math.Ceiling(minSup * Transactions.Count);
+
             foreach (List<string> trans in Transactions)
             {
                 List <string> ordered = trans.OrderByDescending(e => numberOfOcurrances[e]).ToList();
@@ -102,10 +106,12 @@ namespace Estructura
 
 
 
-        public void ConstructFPTree(Dictionary<List<string>, int> Transactions, double minSup)
+        public void ConstructFPTree(Dictionary<List<string>, int> Transactions, int minSup)
         {
             //Guarda, para cada producto (El string es el identificador del producto) el numero de veces que aparece en las transacciones.
             Dictionary<string, int> numberOfOcurrances = new Dictionary<string, int>();
+
+            minSupInt = minSup;
 
             foreach (List<string> list in Transactions.Keys)
             {
@@ -132,7 +138,7 @@ namespace Estructura
             {
                 List<string> ordered = trans.OrderByDescending(e => numberOfOcurrances[e]).ToList();
 
-                Raiz.InsertarTransaccion(ordered, ultimoListaEnlazada, primeroListaEnlazada, (int)Math.Ceiling(minSup * Transactions.Count), numberOfOcurrances, Transactions[trans]);
+                Raiz.InsertarTransaccion(ordered, ultimoListaEnlazada, primeroListaEnlazada, minSup, numberOfOcurrances, Transactions[trans]);
             }
         }
 
@@ -147,13 +153,14 @@ namespace Estructura
 
         public void FrequentItemSets(List<string> frecuente, List<List<string>> frequents, Dictionary<List<string>, int> supports)
         {
-            if (items.Count != 0)
+            if (items.Count != 0 && primeroListaEnlazada.ContainsKey(items[0]))
             {
                 int j = items.Count - 1;
                 while (!primeroListaEnlazada.ContainsKey(items[j]))
                 {
                     j--;
                 }
+
                 for (int i = j; i >= 0; i--)
                 {
                     List<string> frecuenteItem = new List<string>();
@@ -186,7 +193,7 @@ namespace Estructura
                     }
                     supports.Add(frecuenteItem, sup);
                     FPTree conditional = new FPTree();
-                    conditional.ConstructFPTree(transacc, minSup);
+                    conditional.ConstructFPTree(transacc, minSupInt);
                     conditional.FrequentItemSets(frecuenteItem, frequents, supports);
                 }
             }
