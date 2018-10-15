@@ -129,20 +129,35 @@ namespace AllersProject
 
             FPTree prueba;
 
+            //List<List<string>> transacc = new List<List<string>>();
+            //List<string> tranUniq = new List<string> { "b", "a", "c" };
+            //transacc.Add(tranUniq);
+            //List<string> tranUniq2 = new List<string> { "c", "a", "d" };
+            //transacc.Add(tranUniq2);
+            //List<string> tranUniq3 = new List<string> { "a", "d" };
+            //transacc.Add(tranUniq3);
+            //List<string> tranUniq4 = new List<string> { "c", "e" };
+            //transacc.Add(tranUniq4);
+            //List<string> tranUniq5 = new List<string> { "b", "f" };
+            //transacc.Add(tranUniq5);
+            //List<string> tranUniq6 = new List<string> { "d", "c" };
+            //transacc.Add(tranUniq6);
+            //prueba = new FPTree(transacc, 0.1);
+
             List<List<string>> transacc = new List<List<string>>();
-            List<string> tranUniq = new List<string> { "b", "a", "c" };
+            List<string> tranUniq = new List<string> { "b", "c", "a", "e"};
             transacc.Add(tranUniq);
-            List<string> tranUniq2 = new List<string> { "c", "a", "d" };
+            List<string> tranUniq2 = new List<string> { "c", "d"};
             transacc.Add(tranUniq2);
-            List<string> tranUniq3 = new List<string> { "a", "d" };
+            List<string> tranUniq3 = new List<string> {"a", "c", "f", "b" };
             transacc.Add(tranUniq3);
-            List<string> tranUniq4 = new List<string> { "c", "e" };
+            List<string> tranUniq4 = new List<string> { "c", "a", "b" };
             transacc.Add(tranUniq4);
-            List<string> tranUniq5 = new List<string> { "b", "f" };
+            List<string> tranUniq5 = new List<string> { "f", "e", "d" };
             transacc.Add(tranUniq5);
-            List<string> tranUniq6 = new List<string> { "d", "c" };
+            List<string> tranUniq6 = new List<string> { "a", "d", "c" };
             transacc.Add(tranUniq6);
-            prueba = new FPTree(transacc, 0.1);
+            prueba = new FPTree(transacc, 0.5);
 
             List<List<string>> list = prueba.FindFrequentItemsets();
             foreach (List<string> list2 in list)
@@ -153,6 +168,10 @@ namespace AllersProject
                     Debug.Write(x + " ");
                 }
             }
+
+
+
+
         }
 
 
