@@ -46,6 +46,9 @@
   <ItemGroup>
     <Compile Include="machineLearningAlgorithms\AssociationAnalyzerApriori.cs" />
     <Compile Include="machineLearningAlgorithms\AssociationAnalyzerFPGrowth.cs" />
+    <Compile Include="services\Prediction.cs" />
+    <Compile Include="services\Recommendation.cs" />
+    <Compile Include="services\ServiceProvider.cs" />
     <Compile Include="structures\Cluster.cs" />
     <Compile Include="dataManaging\Customer.cs" />
     <Compile Include="dataManaging\DataManager.cs" />
@@ -66,8 +69,6 @@
       <Name>Extensions</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="services\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
