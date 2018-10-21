@@ -105,7 +105,7 @@ namespace UnitTestProject1
             Assert.AreEqual(freq[0], resultado[2][0]);
             Assert.AreEqual(freq[1], resultado[2][1]);
 
-            alv = new AssociationAnalyzerApriori(new DataManager("../../../Datos/Escenario1/"), 4, 0.3, 0.3, 2);
+            alv = new AssociationAnalyzerApriori(new DataManager("../../../DatosAllers/Escenario1/"), 4, 0.3, 0.3, 2);
             items = new Item[3];
             items[0] = data.mapFromItemCodeToItem["1"];
             items[1] = data.mapFromItemCodeToItem["2"];
@@ -139,7 +139,7 @@ namespace UnitTestProject1
             Assert.AreEqual(freq[0], resultado[4][0]);
             Assert.AreEqual(freq[1], resultado[4][1]);
 
-            alv = new AssociationAnalyzerApriori(new DataManager("../../../Datos/Escenario2/"), 4, 0.3, 0.3, 2);
+            alv = new AssociationAnalyzerApriori(new DataManager("../../../DatosAllers/Escenario2/"), 4, 0.3, 0.3, 2);
             items = new Item[4];
             items[0] = data.mapFromItemCodeToItem["1"];
             items[1] = data.mapFromItemCodeToItem["2"];

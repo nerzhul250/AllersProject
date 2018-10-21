@@ -21,7 +21,7 @@ namespace AllersProject
             //Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Form1());
-            DataManager data = new DataManager("../../../Datos/");
+            DataManager data = new DataManager("../../../DatosAllers/");
             //<<<<<<< HEAD
             AssociationAnalyzerApriori aA = new AssociationAnalyzerApriori(data, 40, 0.05, 0.05, 3);
             Debug.WriteLine("ItsBeenASuccesThereAre " + data.getTransactionsCount() + "Transactions!");
