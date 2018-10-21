@@ -100,7 +100,7 @@ namespace Estructura
             {
                 List <string> ordered = trans.OrderByDescending(e => numberOfOcurrances[e]).ToList();
                 
-                Raiz.InsertarTransaccion(ordered, ultimoListaEnlazada, primeroListaEnlazada, (int)Math.Ceiling(minSup * Transactions.Count), numberOfOcurrances);
+                Raiz.InsertarTransaccion(ordered, ultimoListaEnlazada, primeroListaEnlazada, minSupInt, numberOfOcurrances);
             }
         }
 
@@ -138,7 +138,7 @@ namespace Estructura
             {
                 List<string> ordered = trans.OrderByDescending(e => numberOfOcurrances[e]).ToList();
 
-                Raiz.InsertarTransaccion(ordered, ultimoListaEnlazada, primeroListaEnlazada, minSup, numberOfOcurrances, Transactions[trans]);
+                Raiz.InsertarTransaccion(ordered, ultimoListaEnlazada, primeroListaEnlazada, minSupInt, numberOfOcurrances, Transactions[trans]);
             }
         }
 

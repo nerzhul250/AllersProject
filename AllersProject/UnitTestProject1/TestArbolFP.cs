@@ -87,6 +87,23 @@ namespace UnitTestProject1
 
         }
 
+        private void setEscenario5()
+        {
+            List<List<string>> transacc = new List<List<string>>();
+            List<string> tranUniq = new List<string> { "b", "c", "a", "e" };
+            transacc.Add(tranUniq);
+            List<string> tranUniq2 = new List<string> { "c", "d" };
+            transacc.Add(tranUniq2);
+            List<string> tranUniq3 = new List<string> { "a", "c", "f", "b" };
+            transacc.Add(tranUniq3);
+            List<string> tranUniq4 = new List<string> { "c", "a", "b" };
+            transacc.Add(tranUniq4);
+            List<string> tranUniq5 = new List<string> { "f", "e", "d" };
+            transacc.Add(tranUniq5);
+            List<string> tranUniq6 = new List<string> { "a", "d", "c" };
+            transacc.Add(tranUniq6);
+            prueba = new FPTree(transacc, 0.5);
+        }
 
 
 
@@ -347,6 +364,49 @@ namespace UnitTestProject1
         {
             setEscenario1();
             Assert.AreEqual(prueba.FindFrequentItemsets().Count, 0);
+        }
+
+        [TestMethod]
+        public void testAllTransactionsFrequents()
+        {
+            setEscenario3();
+            List<List<string>> result = new List<List<string>> { new List<string> {"f","b" },
+            new List<string> { "e", "c" },  new List<string> {"b", "c" },
+             new List<string> {"b","c","a" },  new List<string>{"a","b" },
+             new List<string> {"c","d" },  new List<string> {"d", "c", "a" },
+             new List<string> {"a","d" },  new List<string> {"a", "c" } };
+
+            List<List<string>> test = prueba.FindFrequentItemsets();
+            Assert.AreEqual(test.Count, result.Count);
+            for (int i = 0; i < test.Count; i++)
+            {
+                Assert.AreEqual(test[i].Count, result[i].Count);
+                for (int j = 0; j < test[i].Count; j++)
+                {
+                    Assert.AreEqual(test[i][j], result[i][j]);
+                }
+            }
+        }
+
+        [TestMethod]
+        public void testFrequentItemsets()
+        {
+            setEscenario5();
+
+            List<List<string>> result = new List<List<string>> { new List<string> {"b","c" },
+            new List<string> { "b", "c", "a" },  new List<string> {"a", "b"},
+             new List<string> {"a", "c"} };
+
+            List<List<string>> test = prueba.FindFrequentItemsets();
+            Assert.AreEqual(test.Count, result.Count);
+            for (int i = 0; i < test.Count; i++)
+            {
+                Assert.AreEqual(test[i].Count, result[i].Count);
+                for (int j = 0; j < test[i].Count; j++)
+                {
+                    Assert.AreEqual(test[i][j], result[i][j]);
+                }
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Estructura;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,22 +19,29 @@ namespace Modelo
 
 
 
-        public AssociationAnalyzerFPGrowth (DataManager data, double minSupport)
+        public AssociationAnalyzerFPGrowth(DataManager data, double minSupport)
         {
 
-            List <List<String>> transactions = new List<List<string>>();
+            List<List<String>> transactions = new List<List<string>>();
+
+            this.minSupport = minSupport;
 
             for (int i = 0; i < data.listOfAllTransactions.Count; i++)
             {
-                List<string> items = new List<string>();
-                foreach (Item it in data.listOfAllTransactions[i].MapFromItemToQuantity.Keys)
+                if (data.listOfAllTransactions[i].MapFromItemToQuantity.Count > 0)
                 {
-                    items.Add(it.ItemCode);
+                    List<string> items = new List<string>();
+                    foreach (Item it in data.listOfAllTransactions[i].MapFromItemToQuantity.Keys)
+                    {
+                        items.Add(it.ItemCode);
+                    }
+                    transactions.Add(items);
+
                 }
-                transactions.Add(items);
             }
 
             FPTree = new FPTree(transactions, minSupport);
+
         }
 
         public List<List<string>> frequentItemSets()
@@ -44,7 +52,7 @@ namespace Modelo
         {
             if (itemSets.Count != 0)
             {
-                int k =kItemSet.Count;
+                int k = kItemSet.Count;
                 int m = itemSets[0].Count;
                 if (k >= m + 1)
                 {
@@ -54,10 +62,10 @@ namespace Modelo
                         //bool contains = itemSetToSupport.ContainsKey(kItemSet) && itemSetToSupport.ContainsKey(kItemSet ^ h.Value);
                         double conf = 0;
                         bool contains = true;
-                        if (contains) conf = (double)FPTree.frequentsSupport[kItemSet] /FPTree.frequentsSupport[kItemSet.Except(h).ToList()];
+                        if (contains) conf = (double)FPTree.frequentsSupport[kItemSet] / FPTree.frequentsSupport[kItemSet.Except(h).ToList()];
                         if (contains && conf >= minConfidence)
                         {
-                            rules.Add(new Tuple<List<string>, List<string>>(kItemSet.Except(h).ToList(),h));
+                            rules.Add(new Tuple<List<string>, List<string>>(kItemSet.Except(h).ToList(), h));
                         }
                         else
                         {
@@ -73,8 +81,9 @@ namespace Modelo
         public void RuleGeneration(List<List<string>> frequentItemSets)
         {
             rules = new List<Tuple<List<string>, List<string>>>();
-            var group = frequentItemSets.GroupBy(k => k.Count).OrderBy(g=>g.Key);
-            group.ToList().ForEach(g => {
+            var group = frequentItemSets.GroupBy(k => k.Count).OrderBy(g => g.Key);
+            group.ToList().ForEach(g =>
+            {
                 g.ToList().ForEach(listsfs =>
                 {
                     List<List<string>> H = new List<List<string>>();
@@ -84,8 +93,8 @@ namespace Modelo
                         newList.Add(listsfs[i]);
                         H.Add(newList);
                     }
-                    GenRules(listsfs,H);
-                }); 
+                    GenRules(listsfs, H);
+                });
             });
         }
 
@@ -96,17 +105,18 @@ namespace Modelo
             {
                 List<string> fis1 = frequentItemSets[i];
                 fis1.Sort();
-                for (int j = i+1; j < frequentItemSets.Count; j++)
+                for (int j = i + 1; j < frequentItemSets.Count; j++)
                 {
                     List<string> fis2 = frequentItemSets[j];
                     fis2.Sort();
-                    if (canBeJoined(fis1,fis2)) {
+                    if (canBeJoined(fis1, fis2))
+                    {
                         List<string> atarashi = new List<string>();
                         for (int k = 0; k < fis1.Count; k++)
                         {
                             atarashi.Add(fis1[k]);
                         }
-                        atarashi.Add(fis2[fis2.Count-1]);
+                        atarashi.Add(fis2[fis2.Count - 1]);
                         atarashi.Sort();
                         candidates.Add(atarashi);
                     }
@@ -119,7 +129,7 @@ namespace Modelo
         {
             if (fis1.Count == 1) return true;
             bool e = true;
-            for (int i = 0; i < fis1.Count-1 && e; i++)
+            for (int i = 0; i < fis1.Count - 1 && e; i++)
             {
                 e = fis1[i].Equals(fis2[i]);
             }

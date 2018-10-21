@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace Modelo
 {
-    class Cluster
+    public class Cluster
     {
-        private HashSet<DataPoint> cluster;
+        public HashSet<DataPoint> cluster { get; set; }
         public double[] centroid { get; set; }
 
         public Cluster(double[]cent)
         {
             centroid = cent;
+            cluster = new HashSet<DataPoint>();
         }
         
         public void AddDataPoint(DataPoint dp)
@@ -25,8 +26,13 @@ namespace Modelo
         {
             cluster = new HashSet<DataPoint>();
         }
-        public void ComputeNewCentroid ()
+        /**
+         * Retorna true si se va a eliminar por falta de DP's
+         */
+        public bool ComputeNewCentroid ()
         {
+            if (cluster.Count ==0)
+                return true;
             double[] average = new double[centroid.Length];
             foreach(DataPoint dp in cluster)
             {
@@ -36,6 +42,7 @@ namespace Modelo
             for (int i = 0; i < average.Length; i++)
                 average[i] /= cluster.Count;
             centroid = average;
+            return false;
         }
         public Boolean ContainsDataPoint(DataPoint dp)
         {
