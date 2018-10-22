@@ -22,36 +22,50 @@ namespace AllersProject
             //Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Form1());
             DataManager data = new DataManager("../../../Datos/");
-            //<<<<<<< HEAD
-            AssociationAnalyzerApriori aA = new AssociationAnalyzerApriori(data, 40, 0.05, 0.05, 3);
-            Debug.WriteLine("ItsBeenASuccesThereAre " + data.getTransactionsCount() + "Transactions!");
-            Debug.WriteLine(data.getCustomersCount() + "Customers!");
-            Debug.WriteLine(data.getItemsCount() + "Items!");
-            Debug.WriteLine(aA.getBinaryTransactions().Count + "binaryTransactions!");
-            //aA.GenerateFrequentItemSets();
-            Debug.WriteLine("EMPEZANDOApriori------------------------");
+            Debug.WriteLine("EMPEZANDO FP--------------");
             Stopwatch sw = Stopwatch.StartNew();
-            List<List<BigInteger>> list = aA.GenerateFrequentItemSetsApriori();
-            Debug.WriteLine("Numero de listas: " + list.Count);
-            int sum = 0;
-            foreach (List<BigInteger> lis in list)
+            AssociationAnalyzerFPGrowth asso = new AssociationAnalyzerFPGrowth(data, 0.01);
+            List<List<string>> frequents = asso.frequentItemSets();
+            Debug.WriteLine("Ellapsed miliseconds = " + sw.ElapsedMilliseconds);
+            foreach (List<string> l in frequents)
             {
-                Debug.WriteLine("Conjuntos de items frecuentes con " + aA.CountSetBits(lis[0]) + " Items ");
-                for (int i = 0; i < lis.Count(); i++)
+                Debug.WriteLine("FREQUENT");
+                foreach (string x in l)
                 {
-                    String a = "";
-                    List<Item> items = aA.BinaryItemSetToObjectItemSet(lis[i]);
-                    for (int j = 0; j < items.Count(); j++)
-                    {
-                        a = a + "//" + items[j].itemName;
-                    }
-                    Debug.WriteLine(a);
+                    Debug.WriteLine(x);
                 }
-                sum += lis.Count();
             }
-            Debug.WriteLine("Numero de conjuntos de items frecuentes: " + sum);
-            Debug.WriteLine("Tiempo de ejecucion en milisegundos " + sw.ElapsedMilliseconds);
-            sw.Stop();
+            Debug.WriteLine("FIN FP-------------");
+            //<<<<<<< HEAD
+            //AssociationAnalyzerApriori aA = new AssociationAnalyzerApriori(data, 40, 0.05, 0.05, 3);
+            //Debug.WriteLine("ItsBeenASuccesThereAre " + data.getTransactionsCount() + "Transactions!");
+            //Debug.WriteLine(data.getCustomersCount() + "Customers!");
+            //Debug.WriteLine(data.getItemsCount() + "Items!");
+            //Debug.WriteLine(aA.getBinaryTransactions().Count + "binaryTransactions!");
+            ////aA.GenerateFrequentItemSets();
+            //Debug.WriteLine("EMPEZANDOApriori------------------------");
+            //Stopwatch sw = Stopwatch.StartNew();
+            //List<List<BigInteger>> list = aA.GenerateFrequentItemSetsApriori();
+            //Debug.WriteLine("Numero de listas: " + list.Count);
+            //int sum = 0;
+            //foreach (List<BigInteger> lis in list)
+            //{
+            //    Debug.WriteLine("Conjuntos de items frecuentes con " + aA.CountSetBits(lis[0]) + " Items ");
+            //    for (int i = 0; i < lis.Count(); i++)
+            //    {
+            //        String a = "";
+            //        List<Item> items = aA.BinaryItemSetToObjectItemSet(lis[i]);
+            //        for (int j = 0; j < items.Count(); j++)
+            //        {
+            //            a = a + "//" + items[j].itemName;
+            //        }
+            //        Debug.WriteLine(a);
+            //    }
+            //    sum += lis.Count();
+            //}
+            //Debug.WriteLine("Numero de conjuntos de items frecuentes: " + sum);
+            //Debug.WriteLine("Tiempo de ejecucion en milisegundos " + sw.ElapsedMilliseconds);
+            //sw.Stop();
             //            Debug.WriteLine("TERMINANDOApriori------------------------");
 
             //AssociationAnalyzerApriori aA = new AssociationAnalyzerApriori(data, 100, 0.01, 0.05, 63);
@@ -112,20 +126,6 @@ namespace AllersProject
             //            //sw.Stop();
             //            //Debug.WriteLine("TERMINANDOBRUTE------------------------");
 
-            Debug.WriteLine("EMPEZANDO FP--------------");
-            sw = Stopwatch.StartNew();
-            AssociationAnalyzerFPGrowth asso = new AssociationAnalyzerFPGrowth(data, 0.01);
-            List<List<string>> frequents = asso.frequentItemSets();
-            Debug.WriteLine("Ellapsed miliseconds = " + sw.ElapsedMilliseconds);
-            foreach (List<string> l in frequents)
-            {
-                Debug.WriteLine("FREQUENT");
-                foreach (string x in l)
-                {
-                    Debug.WriteLine(x);
-                }
-            }
-            Debug.WriteLine("FIN FP-------------");
 
             //FPTree prueba;
 

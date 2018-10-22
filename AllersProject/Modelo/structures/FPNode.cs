@@ -40,7 +40,8 @@ namespace Estructura
          * item tiene un soporte inferior al minSup. Se asume que t ya está ordenado. minSup es el minimo de VECES que debe aparecer en TODAS
          * las transacciones.
          **/
-        public void InsertarTransaccion(List<String> t, Dictionary<string, FPNode> listaEn, Dictionary<string, FPNode> listaEnPrim, int minSup, Dictionary<string, int> supports)
+        public void InsertarTransaccion(List<String> t, Dictionary<string, FPNode> listaEn, Dictionary<string, FPNode> listaEnPrim, 
+            int minSup, Dictionary<string, int> supports)
         {
             if (t.Count != 0 && supports[t[0]] >= minSup)
             {
@@ -72,7 +73,8 @@ namespace Estructura
             }
         }
 
-        public void InsertarTransaccion(List<String> t, Dictionary<string, FPNode> listaEn, Dictionary<string, FPNode> listaEnPrim, int minSup, Dictionary<string, int> supports, int times)
+        public void InsertarTransaccion(List<String> t, Dictionary<string, FPNode> listaEn, Dictionary<string, FPNode> listaEnPrim, int minSup, 
+            Dictionary<string, int> supports, int times)
         {
             if (t.Count != 0 && supports[t[0]] >= minSup)
             {
