@@ -21,8 +21,20 @@ namespace AllersProject
             //Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Form1());
+<<<<<<< HEAD
             DataManager data = new DataManager("../../../Datos/");
             Debug.WriteLine("EMPEZANDO FP--------------");
+=======
+            DataManager data = new DataManager("../../../DatosAllers/");
+            //<<<<<<< HEAD
+            AssociationAnalyzerApriori aA = new AssociationAnalyzerApriori(data, 40, 0.05, 0.05, 3);
+            Debug.WriteLine("ItsBeenASuccesThereAre " + data.getTransactionsCount() + "Transactions!");
+            Debug.WriteLine(data.getCustomersCount() + "Customers!");
+            Debug.WriteLine(data.getItemsCount() + "Items!");
+            Debug.WriteLine(aA.getBinaryTransactions().Count + "binaryTransactions!");
+            //aA.GenerateFrequentItemSets();
+            Debug.WriteLine("EMPEZANDOApriori------------------------");
+>>>>>>> 3963ced9578959c386ca935a8f2de5e383db3bc8
             Stopwatch sw = Stopwatch.StartNew();
             AssociationAnalyzerFPGrowth asso = new AssociationAnalyzerFPGrowth(data, 0.01);
             List<List<string>> frequents = asso.frequentItemSets();
