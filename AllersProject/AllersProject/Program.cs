@@ -18,9 +18,9 @@ namespace AllersProject
         [STAThread]
         static void Main()
         {
-            //Application.EnableVisualStyles();
-            //Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new Form1());
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new Form1());
             DataManager data = new DataManager("../../../Datos/");
             Debug.WriteLine("EMPEZANDO FP--------------");
             Stopwatch sw = Stopwatch.StartNew();
