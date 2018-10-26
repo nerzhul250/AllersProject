@@ -54,10 +54,10 @@
             this.expandCollapsePanel1.ButtonStyle = MakarovDev.ExpandCollapsePanel.ExpandCollapseButton.ExpandButtonStyle.MagicArrow;
             this.expandCollapsePanel1.Controls.Add(this.customerPredictionPane1);
             this.expandCollapsePanel1.ExpandedHeight = 376;
-            this.expandCollapsePanel1.IsExpanded = false;
+            this.expandCollapsePanel1.IsExpanded = true;
             this.expandCollapsePanel1.Location = new System.Drawing.Point(3, 3);
             this.expandCollapsePanel1.Name = "expandCollapsePanel1";
-            this.expandCollapsePanel1.Size = new System.Drawing.Size(732, 35);
+            this.expandCollapsePanel1.Size = new System.Drawing.Size(715, 376);
             this.expandCollapsePanel1.TabIndex = 1;
             this.expandCollapsePanel1.Text = "CN0002-Compras Promedio: $3´750.000";
             this.expandCollapsePanel1.UseAnimation = true;
@@ -83,9 +83,12 @@
             // customerPredictionPane1
             // 
             this.customerPredictionPane1.AutoScroll = true;
+            this.customerPredictionPane1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.customerPredictionPane1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.customerPredictionPane1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(130)))), ((int)(((byte)(180)))));
             this.customerPredictionPane1.Location = new System.Drawing.Point(23, 46);
             this.customerPredictionPane1.Name = "customerPredictionPane1";
-            this.customerPredictionPane1.Size = new System.Drawing.Size(655, 268);
+            this.customerPredictionPane1.Size = new System.Drawing.Size(655, 284);
             this.customerPredictionPane1.TabIndex = 1;
             // 
             // CustomerPane

@@ -34,8 +34,11 @@
             this.clientes = new System.Windows.Forms.TabPage();
             this.gruposClientes = new System.Windows.Forms.TabPage();
             this.ayuda = new System.Windows.Forms.TabPage();
+            this.menuPane1 = new AllersProject.MenuPane();
             this.customerPane1 = new AllersProject.CustomerPane();
+            this.customerPredictionPane1 = new AllersProject.CustomerPredictionPane();
             this.tabControl1.SuspendLayout();
+            this.menu.SuspendLayout();
             this.clientes.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,6 +57,9 @@
             // 
             // menu
             // 
+            this.menu.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.menu.Controls.Add(this.customerPredictionPane1);
+            this.menu.Controls.Add(this.menuPane1);
             this.menu.Location = new System.Drawing.Point(4, 25);
             this.menu.Name = "menu";
             this.menu.Padding = new System.Windows.Forms.Padding(3);
@@ -64,6 +70,7 @@
             // 
             // clientes
             // 
+            this.clientes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.clientes.Controls.Add(this.customerPane1);
             this.clientes.Location = new System.Drawing.Point(4, 25);
             this.clientes.Name = "clientes";
@@ -91,12 +98,29 @@
             this.ayuda.Text = "Ayuda";
             this.ayuda.UseVisualStyleBackColor = true;
             // 
+            // menuPane1
+            // 
+            this.menuPane1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.menuPane1.Location = new System.Drawing.Point(218, 6);
+            this.menuPane1.Name = "menuPane1";
+            this.menuPane1.Size = new System.Drawing.Size(365, 148);
+            this.menuPane1.TabIndex = 0;
+            // 
             // customerPane1
             // 
             this.customerPane1.Location = new System.Drawing.Point(3, 6);
             this.customerPane1.Name = "customerPane1";
             this.customerPane1.Size = new System.Drawing.Size(758, 357);
             this.customerPane1.TabIndex = 0;
+            // 
+            // customerPredictionPane1
+            // 
+            this.customerPredictionPane1.AutoScroll = true;
+            this.customerPredictionPane1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.customerPredictionPane1.Location = new System.Drawing.Point(6, 160);
+            this.customerPredictionPane1.Name = "customerPredictionPane1";
+            this.customerPredictionPane1.Size = new System.Drawing.Size(756, 231);
+            this.customerPredictionPane1.TabIndex = 1;
             // 
             // Form1
             // 
@@ -110,6 +134,7 @@
             this.Text = "Allers";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
+            this.menu.ResumeLayout(false);
             this.clientes.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -123,6 +148,8 @@
         private System.Windows.Forms.TabPage gruposClientes;
         private System.Windows.Forms.TabPage ayuda;
         private CustomerPane customerPane1;
+        private MenuPane menuPane1;
+        private CustomerPredictionPane customerPredictionPane1;
     }
 }
 
