@@ -282,6 +282,7 @@ namespace Modelo
             {
                 foreach (Item i in t.MapFromItemToQuantity.Keys)
                 {
+                    i.Number = 0;
                     if (dict.ContainsKey(i))
                     {
                         dict[i]++;

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Modelo
 {
-    class Transaction
+    public class Transaction
     {
         private string tid;
-        private DateTime transactionDate;
+        public DateTime transactionDate { get; set; }
         public Dictionary<Item, int> MapFromItemToQuantity { get; set; }
         public Customer customer{ get; set; }
         public Transaction(string tid,DateTime date,Customer cus,Object[,] itemCode_Quantity) {
@@ -29,6 +29,15 @@ namespace Modelo
                     }
                 }
             }
+        }
+
+        internal double getTotalPurchased()
+        {
+            double sum =;
+            foreach (Item it in MapFromItemToQuantity.Keys) {
+                sum += it.price * MapFromItemToQuantity[it];
+            }
+            return sum;
         }
     }
 }

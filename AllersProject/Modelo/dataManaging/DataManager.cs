@@ -10,11 +10,11 @@ namespace Modelo
 {
     public class DataManager
     {
-        private String dataRoute;
+        public String dataRoute { get; set; }
 
-        public Dictionary<string, Item> mapFromItemCodeToItem;
-        private Dictionary<string, Customer> mapFromCustomerIdToCustomer;
-        internal List<Transaction> listOfAllTransactions;
+        public Dictionary<string, Item> mapFromItemCodeToItem { get; set; }
+        public Dictionary<string, Customer> mapFromCustomerIdToCustomer { get; set; }
+        public List<Transaction> listOfAllTransactions { get; set; }
 
         static void Main(string[] args)
         {
@@ -28,7 +28,11 @@ namespace Modelo
             listOfAllTransactions = new List<Transaction>();
             LoadData();
         }
-
+        public DataManager(){
+            mapFromCustomerIdToCustomer = new Dictionary<string, Customer>();
+            mapFromItemCodeToItem = new Dictionary<string, Item>();
+            listOfAllTransactions = new List<Transaction>();
+        }
         public int getTransactionsCount()
         {
             return listOfAllTransactions.Count;

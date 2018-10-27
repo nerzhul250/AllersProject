@@ -17,15 +17,13 @@ namespace Modelo
         public double minSupport { get; set; }
         public double minConfidence { get; set; }
 
-
-
-        public AssociationAnalyzerFPGrowth(DataManager data, double minSupport)
+        public AssociationAnalyzerFPGrowth(DataManager data, double minSupport,double minConfidence)
         {
 
             List<List<String>> transactions = new List<List<string>>();
 
             this.minSupport = minSupport;
-
+            this.minConfidence = minConfidence;
             for (int i = 0; i < data.listOfAllTransactions.Count; i++)
             {
                 if (data.listOfAllTransactions[i].MapFromItemToQuantity.Count > 0)
@@ -33,6 +31,14 @@ namespace Modelo
                     List<string> items = new List<string>();
                     foreach (Item it in data.listOfAllTransactions[i].MapFromItemToQuantity.Keys)
                     {
+                        if (it.minQuantity > data.listOfAllTransactions[i].MapFromItemToQuantity[it])
+                        {
+                            it.minQuantity = data.listOfAllTransactions[i].MapFromItemToQuantity[it];
+                        }
+                        if (it.maxQuantity < data.listOfAllTransactions[i].MapFromItemToQuantity[it])
+                        {
+                            it.maxQuantity = data.listOfAllTransactions[i].MapFromItemToQuantity[it];
+                        }
                         items.Add(it.ItemCode);
                     }
                     transactions.Add(items);
