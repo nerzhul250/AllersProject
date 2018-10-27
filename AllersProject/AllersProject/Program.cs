@@ -24,7 +24,7 @@ namespace AllersProject
             DataManager data = new DataManager("../../../Datos/");
             Debug.WriteLine("EMPEZANDO FP--------------");
             Stopwatch sw = Stopwatch.StartNew();
-            AssociationAnalyzerFPGrowth asso = new AssociationAnalyzerFPGrowth(data, 0.01);
+            AssociationAnalyzerFPGrowth asso = new AssociationAnalyzerFPGrowth(data, 0.01,0.01);
             List<List<string>> frequents = asso.frequentItemSets();
             Debug.WriteLine("Ellapsed miliseconds = " + sw.ElapsedMilliseconds);
             foreach (List<string> l in frequents)

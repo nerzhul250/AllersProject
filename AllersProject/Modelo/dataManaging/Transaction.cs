@@ -33,7 +33,7 @@ namespace Modelo
 
         internal double getTotalPurchased()
         {
-            double sum =;
+            double sum =0;
             foreach (Item it in MapFromItemToQuantity.Keys) {
                 sum += it.price * MapFromItemToQuantity[it];
             }

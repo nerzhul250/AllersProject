@@ -27,7 +27,50 @@ namespace Modelo
             mapFromItemCodeToItem = new Dictionary<string, Item>();
             listOfAllTransactions = new List<Transaction>();
             LoadData();
+            pruneData();
         }
+
+        private void pruneData()
+        {
+            List<Item> commons = new List<Item>();
+            Dictionary<Item, int> dict = new Dictionary<Item, int>();
+            int minNumberOfOccurences = 11;
+            foreach (Transaction t in listOfAllTransactions)
+            {
+                foreach (Item i in t.MapFromItemToQuantity.Keys)
+                {
+                    if (dict.ContainsKey(i))
+                    {
+                        dict[i]++;
+                    }
+                    else
+                    {
+                        dict.Add(i, 1);
+                        commons.Add(i);
+                    }
+                }
+            }
+            commons = commons.OrderBy(it => dict[it]).TakeWhile(it=> dict[it]<minNumberOfOccurences).ToList();
+            foreach (Item it in commons) {
+                mapFromItemCodeToItem.Remove(it.ItemCode);
+            }
+            for (int i = 0; i < listOfAllTransactions.Count; i++)
+            {
+                Transaction t = listOfAllTransactions[i];
+                foreach (Item it in commons)
+                {
+                    if (t.MapFromItemToQuantity.ContainsKey(it))
+                    {
+                        t.MapFromItemToQuantity.Remove(it);
+                    }
+                }
+                if (t.MapFromItemToQuantity.Count==0) {
+                    listOfAllTransactions.Remove(t);
+                    i--;
+                }
+            }      
+        }
+
         public DataManager(){
             mapFromCustomerIdToCustomer = new Dictionary<string, Customer>();
             mapFromItemCodeToItem = new Dictionary<string, Item>();
