@@ -35,7 +35,7 @@ namespace UnitTestProject1
 
         private void setupEscenario2 ()
         {
-            kMeans = new SimilarityAnalysisKMeans(4, 3, 7, 9, null, null);
+            kMeans = new SimilarityAnalysisKMeans(4, 3, 7, 9, new Dictionary<Customer, DataPoint>(), new Dictionary<int, Item>());
         }
         [TestMethod]
             public void TestAngularDistance ()
@@ -83,6 +83,13 @@ namespace UnitTestProject1
                         Assert.IsTrue(kMeans.AngularDistance(clus[i].centroid, dp.vector) <= kMeans.AngularDistance(clus[j].centroid, dp.vector));
                     }
                 }
+            }
+            List<double[]> result = kMeans.Uncompress();
+            for (int i = 0; i < result.Count; i++)
+            {
+                for (int j = 0; i < result[0].Length; i++)
+                    Debug.Write(result[i][j]);
+                Debug.WriteLine("");
             }
             Debug.WriteLine("-------------------------");
         }

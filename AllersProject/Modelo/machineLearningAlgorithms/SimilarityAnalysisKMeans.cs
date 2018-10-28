@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Accord;
-using Accord.MachineLearning.VectorMachines.Learning;
-using Accord.Statistics;
-using Accord.Statistics.Kernels;
+using PCA;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Generic;
+using MathNet.Numerics.LinearAlgebra.Storage;
 
 namespace Modelo
 {
@@ -23,11 +23,12 @@ namespace Modelo
         //cantidad máxima de un item o dimensión. La mayor cantidad de una casilla de los vectores
         private int maxQuantityItem;
 
-        public SimilarityAnalysisKMeans (DataManager data, int dodp, int k, int noi, int mnoi)
+        public SimilarityAnalysisKMeans(DataManager data, int dimOfDataP, int k, int numOfIter, int minNroItemsPerC)
         {
             int posicionDimension = 0;
             int idDataP = 0;
             mapFromCustomerToDataPoint = new Dictionary<Customer, DataPoint>();
+            dataPoints = new List<DataPoint>();
             mapFromDimensionToItem = new Dictionary<int, Item>();
             Dictionary<Item, int> mapFromItemToDimension = new Dictionary<Item, int>();
             foreach (Transaction t in data.listOfAllTransactions)
@@ -46,7 +47,7 @@ namespace Modelo
                     //agrega la cantidad del item al vector del cliente
                     if (!mapFromCustomerToDataPoint.ContainsKey(cust))
                     {
-                        mapFromCustomerToDataPoint.Add(cust, new DataPoint(idDataP, new double[dodp]));
+                        mapFromCustomerToDataPoint.Add(cust, new DataPoint(idDataP, new double[dimOfDataP]));
                         idDataP++;
                     }
                     //posible nullpointer
@@ -55,11 +56,12 @@ namespace Modelo
                         maxQuantityItem = (int) mapFromCustomerToDataPoint[cust].vector[mapFromItemToDimension[item.Key]];
                 }
             }
-            dimensionOfDataPoints = dodp;
+            dimensionOfDataPoints = dimOfDataP;
             numberOfClusters = k;
-            numberOfIterations = noi;
-            minimumNumberOfItemsPerCustomer = mnoi;
+            numberOfIterations = numOfIter;
+            minimumNumberOfItemsPerCustomer = minNroItemsPerC;
             pruningDataPoints();
+            dataPoints = mapFromCustomerToDataPoint.Values.ToList();
         }
         
         public SimilarityAnalysisKMeans(int numOfClus, int numOfIter, int dimOfDP, int maxQuant, Dictionary<Customer,DataPoint> mapCusToDP, Dictionary<int, Item>mapDimToIt)
@@ -70,6 +72,7 @@ namespace Modelo
             maxQuantityItem = maxQuant;
             mapFromCustomerToDataPoint= mapCusToDP;
             mapFromDimensionToItem = mapDimToIt;
+            dataPoints = mapFromCustomerToDataPoint.Values.ToList();
         }
         public double AngularDistance (double[] x, double[] y)
         {
@@ -155,37 +158,21 @@ namespace Modelo
             }
         }
 
-        public int[] Kernel()
+        public List<double[]> Uncompress()
         {
-            // Create a new Sequential Minimal Optimization (SMO) learning 
-            // algorithm and estimate the complexity parameter C from data
-            var teacher = new SequentialMinimalOptimization<Gaussian>()
-            {
-                UseComplexityHeuristic = true,
-                UseKernelEstimation = true // estimate the kernel from the data
-            };
-            double [][] entrada = DataPointsToLearnFormat();
-            // Teach the vector machine
-            var svm = teacher.Learn(entrada, new double[entrada.Length]);
-
-            // Classify the samples using the model
-            bool[] answers = svm.Decide(entrada);
-
-            // Convert to Int32 so we can plot:
-            int[] zeroOneAnswers = answers.ToZeroOne();
-
-            return zeroOneAnswers;
-            // Plot the results
-            //ScatterplotBox.Show("Expected results", inputs, outputs);
-            //ScatterplotBox.Show("GaussianSVM results", inputs, zeroOneAnswers);
+            PCADimReducer lol = new PCADimReducer();
+            List<double[]> source = GetNormalizedData();
+            Matrix <double> Z; // PCA output 
+            double variance_retained = 8;
+            List<double[]> retorno = lol.CompressData(source, 1, out Z, out variance_retained);
+            return retorno;
         }
-
-        private double[][] DataPointsToLearnFormat()
+        private List<double[]> GetNormalizedData()
         {
-            double[][] retorno = new double[dataPoints.Count][];
+            List<double[]> retorno = new List<double[]>();
             for (int i = 0; i < dataPoints.Count; i++)
-                retorno[i] = dataPoints[i].vector;
-        return retorno;
+                retorno.Add(dataPoints[i].vector);
+            return retorno;
         }
     }
 }
