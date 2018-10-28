@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
+using System.Diagnostics;
 
 namespace Modelo.services
 {
@@ -91,10 +92,10 @@ namespace Modelo.services
             foreach (Tuple<List<string>,List<string>> rule in aafpg.rules)
             {
                 Prediction pre = new Prediction();
-                pre.relevance = (aafpg.FPTree.frequentsSupport[rule.Item1] +
-                    aafpg.FPTree.frequentsSupport[rule.Item2] + 0.0) / aafpg.TransactionCodes.Count;
-                pre.confidence = (aafpg.FPTree.frequentsSupport[rule.Item1] +
-                    aafpg.FPTree.frequentsSupport[rule.Item2] + 0.0) / aafpg.FPTree.frequentsSupport[rule.Item1];
+                pre.relevance = (aafpg.fptree.frequentsSupport[rule.Item1] +
+                    aafpg.fptree.frequentsSupport[rule.Item2] + 0.0) / aafpg.TransactionCodes.Count;
+                pre.confidence = (aafpg.fptree.frequentsSupport[rule.Item1] +
+                    aafpg.fptree.frequentsSupport[rule.Item2] + 0.0) / aafpg.fptree.frequentsSupport[rule.Item1];
                 List<Item> items = new List<Item>();
                 foreach (string itemCode in rule.Item1)
                 {

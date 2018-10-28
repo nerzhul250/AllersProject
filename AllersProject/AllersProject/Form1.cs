@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Modelo.services;
-
+using System.Diagnostics;
 namespace AllersProject
 {
     public partial class Form1 : Form
@@ -18,8 +18,8 @@ namespace AllersProject
         {
             InitializeComponent();
         }
-        private double minS;
-        private double minC;
+        private double minSGeneral;
+        private double minCGeneral;
         private void Form1_Load(object sender, EventArgs e)
         {
             customerPane1.main = this;
@@ -41,14 +41,14 @@ namespace AllersProject
         
         public void modifyGeneralPredictions(double minSup, double minConfidence)
         {
-            minS = minSup;
-            minC = minConfidence;
-            List<Prediction> predictions = model.GetGeneralPredictions(minS, minC);
+            minSGeneral = minSup;
+            minCGeneral = minConfidence;
+            List<Prediction> predictions = model.GetGeneralPredictions(minSGeneral, minCGeneral);
             double AverageRelevance = 0;
             double averageConfidence = 0;
             string text = "";
-            MessageBox.Show(minS+"");
-            MessageBox.Show(minC + "");
+            MessageBox.Show(minSGeneral+"");
+            MessageBox.Show(minCGeneral + "");
             MessageBox.Show(predictions.Count+"");
             foreach (var p in predictions)
             {
@@ -59,9 +59,12 @@ namespace AllersProject
                 for(int i = 0; i < p.antecedent.Length; i++)
                 {
                     antecedent += ", " + p.antecedent[i].itemName;
+                }
+                for (int i = 0; i < p.consequent.Length; i++)
+                {
                     consequent += ", " + p.consequent[i].itemName;
                 }
-                text+= antecedent+"\n"+consequent+"---------------------------------------\n";
+                text += antecedent+"\n"+consequent+"---------------------------------------\n";
             }
             averageConfidence /= predictions.Count*100;
             AverageRelevance /= predictions.Count*100;
@@ -73,18 +76,19 @@ namespace AllersProject
         {
             int numberOfGroups = Int32.Parse(NoGroups);
         }
-        public void predictionsByCostumer(String customerId)
+        public void predictionsByCostumer(String customerId,double sop,double conf)
         {
             if (model == null)
             {
                 MessageBox.Show("En la primer pestaña debe ingresar los parámetros");
                 return;
             }
-            List<Prediction> predictions = model.GetPredictionsOfCustomer(customerId,minS,minC);
+            List<Prediction> predictions = model.GetPredictionsOfCustomer(customerId,sop,conf);
             double AverageRelevance = 0;
-            double averageConfidence = 0;
+            double averageConfidence = 0;   
             string text = "";
-            foreach (var p in predictions)
+            Debug.WriteLine(predictions.Count);
+            foreach (Prediction p in predictions)
             {
                 averageConfidence += p.confidence;
                 AverageRelevance += p.relevance;
@@ -93,6 +97,9 @@ namespace AllersProject
                 for (int i = 0; i < p.antecedent.Length; i++)
                 {
                     antecedent += ", " + p.antecedent[i].itemName;
+                }
+                for (int i = 0; i < p.consequent.Length; i++)
+                {
                     consequent += ", " + p.consequent[i].itemName;
                 }
                 text += antecedent + "\n" + consequent + "---------------------------------------\n";

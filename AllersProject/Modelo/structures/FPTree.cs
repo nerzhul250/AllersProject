@@ -24,6 +24,7 @@ namespace Estructura
 
         public int GetHashCode(List<string> obj)
         {
+            obj.Sort();
             return obj[0].GetHashCode();
         }
     }

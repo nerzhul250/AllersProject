@@ -27,18 +27,22 @@ namespace AllersProject
         {
             advancedFlowLayoutPanel1.AutoScroll = true;
         }
-
+        public void modifyPredictions(string text)
+        {
+            customerPredictionPane1.setText(text);
+        }
         private void button1_Click_1(object sender, EventArgs e)
         {
-            try {
-            main.predictionsByCostumer(textBox1.Text);
+            try
+            {
+                main.predictionsByCostumer(textBox1.Text,Double.Parse(textBox2.Text), Double.Parse(textBox3.Text));
 
-            }catch(Exception ex)
+        }catch(Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
 
-        }
+}
 
         private void expandCollapsePanel1_Paint(object sender, PaintEventArgs e)
         {
@@ -51,6 +55,11 @@ namespace AllersProject
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
         {
 
         }

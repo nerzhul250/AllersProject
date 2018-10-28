@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Modelo
 {
@@ -12,7 +13,7 @@ namespace Modelo
     {
         public List<List<String>> TransactionCodes { get; set; }
         public List<Tuple<List<string>, List<string>>> rules { get; set; }
-        public FPTree FPTree { get; set; }
+        public FPTree fptree { get; set; }
 
         public double minSupport { get; set; }
         public double minConfidence { get; set; }
@@ -45,14 +46,14 @@ namespace Modelo
 
                 }
             }
-
-            FPTree = new FPTree(transactions, minSupport);
+            TransactionCodes = transactions;
+            fptree = new FPTree(transactions, minSupport);
 
         }
 
         public List<List<string>> frequentItemSets()
         {
-            return FPTree.FindFrequentItemsets();
+            return fptree.FindFrequentItemsets();
         }
         public void GenRules(List<string> kItemSet, List<List<string>> itemSets)
         {
@@ -65,13 +66,13 @@ namespace Modelo
                     for (int i = 0; i < itemSets.Count; i++)
                     {
                         List<string> h = itemSets[i];
-                        //bool contains = itemSetToSupport.ContainsKey(kItemSet) && itemSetToSupport.ContainsKey(kItemSet ^ h.Value);
+                        List<string> theRemovedOne = kItemSet.Except(h).ToList();
+                        bool contains = fptree.frequentsSupport.ContainsKey(kItemSet) && fptree.frequentsSupport.ContainsKey(theRemovedOne);
                         double conf = 0;
-                        bool contains = true;
-                        if (contains) conf = (double)FPTree.frequentsSupport[kItemSet] / FPTree.frequentsSupport[kItemSet.Except(h).ToList()];
+                        if (contains) conf = (double)fptree.frequentsSupport[kItemSet] / fptree.frequentsSupport[theRemovedOne];
                         if (contains && conf >= minConfidence)
                         {
-                            rules.Add(new Tuple<List<string>, List<string>>(kItemSet.Except(h).ToList(), h));
+                            rules.Add(new Tuple<List<string>, List<string>>(theRemovedOne, h));
                         }
                         else
                         {
