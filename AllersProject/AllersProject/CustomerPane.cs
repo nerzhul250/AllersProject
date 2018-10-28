@@ -30,7 +30,14 @@ namespace AllersProject
 
         private void button1_Click_1(object sender, EventArgs e)
         {
+            try {
             main.predictionsByCostumer(textBox1.Text);
+
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
         private void expandCollapsePanel1_Paint(object sender, PaintEventArgs e)

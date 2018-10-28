@@ -30,11 +30,12 @@ namespace AllersProject
         {
             try
             {
-            ServiceProvider model1 = new ServiceProvider(route);
+                String r= route+"\\";
+            ServiceProvider model1 = new ServiceProvider(r);
                 model = model1;
             }catch(Exception e)
             {
-                MessageBox.Show("Ruta no especificada");
+                MessageBox.Show("Ruta no especificada correctamente");
             }
         }
         
@@ -42,11 +43,14 @@ namespace AllersProject
         {
             minS = minSup;
             minC = minConfidence;
-            List<Prediction> predictions = model.GetGeneralPredictions(minSup, minConfidence);
+            List<Prediction> predictions = model.GetGeneralPredictions(minS, minC);
             double AverageRelevance = 0;
             double averageConfidence = 0;
             string text = "";
-            foreach(var p in predictions)
+            MessageBox.Show(minS+"");
+            MessageBox.Show(minC + "");
+            MessageBox.Show(predictions.Count+"");
+            foreach (var p in predictions)
             {
                 averageConfidence += p.confidence;
                 AverageRelevance += p.relevance;
@@ -59,9 +63,9 @@ namespace AllersProject
                 }
                 text+= antecedent+"\n"+consequent+"---------------------------------------\n";
             }
-            averageConfidence /= predictions.Count;
-            AverageRelevance /= predictions.Count;
-            text = "Average relevance: " + AverageRelevance * 100 + "%" + "\n" + "Average confidence: " + averageConfidence + "%\n";
+            averageConfidence /= predictions.Count*100;
+            AverageRelevance /= predictions.Count*100;
+            text = "Average relevance: " + AverageRelevance+""+ "%" + "\n" + "Average confidence: " + averageConfidence+"" + "%\n"+text;
             customerPredictionPane1.setText(text);
         }
         //TODO
@@ -93,9 +97,9 @@ namespace AllersProject
                 }
                 text += antecedent + "\n" + consequent + "---------------------------------------\n";
             }
-            averageConfidence /= predictions.Count;
-            AverageRelevance /= predictions.Count;
-            text = "Average relevance: " + AverageRelevance * 100 + "%" + "\n" + "Average confidence: " + averageConfidence + "%\n";
+            averageConfidence /= predictions.Count*100;
+            AverageRelevance /= predictions.Count*100;
+            text = "Average relevance: " + AverageRelevance+ "%" + "\n" + "Average confidence: " + averageConfidence + "%\n"+text;
             customerPane1.modifyPredictions(text);
         }
         //END_METHODS

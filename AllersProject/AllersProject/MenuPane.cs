@@ -39,6 +39,7 @@ namespace AllersProject
             }catch(Exception ex)
             {
                 MessageBox.Show("Minsup o Minconfidence erróneos");
+                MessageBox.Show(ex.Message);
             }
             try
             {
