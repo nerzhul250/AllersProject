@@ -42,9 +42,6 @@ namespace AllersProject
             this.customerPane1 = new AllersProject.CustomerPane();
             this.gruposClientes = new System.Windows.Forms.TabPage();
             this.ayuda = new System.Windows.Forms.TabPage();
-            this.customerPredictionPane1 = new AllersProject.CustomerPredictionPane();
-            this.menuPane1 = new AllersProject.MenuPane();
-            this.customerPane1 = new AllersProject.CustomerPane();
             this.groupsPane1 = new AllersProject.GroupsPane();
             this.tabControl1.SuspendLayout();
             this.menu.SuspendLayout();

@@ -57,7 +57,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.zedGraphControl1);
             this.Name = "GroupsPane";
-            this.Size = new System.Drawing.Size(1177, 676);
+            this.Size = new System.Drawing.Size(1174, 672);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Accord;
+using Accord.MachineLearning.VectorMachines.Learning;
+using Accord.Statistics;
+using Accord.Statistics.Kernels;
 
 namespace Modelo
 {
@@ -149,6 +153,39 @@ namespace Modelo
                 else if(i < numberOfIterations-1)
                     clusters.ForEach(x => x.RemoveAll());
             }
+        }
+
+        public int[] Kernel()
+        {
+            // Create a new Sequential Minimal Optimization (SMO) learning 
+            // algorithm and estimate the complexity parameter C from data
+            var teacher = new SequentialMinimalOptimization<Gaussian>()
+            {
+                UseComplexityHeuristic = true,
+                UseKernelEstimation = true // estimate the kernel from the data
+            };
+            double [][] entrada = DataPointsToLearnFormat();
+            // Teach the vector machine
+            var svm = teacher.Learn(entrada, new double[entrada.Length]);
+
+            // Classify the samples using the model
+            bool[] answers = svm.Decide(entrada);
+
+            // Convert to Int32 so we can plot:
+            int[] zeroOneAnswers = answers.ToZeroOne();
+
+            return zeroOneAnswers;
+            // Plot the results
+            //ScatterplotBox.Show("Expected results", inputs, outputs);
+            //ScatterplotBox.Show("GaussianSVM results", inputs, zeroOneAnswers);
+        }
+
+        private double[][] DataPointsToLearnFormat()
+        {
+            double[][] retorno = new double[dataPoints.Count][];
+            for (int i = 0; i < dataPoints.Count; i++)
+                retorno[i] = dataPoints[i].vector;
+        return retorno;
         }
     }
 }
