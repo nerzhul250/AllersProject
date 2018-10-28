@@ -42,13 +42,10 @@ namespace AllersProject
             this.customerPane1 = new AllersProject.CustomerPane();
             this.gruposClientes = new System.Windows.Forms.TabPage();
             this.ayuda = new System.Windows.Forms.TabPage();
-<<<<<<< HEAD
-=======
             this.customerPredictionPane1 = new AllersProject.CustomerPredictionPane();
             this.menuPane1 = new AllersProject.MenuPane();
             this.customerPane1 = new AllersProject.CustomerPane();
             this.groupsPane1 = new AllersProject.GroupsPane();
->>>>>>> f75b3d29bb4c60e74355a79eef2c0e82277688bb
             this.tabControl1.SuspendLayout();
             this.menu.SuspendLayout();
             this.clientes.SuspendLayout();
@@ -146,8 +143,6 @@ namespace AllersProject
             this.ayuda.Text = "Ayuda";
             this.ayuda.UseVisualStyleBackColor = true;
             // 
-<<<<<<< HEAD
-=======
             // customerPredictionPane1
             // 
             this.customerPredictionPane1.AutoScroll = true;
@@ -182,7 +177,6 @@ namespace AllersProject
             this.groupsPane1.Size = new System.Drawing.Size(1177, 676);
             this.groupsPane1.TabIndex = 0;
             // 
->>>>>>> f75b3d29bb4c60e74355a79eef2c0e82277688bb
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
