@@ -63,5 +63,13 @@ namespace AllersProject
                 }
             }
         }
+        public void setText(String text)
+        {
+            richTextBox1.AppendText(text);
+        }
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

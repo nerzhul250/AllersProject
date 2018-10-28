@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace Modelo.services
 {
-    class ServiceProvider
+    public class ServiceProvider
     {
         private DataManager data;
 

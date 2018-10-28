@@ -13,6 +13,7 @@ namespace AllersProject
 {
     public partial class MenuPane : UserControl
     {
+        public Form1 main;
         public MenuPane()
         {
             InitializeComponent();
@@ -26,6 +27,29 @@ namespace AllersProject
                 button1.Text = folderBrowserDialog1.SelectedPath;
                 toolTip1.SetToolTip(this.button1,button1.Text);
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            
+            main.initializeServiceProvider(button1.Text);
+            try
+            {
+                main.modifyGeneralPredictions(Double.Parse(textBox1.Text), Double.Parse(textBox2.Text));
+            }catch(Exception ex)
+            {
+                MessageBox.Show("Minsup o Minconfidence erróneos");
+            }
+            try
+            {
+            main.modifyGroupOfCLients(textBox3.Text);
+               
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Número de grupos inválidos");
+            }
+
         }
     }
 }

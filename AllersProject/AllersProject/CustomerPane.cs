@@ -12,6 +12,7 @@ namespace AllersProject
 {
     public partial class CustomerPane : UserControl
     {
+        public Form1 main;
         public CustomerPane()
         {
             InitializeComponent();
@@ -28,6 +29,21 @@ namespace AllersProject
         }
 
         private void button1_Click_1(object sender, EventArgs e)
+        {
+            main.predictionsByCostumer(textBox1.Text);
+        }
+
+        private void expandCollapsePanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void customerPredictionPane1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
         }

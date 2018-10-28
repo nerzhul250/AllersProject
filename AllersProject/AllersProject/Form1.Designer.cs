@@ -1,4 +1,7 @@
-﻿namespace AllersProject
+﻿using System;
+using Modelo.services;
+
+namespace AllersProject
 {
     partial class Form1
     {
@@ -7,6 +10,8 @@
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
+        
+        
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
@@ -31,12 +36,12 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.menu = new System.Windows.Forms.TabPage();
+            this.customerPredictionPane1 = new AllersProject.CustomerPredictionPane();
+            this.menuPane1 = new AllersProject.MenuPane();
             this.clientes = new System.Windows.Forms.TabPage();
+            this.customerPane1 = new AllersProject.CustomerPane();
             this.gruposClientes = new System.Windows.Forms.TabPage();
             this.ayuda = new System.Windows.Forms.TabPage();
-            this.menuPane1 = new AllersProject.MenuPane();
-            this.customerPane1 = new AllersProject.CustomerPane();
-            this.customerPredictionPane1 = new AllersProject.CustomerPredictionPane();
             this.tabControl1.SuspendLayout();
             this.menu.SuspendLayout();
             this.clientes.SuspendLayout();
@@ -67,6 +72,26 @@
             this.menu.TabIndex = 0;
             this.menu.Text = "Menu";
             this.menu.UseVisualStyleBackColor = true;
+            this.menu.Click += new System.EventHandler(this.menu_Click);
+            // 
+            // customerPredictionPane1
+            // 
+            this.customerPredictionPane1.AutoScroll = true;
+            this.customerPredictionPane1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.customerPredictionPane1.Location = new System.Drawing.Point(6, 160);
+            this.customerPredictionPane1.Name = "customerPredictionPane1";
+            this.customerPredictionPane1.Size = new System.Drawing.Size(756, 231);
+            this.customerPredictionPane1.TabIndex = 1;
+            this.customerPredictionPane1.Load += new System.EventHandler(this.customerPredictionPane1_Load);
+            // 
+            // menuPane1
+            // 
+            this.menuPane1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.menuPane1.Location = new System.Drawing.Point(218, 6);
+            this.menuPane1.Name = "menuPane1";
+            this.menuPane1.Size = new System.Drawing.Size(365, 148);
+            this.menuPane1.TabIndex = 0;
+            this.menuPane1.Load += new System.EventHandler(this.menuPane1_Load);
             // 
             // clientes
             // 
@@ -80,6 +105,14 @@
             this.clientes.Text = "Clientes";
             this.clientes.UseVisualStyleBackColor = true;
             // 
+            // customerPane1
+            // 
+            this.customerPane1.Location = new System.Drawing.Point(3, 6);
+            this.customerPane1.Name = "customerPane1";
+            this.customerPane1.Size = new System.Drawing.Size(758, 357);
+            this.customerPane1.TabIndex = 0;
+            this.customerPane1.Load += new System.EventHandler(this.customerPane1_Load_3);
+            // 
             // gruposClientes
             // 
             this.gruposClientes.Location = new System.Drawing.Point(4, 25);
@@ -88,6 +121,7 @@
             this.gruposClientes.TabIndex = 2;
             this.gruposClientes.Text = "Grupos de clientes";
             this.gruposClientes.UseVisualStyleBackColor = true;
+            this.gruposClientes.Click += new System.EventHandler(this.gruposClientes_Click);
             // 
             // ayuda
             // 
@@ -97,30 +131,6 @@
             this.ayuda.TabIndex = 3;
             this.ayuda.Text = "Ayuda";
             this.ayuda.UseVisualStyleBackColor = true;
-            // 
-            // menuPane1
-            // 
-            this.menuPane1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.menuPane1.Location = new System.Drawing.Point(218, 6);
-            this.menuPane1.Name = "menuPane1";
-            this.menuPane1.Size = new System.Drawing.Size(365, 148);
-            this.menuPane1.TabIndex = 0;
-            // 
-            // customerPane1
-            // 
-            this.customerPane1.Location = new System.Drawing.Point(3, 6);
-            this.customerPane1.Name = "customerPane1";
-            this.customerPane1.Size = new System.Drawing.Size(758, 357);
-            this.customerPane1.TabIndex = 0;
-            // 
-            // customerPredictionPane1
-            // 
-            this.customerPredictionPane1.AutoScroll = true;
-            this.customerPredictionPane1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.customerPredictionPane1.Location = new System.Drawing.Point(6, 160);
-            this.customerPredictionPane1.Name = "customerPredictionPane1";
-            this.customerPredictionPane1.Size = new System.Drawing.Size(756, 231);
-            this.customerPredictionPane1.TabIndex = 1;
             // 
             // Form1
             // 
