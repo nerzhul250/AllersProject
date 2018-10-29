@@ -69,7 +69,7 @@ namespace AllersProject
             //    break;
             //}
         }
-        // This event handler updates the progress.
+        //  This event handler updates the progress.
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             switch (e.ProgressPercentage)
