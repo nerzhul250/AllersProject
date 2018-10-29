@@ -64,7 +64,7 @@ namespace AllersProject
                 {
                     consequent += ", " + p.consequent[i].itemName;
                 }
-                text += antecedent+"\n"+consequent+"---------------------------------------\n";
+                text += antecedent+"\n"+consequent+"\n---------------------------------------\n";
             }
             averageConfidence /= predictions.Count*100;
             AverageRelevance /= predictions.Count*100;
@@ -102,12 +102,44 @@ namespace AllersProject
                 {
                     consequent += ", " + p.consequent[i].itemName;
                 }
-                text += antecedent + "\n" + consequent + "---------------------------------------\n";
+                text += antecedent + "\n" + consequent + "\n---------------------------------------\n";
             }
             averageConfidence /= predictions.Count*100;
             AverageRelevance /= predictions.Count*100;
             text = "Average relevance: " + AverageRelevance+ "%" + "\n" + "Average confidence: " + averageConfidence + "%\n"+text;
             customerPane1.modifyPredictions(text);
+        }
+        //THIS METHOD DEPENDS ON THE GENERAL SUPPORT AND CONFIDENCE
+        public void getRelevantCustomers()
+        {
+            Dictionary<String, List<Prediction>> dic = model.getRelevantCustomersByHisAveragePurchases(minSGeneral,minCGeneral);
+            foreach(var n in dic.Keys)
+            {
+                List<Prediction> predictions =dic[n];
+                double AverageRelevance = 0;
+                double averageConfidence = 0;
+                string text = "";
+                Debug.WriteLine(predictions.Count);
+                foreach (Prediction p in predictions)
+                {
+                    averageConfidence += p.confidence;
+                    AverageRelevance += p.relevance;
+                    string antecedent = "If the client buy these items:";
+                    string consequent = "he will probably buy those: ";
+                    for (int i = 0; i < p.antecedent.Length; i++)
+                    {
+                        antecedent += ", " + p.antecedent[i].itemName;
+                    }
+                    for (int i = 0; i < p.consequent.Length; i++)
+                    {
+                        consequent += ", " + p.consequent[i].itemName;
+                    }
+                    text += antecedent + "\n" + consequent + "\n---------------------------------------\n";
+                }
+                averageConfidence /= predictions.Count * 100;
+                AverageRelevance /= predictions.Count * 100;
+                text = "Average relevance: " + AverageRelevance + "%" + "\n" + "Average confidence: " + averageConfidence + "%\n" + text;
+            }
         }
         //END_METHODS
 

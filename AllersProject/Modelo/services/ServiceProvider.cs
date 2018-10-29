@@ -55,6 +55,13 @@ namespace Modelo.services
                 .GroupBy(t =>new { t.transactionDate.Month,t.transactionDate.Year})
                 .Average(g=>g.Sum(t=>t.getTotalPurchased()));
         }
+        public Dictionary<String, List<Prediction>> getRelevantCustomersByHisAveragePurchases(double minSup, double minConfidence)
+        {
+            Dictionary<String, List<Prediction>> toReturn = new Dictionary<string, List<Prediction>>();
+            var consult = data.mapFromCustomerIdToCustomer.Keys.Select(x => new { Id = x, average = GetCustomerAveragePurchasesByMonth(x) }).OrderBy(x=>x.average).Take(10);
+            consult.ToList().ForEach(x => toReturn.Add(x.Id, GetPredictionsOfCustomer(x.Id,minSup,minConfidence)));
+            return toReturn;
+        }
    
         public List<Prediction> GetPredictionsOfCustomer(String customerId,double minSup,double minConfidence)
         {
