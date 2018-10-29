@@ -36,6 +36,7 @@ namespace AllersProject
             try
             {
                 main.predictionsByCostumer(textBox1.Text,Double.Parse(textBox2.Text), Double.Parse(textBox3.Text));
+                expandCollapsePanel1.Text = "Código: " + textBox1.Text;
 
         }catch(Exception ex)
             {
