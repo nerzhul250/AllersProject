@@ -63,10 +63,22 @@ namespace AllersProject
                 }
             }
         }
+        delegate void SetTextCallback(string text);
         public void setText(String text)
         {
-            richTextBox1.ResetText();
-            richTextBox1.AppendText(text);
+            // InvokeRequired required compares the thread ID of the
+            // calling thread to the thread ID of the creating thread.
+            // If these threads are different, it returns true.
+            if (this.richTextBox1.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(setText);
+                this.Invoke(d, new object[] { text });
+            }
+            else
+            {
+                richTextBox1.ResetText();
+                richTextBox1.AppendText(text);
+            }
         }
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
