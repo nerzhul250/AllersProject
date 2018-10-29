@@ -1,13 +1,8 @@
-﻿using System;
+﻿using Modelo;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Numerics;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Estructura;
-using Modelo;
-
 namespace AllersProject
 {
     static class Program

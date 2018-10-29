@@ -1,7 +1,4 @@
-﻿using System;
-using Modelo.services;
-
-namespace AllersProject
+﻿namespace AllersProject
 {
     partial class Form1
     {

@@ -7,10 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Modelo.services;
 using System.Diagnostics;
 using ZedGraph;
 using MakarovDev.ExpandCollapsePanel;
+using Modelo.services;
 
 namespace AllersProject
 {
@@ -188,25 +188,31 @@ namespace AllersProject
                 averageConfidence /= predictions.Count * 100;
                 AverageRelevance /= predictions.Count * 100;
                 text = "Average relevance: " + AverageRelevance + "%" + "\n" + "Average confidence: " + averageConfidence + "%\n" + text;
-                CustomerPredictionPane c1 = new CustomerPredictionPane();
-                c1.setText(text);
-                ExpandCollapsePanel ex = new ExpandCollapsePanel();
-                //ex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-                //ex.ButtonSize = MakarovDev.ExpandCollapsePanel.ExpandCollapseButton.ExpandButtonSize.Normal;
-                //ex.ButtonStyle = MakarovDev.ExpandCollapsePanel.ExpandCollapseButton.ExpandButtonStyle.MagicArrow;
-                ex.Controls.Add(c1);
-                //ex.ExpandedHeight = 376;
-                //ex.IsExpanded = true;
-                //ex.Location = new System.Drawing.Point(3, 3);
-                //ex.Name = n;
-                //ex.Size = new System.Drawing.Size(715, 376);
-                //ex.TabIndex = 1;
-                ex.Text = "Codigo: " + n;
-                //ex.UseAnimation = true;
-                customerPane1.addControlToTheAdvanceControl(ex);
-
+                CrearExpandibleCallback d = new CrearExpandibleCallback(CrearExpandible);
+                this.Invoke(d, new object[] { text,n });
             }
         }
+        delegate void CrearExpandibleCallback(string text,string n);
+        private void CrearExpandible(string text,string n)
+        {
+            CustomerPredictionPane c1 = new CustomerPredictionPane();
+            c1.setText(text);
+            ExpandCollapsePanel ex = new ExpandCollapsePanel();
+            //ex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            //ex.ButtonSize = MakarovDev.ExpandCollapsePanel.ExpandCollapseButton.ExpandButtonSize.Normal;
+            //ex.ButtonStyle = MakarovDev.ExpandCollapsePanel.ExpandCollapseButton.ExpandButtonStyle.MagicArrow;
+            ex.Controls.Add(c1);
+            //ex.ExpandedHeight = 376;
+            //ex.IsExpanded = true;
+            //ex.Location = new System.Drawing.Point(3, 3);
+            //ex.Name = n;
+            //ex.Size = new System.Drawing.Size(715, 376);
+            //ex.TabIndex = 1;
+            ex.Text = "Codigo: " + n;
+            //ex.UseAnimation = true;
+            customerPane1.addControlToTheAdvanceControl(ex);
+        }
+
         //END_METHODS
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
