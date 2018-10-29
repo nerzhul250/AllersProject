@@ -11,6 +11,7 @@ using Modelo.services;
 using System.Diagnostics;
 using ZedGraph;
 using MakarovDev.ExpandCollapsePanel;
+
 namespace AllersProject
 {
     public partial class Form1 : Form
@@ -49,9 +50,6 @@ namespace AllersProject
             double AverageRelevance = 0;
             double averageConfidence = 0;
             string text = "";
-            MessageBox.Show(minSGeneral+"");
-            MessageBox.Show(minCGeneral + "");
-            MessageBox.Show(predictions.Count+"");
             foreach (var p in predictions)
             {
                 averageConfidence += p.confidence;
@@ -82,19 +80,19 @@ namespace AllersProject
             GraphPane myPane = zgc.GraphPane;
 
             // Set the titles
-            myPane.Title.Text = "Clientes";
+            myPane.Title.Text = "Grupos de Clientes";
             myPane.XAxis.Title.Text = "X";
             myPane.YAxis.Title.Text = "Y";
 
             // Populate a PointPairList
             PointPairList list = new PointPairList();
             int control = 0;
-            foreach (Recommendation re in res)
+            for (int i=0;i<res.Count;i++)
             {
-                double x = re.customer2dRepresentation[0];
-                double y = re.customer2dRepresentation[1];
-                if (re.groupColor != control) {
-                    control = re.groupColor;
+                double x = res[i].customer2dRepresentation[0];
+                double y = res[i].customer2dRepresentation[1];
+                if (res[i].groupColor != control) {
+                    control = res[i].groupColor;
                     // Add the curve
                     LineItem myCurve = myPane.AddCurve("G"+(control-1)+"", list, Color.Black, SymbolType.Diamond);
                     // Don't display the line (This makes a scatter plot)
@@ -110,14 +108,23 @@ namespace AllersProject
                     list.Add(x, y);
                 }
             }
-            
-
+           
             // Fill the background of the chart rect and pane
             myPane.Chart.Fill = new Fill(Color.White, Color.LightGoldenrodYellow, 45.0f);
             myPane.Fill = new Fill(Color.White, Color.SlateGray, 45.0f);
 
             zgc.AxisChange();
             zgc.GraphPane.Legend.IsVisible = false;
+            string recom = "";
+            for (int i=res.Count-1;i>=0;i--) {
+                recom += "El cliente " + res[i].customer.id + "\n";
+                recom += "Podria comprar mas de:\n";
+                for (int j = 0; j < res[i].recommendations.Count; j++)
+                {
+                    recom += res[i].recommendations[j].Item1.itemName + " " + "ya que compra " + res[i].recommendations[j].Item2 + "unidades menos que el promedio de su grupo\n";
+                }
+            }
+            recommendationsPane1.setRecommendations(recom);
         }
         public void predictionsByCostumer(String customerId,double sop,double conf)
         {
@@ -130,7 +137,6 @@ namespace AllersProject
             double AverageRelevance = 0;
             double averageConfidence = 0;   
             string text = "";
-            Debug.WriteLine(predictions.Count);
             foreach (Prediction p in predictions)
             {
                 averageConfidence += p.confidence;
@@ -156,7 +162,6 @@ namespace AllersProject
         public void getRelevantCustomers()
         {
             Dictionary<String, List<Prediction>> dic = model.getRelevantCustomersByHisAveragePurchases(minSGeneral,minCGeneral);
-            MessageBox.Show("a");
             foreach (var n in dic.Keys)
             {
                 List<Prediction> predictions = dic[n];

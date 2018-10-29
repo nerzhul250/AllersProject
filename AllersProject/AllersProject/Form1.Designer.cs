@@ -39,11 +39,12 @@ namespace AllersProject
             this.menu = new System.Windows.Forms.TabPage();
             this.clientes = new System.Windows.Forms.TabPage();
             this.gruposClientes = new System.Windows.Forms.TabPage();
+            this.zedGraphControl1 = new ZedGraph.ZedGraphControl();
             this.ayuda = new System.Windows.Forms.TabPage();
             this.customerPredictionPane1 = new AllersProject.CustomerPredictionPane();
             this.menuPane1 = new AllersProject.MenuPane();
             this.customerPane1 = new AllersProject.CustomerPane();
-            this.zedGraphControl1 = new ZedGraph.ZedGraphControl();
+            this.recommendationsPane1 = new AllersProject.RecommendationsPane();
             this.tabControl1.SuspendLayout();
             this.menu.SuspendLayout();
             this.clientes.SuspendLayout();
@@ -70,7 +71,7 @@ namespace AllersProject
             this.menu.Controls.Add(this.menuPane1);
             this.menu.Location = new System.Drawing.Point(4, 25);
             this.menu.Name = "menu";
-            this.menu.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.menu.Padding = new System.Windows.Forms.Padding(3);
             this.menu.Size = new System.Drawing.Size(768, 397);
             this.menu.TabIndex = 0;
             this.menu.Text = "Menu";
@@ -83,7 +84,7 @@ namespace AllersProject
             this.clientes.Controls.Add(this.customerPane1);
             this.clientes.Location = new System.Drawing.Point(4, 25);
             this.clientes.Name = "clientes";
-            this.clientes.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.clientes.Padding = new System.Windows.Forms.Padding(3);
             this.clientes.Size = new System.Drawing.Size(768, 397);
             this.clientes.TabIndex = 1;
             this.clientes.Text = "Clientes";
@@ -92,6 +93,7 @@ namespace AllersProject
             // gruposClientes
             // 
             this.gruposClientes.AutoScroll = true;
+            this.gruposClientes.Controls.Add(this.recommendationsPane1);
             this.gruposClientes.Controls.Add(this.zedGraphControl1);
             this.gruposClientes.Location = new System.Drawing.Point(4, 25);
             this.gruposClientes.Name = "gruposClientes";
@@ -100,6 +102,21 @@ namespace AllersProject
             this.gruposClientes.Text = "Grupos de clientes";
             this.gruposClientes.UseVisualStyleBackColor = true;
             this.gruposClientes.Click += new System.EventHandler(this.gruposClientes_Click);
+            // 
+            // zedGraphControl1
+            // 
+            this.zedGraphControl1.Location = new System.Drawing.Point(3, 42);
+            this.zedGraphControl1.Name = "zedGraphControl1";
+            this.zedGraphControl1.ScrollGrace = 0D;
+            this.zedGraphControl1.ScrollMaxX = 0D;
+            this.zedGraphControl1.ScrollMaxY = 0D;
+            this.zedGraphControl1.ScrollMaxY2 = 0D;
+            this.zedGraphControl1.ScrollMinX = 0D;
+            this.zedGraphControl1.ScrollMinY = 0D;
+            this.zedGraphControl1.ScrollMinY2 = 0D;
+            this.zedGraphControl1.Size = new System.Drawing.Size(745, 433);
+            this.zedGraphControl1.TabIndex = 0;
+            this.zedGraphControl1.UseExtendedPrintDialog = true;
             // 
             // ayuda
             // 
@@ -140,20 +157,12 @@ namespace AllersProject
             this.customerPane1.TabIndex = 0;
             this.customerPane1.Load += new System.EventHandler(this.customerPane1_Load_3);
             // 
-            // zedGraphControl1
+            // recommendationsPane1
             // 
-            this.zedGraphControl1.Location = new System.Drawing.Point(3, 3);
-            this.zedGraphControl1.Name = "zedGraphControl1";
-            this.zedGraphControl1.ScrollGrace = 0D;
-            this.zedGraphControl1.ScrollMaxX = 0D;
-            this.zedGraphControl1.ScrollMaxY = 0D;
-            this.zedGraphControl1.ScrollMaxY2 = 0D;
-            this.zedGraphControl1.ScrollMinX = 0D;
-            this.zedGraphControl1.ScrollMinY = 0D;
-            this.zedGraphControl1.ScrollMinY2 = 0D;
-            this.zedGraphControl1.Size = new System.Drawing.Size(478, 433);
-            this.zedGraphControl1.TabIndex = 0;
-            this.zedGraphControl1.UseExtendedPrintDialog = true;
+            this.recommendationsPane1.Location = new System.Drawing.Point(3, 481);
+            this.recommendationsPane1.Name = "recommendationsPane1";
+            this.recommendationsPane1.Size = new System.Drawing.Size(730, 280);
+            this.recommendationsPane1.TabIndex = 1;
             // 
             // Form1
             // 
@@ -185,6 +194,7 @@ namespace AllersProject
         private MenuPane menuPane1;
         private CustomerPredictionPane customerPredictionPane1;
         private ZedGraph.ZedGraphControl zedGraphControl1;
+        private RecommendationsPane recommendationsPane1;
     }
 }
 
