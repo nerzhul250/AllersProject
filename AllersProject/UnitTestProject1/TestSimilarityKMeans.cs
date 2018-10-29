@@ -84,14 +84,6 @@ namespace UnitTestProject1
                     }
                 }
             }
-            List<double[]> result = kMeans.Uncompress();
-            for (int i = 0; i < result.Count; i++)
-            {
-                for (int j = 0; i < result[0].Length; i++)
-                    Debug.Write(result[i][j]);
-                Debug.WriteLine("");
-            }
-            Debug.WriteLine("-------------------------");
         }
     }
 }

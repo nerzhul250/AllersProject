@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Modelo.services;
 using System.Diagnostics;
+using ZedGraph;
+
 namespace AllersProject
 {
     public partial class Form1 : Form
@@ -75,6 +77,47 @@ namespace AllersProject
         public void modifyGroupOfCLients(String NoGroups)
         {
             int numberOfGroups = Int32.Parse(NoGroups);
+            List<Recommendation>res=model.GetItemsCustomersMightBuyMoreButBuyFew(numberOfGroups,100,2,3);
+            ZedGraph.ZedGraphControl zgc = zedGraphControl1;
+            GraphPane myPane = zgc.GraphPane;
+
+            // Set the titles
+            myPane.Title.Text = "Clientes";
+            myPane.XAxis.Title.Text = "X";
+            myPane.YAxis.Title.Text = "Y";
+
+            // Populate a PointPairList
+            PointPairList list = new PointPairList();
+            int control = 0;
+            foreach (Recommendation re in res)
+            {
+                double x = re.customer2dRepresentation[0];
+                double y = re.customer2dRepresentation[1];
+                if (re.groupColor != control) {
+                    control = re.groupColor;
+                    // Add the curve
+                    LineItem myCurve = myPane.AddCurve("G"+(control-1)+"", list, Color.Black, SymbolType.Diamond);
+                    // Don't display the line (This makes a scatter plot)
+                    myCurve.Line.IsVisible = false;
+                    // Hide the symbol outline
+                    myCurve.Symbol.Border.IsVisible = false;
+                    // Fill the symbol interior with color
+                    myCurve.Symbol.Fill = new Fill(Color.FromArgb(((control*300)%129)+127, ((control * 750)%129)+127, ((control * 400)%129)+127));
+                    list = new PointPairList();
+                    list.Add(x, y);
+                }
+                else {
+                    list.Add(x, y);
+                }
+            }
+            
+
+            // Fill the background of the chart rect and pane
+            myPane.Chart.Fill = new Fill(Color.White, Color.LightGoldenrodYellow, 45.0f);
+            myPane.Fill = new Fill(Color.White, Color.SlateGray, 45.0f);
+
+            zgc.AxisChange();
+            zgc.GraphPane.Legend.IsVisible = false;
         }
         public void predictionsByCostumer(String customerId,double sop,double conf)
         {

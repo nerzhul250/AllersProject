@@ -5,9 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 using System.Diagnostics;
+using Accord.Statistics;
+using Accord.Statistics.Analysis;
 
 namespace Modelo.services
 {
+    public class TupleComparer : IComparer<Tuple<Item, double>>
+    {
+        public int Compare(Tuple<Item, double> x, Tuple<Item, double> y)
+        {
+            return x.Item2.CompareTo(y.Item2);
+        }
+    }
     public class ServiceProvider
     {
         private DataManager data;
@@ -120,9 +129,65 @@ namespace Modelo.services
             return predictions;
         }
 
-        public List<Recommendation> GetItemsCustomersMightBuyMoreButBuyFew(int numberOfGroups)
+        public List<Recommendation> GetItemsCustomersMightBuyMoreButBuyFew(int numberOfGroups,int numberOfItemsInAnalysis,int minimumNumberOfItemPerCustomer,int numberOfItemsToRecommend)
         {
-            return null;
+            int numberOfIterations = 100;
+            SimilarityAnalysisKMeans sakm = new SimilarityAnalysisKMeans(data, numberOfItemsInAnalysis, numberOfGroups, numberOfIterations, minimumNumberOfItemPerCustomer);
+            sakm.Kmeans();
+            List<List<Tuple<Customer, double[]>>> groups = sakm.GetCustomers();
+            List<Recommendation> recommendations = new List<Recommendation>();
+            int groupNum = 0;
+            foreach(List<Tuple<Customer,double[]>> group in groups)
+            {
+                double[] average = new double[sakm.dimensionOfDataPoints];
+                foreach (Tuple<Customer, double[]> items in group) {
+                    double[] vec = items.Item2;
+                    for (int i = 0; i < vec.Length; i++)
+                    {
+                        average[i] += vec[i];
+                    }
+                }
+                for (int i = 0; i < average.Length; i++)
+                {
+                    average[i] = average[i] / group.Count;
+                }
+                foreach (Tuple<Customer, double[]> customer in group)
+                {
+                    List<Tuple<Item,double>>diffs = new List<Tuple<Item, double>>();
+                    for (int i = 0; i < customer.Item2.GetLength(0); i++)
+                    {
+                        diffs.Add(new Tuple<Item, double>(sakm.mapFromDimensionToItem[i],average[i]- customer.Item2[i]));
+                    }
+                    diffs = diffs.OrderByDescending(t=>t.Item2).Take(numberOfItemsToRecommend).ToList();
+                    Recommendation re = new Recommendation(diffs);
+                    re.customerRepresentation = customer.Item2;
+                    re.customer = customer.Item1;
+                    re.groupColor = groupNum;
+                    recommendations.Add(re);
+                }
+                groupNum++;
+            }
+            recommendations.Sort();
+            double[][] matrix = new double[recommendations.Count][];
+            for (int i = 0; i < recommendations.Count; i++)
+            {
+                double[] dat = recommendations[i].customerRepresentation;
+                matrix[i] = dat;
+            }
+            PrincipalComponentAnalysis pca = new PrincipalComponentAnalysis(matrix);
+            pca.NumberOfOutputs = 2;
+            
+            // Compute the Principal Component Analysis
+            pca.Compute();
+
+            // Creates a projection
+            double[][] components = pca.Transform(matrix);
+            for (int i = 0; i < components.GetLength(0); i++)
+            {
+                recommendations[i].customer2dRepresentation = components[i];
+            }
+            return recommendations;
         }
+        
     }
 }

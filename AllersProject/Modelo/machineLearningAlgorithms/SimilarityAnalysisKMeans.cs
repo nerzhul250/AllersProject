@@ -3,22 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PCA;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Generic;
-using MathNet.Numerics.LinearAlgebra.Storage;
-
 namespace Modelo
 {
     public class SimilarityAnalysisKMeans
     {
-        private int dimensionOfDataPoints;
+        public int dimensionOfDataPoints{ get; set; }
         private int numberOfClusters;
         private List<DataPoint> dataPoints;
         private int numberOfIterations;
         private int minimumNumberOfItemsPerCustomer;
         private Dictionary<Customer, DataPoint> mapFromCustomerToDataPoint;
-        private Dictionary<int, Item> mapFromDimensionToItem;
+        private Dictionary<DataPoint,Customer> mapFromDataPointToCustomer;
+        public Dictionary<int, Item> mapFromDimensionToItem { get; set; }
         public List<Cluster> clusters { get; set; }
         //cantidad máxima de un item o dimensión. La mayor cantidad de una casilla de los vectores
         private int maxQuantityItem;
@@ -28,6 +24,7 @@ namespace Modelo
             int posicionDimension = 0;
             int idDataP = 0;
             mapFromCustomerToDataPoint = new Dictionary<Customer, DataPoint>();
+            mapFromDataPointToCustomer = new Dictionary<DataPoint, Customer>();
             dataPoints = new List<DataPoint>();
             mapFromDimensionToItem = new Dictionary<int, Item>();
             Dictionary<Item, int> mapFromItemToDimension = new Dictionary<Item, int>();
@@ -40,6 +37,7 @@ namespace Modelo
                     //genera los números de las dimensiones
                     if (!mapFromItemToDimension.ContainsKey(item.Key))
                     {
+                        if (posicionDimension == dimOfDataP) continue;
                         mapFromItemToDimension.Add(item.Key,posicionDimension);
                         mapFromDimensionToItem.Add(posicionDimension, item.Key);
                         posicionDimension++;
@@ -47,7 +45,9 @@ namespace Modelo
                     //agrega la cantidad del item al vector del cliente
                     if (!mapFromCustomerToDataPoint.ContainsKey(cust))
                     {
-                        mapFromCustomerToDataPoint.Add(cust, new DataPoint(idDataP, new double[dimOfDataP]));
+                        DataPoint dp = new DataPoint(idDataP, new double[dimOfDataP]);
+                        mapFromCustomerToDataPoint.Add(cust, dp);
+                        mapFromDataPointToCustomer.Add(dp,cust);
                         idDataP++;
                     }
                     //posible nullpointer
@@ -91,6 +91,7 @@ namespace Modelo
 
         public void pruningDataPoints ()
         {
+            List<Customer> toRemove = new List<Customer>();
             foreach (KeyValuePair<Customer, DataPoint> customer in mapFromCustomerToDataPoint)
             {
                 int cantItems = 0;
@@ -99,14 +100,12 @@ namespace Modelo
                     if (customer.Value.vector[i] > 0)
                         cantItems++;
                 }
-                //si arroja error, guardarlos en una lista y después eliminarlos
-                if (cantItems < minimumNumberOfItemsPerCustomer)
-                    mapFromCustomerToDataPoint.Remove(customer.Key);
+                if (cantItems < minimumNumberOfItemsPerCustomer) toRemove.Add(customer.Key);
             }
-        }
-        public List<Tuple<Customer, DataPoint, int>> GetCustomers ()
-        {
-            return null;
+            for (int i = 0; i < toRemove.Count; i++)
+            {
+                mapFromCustomerToDataPoint.Remove(toRemove[i]);
+            }
         }
         public void Kmeans ()
         {
@@ -157,22 +156,18 @@ namespace Modelo
                     clusters.ForEach(x => x.RemoveAll());
             }
         }
-
-        public List<double[]> Uncompress()
+        public List<List<Tuple<Customer, double[]>>> GetCustomers()
         {
-            PCADimReducer lol = new PCADimReducer();
-            List<double[]> source = GetNormalizedData();
-            Matrix <double> Z; // PCA output 
-            double variance_retained = 8;
-            List<double[]> retorno = lol.CompressData(source, 1, out Z, out variance_retained);
-            return retorno;
+            List<List<Tuple<Customer, double[]>>> ans = new List<List<Tuple<Customer, double[]>>>();
+            foreach (Cluster cluster in clusters) {
+                List<Tuple<Customer, double[]>> clus = new List<Tuple<Customer, double[]>>();
+                foreach (DataPoint dp in cluster.cluster) {
+                    clus.Add(new Tuple<Customer, double[]>(mapFromDataPointToCustomer[dp],dp.vector));
+                }
+                ans.Add(clus);
+            }
+            return ans;
         }
-        private List<double[]> GetNormalizedData()
-        {
-            List<double[]> retorno = new List<double[]>();
-            for (int i = 0; i < dataPoints.Count; i++)
-                retorno.Add(dataPoints[i].vector);
-            return retorno;
-        }
+        
     }
 }
