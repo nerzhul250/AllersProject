@@ -41,15 +41,22 @@ namespace AllersProject
                 MessageBox.Show("Minsup o Minconfidence erróneos");
                 MessageBox.Show(ex.Message);
             }
-            //try
-            //{
-            main.modifyGroupOfCLients(textBox3.Text);
-               
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show("Número de grupos inválidos");
-            //}
+            try
+            {
+                main.modifyGroupOfCLients(textBox3.Text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Número de grupos inválidos");
+            }
+            try
+            {
+                main.getRelevantCustomers();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

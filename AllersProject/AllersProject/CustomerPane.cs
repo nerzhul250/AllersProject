@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MakarovDev.ExpandCollapsePanel;
 
 namespace AllersProject
 {
@@ -36,6 +37,7 @@ namespace AllersProject
             try
             {
                 main.predictionsByCostumer(textBox1.Text,Double.Parse(textBox2.Text), Double.Parse(textBox3.Text));
+                expandCollapsePanel1.Text = "Código: " + textBox1.Text;
 
         }catch(Exception ex)
             {
@@ -44,6 +46,10 @@ namespace AllersProject
 
 }
 
+        public void addControlToTheAdvanceControl(ExpandCollapsePanel ad)
+        {
+            advancedFlowLayoutPanel1.Controls.Add(ad);
+        }
         private void expandCollapsePanel1_Paint(object sender, PaintEventArgs e)
         {
 

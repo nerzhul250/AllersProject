@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using Modelo.services;
 using System.Diagnostics;
 using ZedGraph;
-
+using MakarovDev.ExpandCollapsePanel;
 namespace AllersProject
 {
     public partial class Form1 : Form
@@ -66,7 +66,7 @@ namespace AllersProject
                 {
                     consequent += ", " + p.consequent[i].itemName;
                 }
-                text += antecedent+"\n"+consequent+"---------------------------------------\n";
+                text += antecedent+"\n"+consequent+"\n---------------------------------------\n";
             }
             averageConfidence /= predictions.Count*100;
             AverageRelevance /= predictions.Count*100;
@@ -145,12 +145,62 @@ namespace AllersProject
                 {
                     consequent += ", " + p.consequent[i].itemName;
                 }
-                text += antecedent + "\n" + consequent + "---------------------------------------\n";
+                text += antecedent + "\n" + consequent + "\n---------------------------------------\n";
             }
             averageConfidence /= predictions.Count*100;
             AverageRelevance /= predictions.Count*100;
             text = "Average relevance: " + AverageRelevance+ "%" + "\n" + "Average confidence: " + averageConfidence + "%\n"+text;
             customerPane1.modifyPredictions(text);
+        }
+        //THIS METHOD DEPENDS ON THE GENERAL SUPPORT AND CONFIDENCE
+        public void getRelevantCustomers()
+        {
+            Dictionary<String, List<Prediction>> dic = model.getRelevantCustomersByHisAveragePurchases(minSGeneral,minCGeneral);
+            MessageBox.Show("a");
+            foreach (var n in dic.Keys)
+            {
+                List<Prediction> predictions = dic[n];
+                double AverageRelevance = 0;
+                double averageConfidence = 0;
+                string text = "";
+
+                foreach (Prediction p in predictions)
+                {
+                    averageConfidence += p.confidence;
+                    AverageRelevance += p.relevance;
+                    string antecedent = "If the client buy these items:";
+                    string consequent = "he will probably buy those: ";
+                    for (int i = 0; i < p.antecedent.Length; i++)
+                    {
+                        antecedent += ", " + p.antecedent[i].itemName;
+                    }
+                    for (int i = 0; i < p.consequent.Length; i++)
+                    {
+                        consequent += ", " + p.consequent[i].itemName;
+                    }
+                    text += antecedent + "\n" + consequent + "\n---------------------------------------\n";
+                }
+                averageConfidence /= predictions.Count * 100;
+                AverageRelevance /= predictions.Count * 100;
+                text = "Average relevance: " + AverageRelevance + "%" + "\n" + "Average confidence: " + averageConfidence + "%\n" + text;
+                CustomerPredictionPane c1 = new CustomerPredictionPane();
+                c1.setText(text);
+                ExpandCollapsePanel ex = new ExpandCollapsePanel();
+                //ex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+                //ex.ButtonSize = MakarovDev.ExpandCollapsePanel.ExpandCollapseButton.ExpandButtonSize.Normal;
+                //ex.ButtonStyle = MakarovDev.ExpandCollapsePanel.ExpandCollapseButton.ExpandButtonStyle.MagicArrow;
+                ex.Controls.Add(c1);
+                //ex.ExpandedHeight = 376;
+                //ex.IsExpanded = true;
+                //ex.Location = new System.Drawing.Point(3, 3);
+                //ex.Name = n;
+                //ex.Size = new System.Drawing.Size(715, 376);
+                //ex.TabIndex = 1;
+                ex.Text = "Codigo: " + n;
+                //ex.UseAnimation = true;
+                customerPane1.addControlToTheAdvanceControl(ex);
+
+            }
         }
         //END_METHODS
 
