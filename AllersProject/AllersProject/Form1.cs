@@ -134,6 +134,7 @@ namespace AllersProject
                 return;
             }
             List<Prediction> predictions = model.GetPredictionsOfCustomer(customerId,sop,conf);
+            Debug.WriteLine(predictions.Count);
             double AverageRelevance = 0;
             double averageConfidence = 0;   
             string text = "";
@@ -167,29 +168,43 @@ namespace AllersProject
                 List<Prediction> predictions = dic[n];
                 double AverageRelevance = 0;
                 double averageConfidence = 0;
-                string text = "";
-
+                StringBuilder text = new StringBuilder();
+                Debug.WriteLine(predictions.Count+"JOLA");
                 foreach (Prediction p in predictions)
                 {
                     averageConfidence += p.confidence;
                     AverageRelevance += p.relevance;
-                    string antecedent = "If the client buy these items:";
-                    string consequent = "he will probably buy those: ";
+                    StringBuilder antecedent = new StringBuilder();
+                    antecedent.Append("If the client buy these items:");
+                    StringBuilder consequent = new StringBuilder();
+                    consequent.Append("he will probably buy those: ");
                     for (int i = 0; i < p.antecedent.Length; i++)
                     {
-                        antecedent += ", " + p.antecedent[i].itemName;
+                        antecedent.Append(", ");
+                        antecedent.Append(p.antecedent[i].itemName);
                     }
                     for (int i = 0; i < p.consequent.Length; i++)
                     {
-                        consequent += ", " + p.consequent[i].itemName;
+                        consequent.Append(", ");
+                        consequent.Append(p.consequent[i].itemName);
                     }
-                    text += antecedent + "\n" + consequent + "\n---------------------------------------\n";
+                    text.Append(antecedent);
+                    text.Append("\n");
+                    text.Append(consequent);
+                    text.Append("\n---------------------------------------\n");
                 }
+                Debug.WriteLine("TERMINE");
                 averageConfidence /= predictions.Count * 100;
                 AverageRelevance /= predictions.Count * 100;
-                text = "Average relevance: " + AverageRelevance + "%" + "\n" + "Average confidence: " + averageConfidence + "%\n" + text;
+                text.Insert(0, "Average relevance: ");
+                text.Insert(0, AverageRelevance);
+                text.Insert(0, "%");
+                text.Insert(0, "\n");
+                text.Insert(0, "Average confidence: ");
+                text.Insert(0, averageConfidence);
+                text.Insert(0, "%\n");
                 CrearExpandibleCallback d = new CrearExpandibleCallback(CrearExpandible);
-                this.Invoke(d, new object[] { text,n });
+                this.Invoke(d, new object[] { text.ToString(),n });
             }
         }
         delegate void CrearExpandibleCallback(string text,string n);
@@ -198,18 +213,19 @@ namespace AllersProject
             CustomerPredictionPane c1 = new CustomerPredictionPane();
             c1.setText(text);
             ExpandCollapsePanel ex = new ExpandCollapsePanel();
-            //ex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            //ex.ButtonSize = MakarovDev.ExpandCollapsePanel.ExpandCollapseButton.ExpandButtonSize.Normal;
-            //ex.ButtonStyle = MakarovDev.ExpandCollapsePanel.ExpandCollapseButton.ExpandButtonStyle.MagicArrow;
+            ex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            ex.ButtonSize = MakarovDev.ExpandCollapsePanel.ExpandCollapseButton.ExpandButtonSize.Normal;
+            ex.ButtonStyle = MakarovDev.ExpandCollapsePanel.ExpandCollapseButton.ExpandButtonStyle.MagicArrow;
             ex.Controls.Add(c1);
-            //ex.ExpandedHeight = 376;
-            //ex.IsExpanded = true;
-            //ex.Location = new System.Drawing.Point(3, 3);
-            //ex.Name = n;
-            //ex.Size = new System.Drawing.Size(715, 376);
-            //ex.TabIndex = 1;
+            ex.ExpandedHeight = 376;
+            ex.IsExpanded = false;
+            ex.Location = new System.Drawing.Point(3, 3);
+            ex.Name = n;
+            ex.Size = new System.Drawing.Size(715, 376);
+            ex.TabIndex = 1;
             ex.Text = "Codigo: " + n;
-            //ex.UseAnimation = true;
+            ex.UseAnimation = true;
+            ex.ButtonStyle = ExpandCollapseButton.ExpandButtonStyle.MagicArrow;
             customerPane1.addControlToTheAdvanceControl(ex);
         }
 

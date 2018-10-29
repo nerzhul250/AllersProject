@@ -60,42 +60,53 @@ namespace Modelo.services
         public double GetCustomerAveragePurchasesByMonth (String customerId)
         {
             DataManager cusData = GetDataBy(customerId);
-            return cusData.listOfAllTransactions
-                .GroupBy(t =>new { t.transactionDate.Month,t.transactionDate.Year})
-                .Average(g=>g.Sum(t=>t.getTotalPurchased()));
+            if (cusData.listOfAllTransactions.Count == 0)
+            {
+                return 0;
+            }
+            else {
+                return cusData.listOfAllTransactions
+                .GroupBy(t => new { t.transactionDate.Month, t.transactionDate.Year })
+                .Average(g => g.Sum(t => t.getTotalPurchased()));
+            }
+            
         }
         public Dictionary<String, List<Prediction>> getRelevantCustomersByHisAveragePurchases(double minSup, double minConfidence)
         {
             
             Dictionary<String, List<Prediction>> toReturn = new Dictionary<string, List<Prediction>>();
-            
-            var consult = data.mapFromCustomerIdToCustomer.Keys.Take(1);
-            //.Select(x => new { Id = x, average = GetCustomerAveragePurchasesByMonth(x) }).OrderBy(x => x.average).Take(10)
-            //consult.ToList().ForEach(x => toReturn.Add(x.Id, GetPredictionsOfCustomer(x.Id, minSup, minConfidence)));
-            foreach (var a in consult)
-            {
-                toReturn.Add(a, GetPredictionsOfCustomer(a, minSup, minConfidence));
-            Debug.WriteLine("aaaaaaa");
-            }
+
+            var consult = data.mapFromCustomerIdToCustomer.Keys.Select(x => new { Id = x, average = GetCustomerAveragePurchasesByMonth(x) }).OrderByDescending(x => x.average).Take(10);
+            Debug.WriteLine("HERERERE");
+            consult.ToList().ForEach(x => toReturn.Add(x.Id+"-Compras promedio: "+string.Format("{0:C}", x.average), GetPredictionsOfCustomer(x.Id, minSup, minConfidence)));
             return toReturn;
         }
    
         public List<Prediction> GetPredictionsOfCustomer(String customerId,double minSup,double minConfidence)
         {
             DataManager cusData = GetDataBy(customerId);
-            AssociationAnalyzerApriori aaa = new AssociationAnalyzerApriori(cusData,
-                cusData.mapFromItemCodeToItem.Keys.Count,
-                minSup,
-                minConfidence,
-                15);
-            aaa.AprioriRuleGeneration(aaa.GenerateFrequentItemSetsApriori());
+            AssociationAnalyzerFPGrowth aafpg = new AssociationAnalyzerFPGrowth(data, minSup, minConfidence);
+            aafpg.RuleGeneration(aafpg.frequentItemSets());
             List<Prediction> predictions = new List<Prediction>();
-            foreach (Tuple<BigInteger,BigInteger> rule in aaa.rules) {
-                Prediction pre=new Prediction();
-                pre.relevance = (aaa.itemSetToSupport[rule.Item1]+ aaa.itemSetToSupport[rule.Item2] + 0.0) / aaa.totalNumberOfTransactions;
-                pre.confidence= (aaa.itemSetToSupport[rule.Item1] + aaa.itemSetToSupport[rule.Item2] + 0.0) / aaa.itemSetToSupport[rule.Item1];
-                pre.antecedent = aaa.BinaryItemSetToObjectItemSet(rule.Item1).ToArray();
-                pre.consequent = aaa.BinaryItemSetToObjectItemSet(rule.Item2).ToArray();
+            foreach (Tuple<List<string>, List<string>> rule in aafpg.rules)
+            {
+                Prediction pre = new Prediction();
+                pre.relevance = (aafpg.fptree.frequentsSupport[rule.Item1] +
+                    aafpg.fptree.frequentsSupport[rule.Item2] + 0.0) / aafpg.TransactionCodes.Count;
+                pre.confidence = (aafpg.fptree.frequentsSupport[rule.Item1] +
+                    aafpg.fptree.frequentsSupport[rule.Item2] + 0.0) / aafpg.fptree.frequentsSupport[rule.Item1];
+                List<Item> items = new List<Item>();
+                foreach (string itemCode in rule.Item1)
+                {
+                    items.Add(data.mapFromItemCodeToItem[itemCode]);
+                }
+                pre.antecedent = items.ToArray();
+                items = new List<Item>();
+                foreach (string itemCode in rule.Item2)
+                {
+                    items.Add(data.mapFromItemCodeToItem[itemCode]);
+                }
+                pre.consequent = items.ToArray();
                 pre.minimumQuantity = new int[pre.consequent.Length];
                 pre.maximumQuantity = new int[pre.consequent.Length];
                 for (int i = 0; i < pre.consequent.Length; i++)

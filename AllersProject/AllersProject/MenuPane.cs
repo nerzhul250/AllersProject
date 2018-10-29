@@ -55,14 +55,14 @@ namespace AllersProject
                 MessageBox.Show("Número de grupos inválidos");
             }
             worker.ReportProgress(4);
-            try
-            {
+            //try
+            //{
                 main.getRelevantCustomers();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message);
+            //}
             //if (worker.CancellationPending == true)
             //{
             //    e.Cancel = true;
