@@ -50,6 +50,14 @@ namespace AllersProject
             {
                 MessageBox.Show("Número de grupos inválidos");
             }
+            try
+            {
+                main.getRelevantCustomers();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
         }
     }

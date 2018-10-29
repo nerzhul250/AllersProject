@@ -57,9 +57,17 @@ namespace Modelo.services
         }
         public Dictionary<String, List<Prediction>> getRelevantCustomersByHisAveragePurchases(double minSup, double minConfidence)
         {
+            
             Dictionary<String, List<Prediction>> toReturn = new Dictionary<string, List<Prediction>>();
-            var consult = data.mapFromCustomerIdToCustomer.Keys.Select(x => new { Id = x, average = GetCustomerAveragePurchasesByMonth(x) }).OrderBy(x=>x.average).Take(10);
-            consult.ToList().ForEach(x => toReturn.Add(x.Id, GetPredictionsOfCustomer(x.Id,minSup,minConfidence)));
+            
+            var consult = data.mapFromCustomerIdToCustomer.Keys.Take(1);
+            //.Select(x => new { Id = x, average = GetCustomerAveragePurchasesByMonth(x) }).OrderBy(x => x.average).Take(10)
+            //consult.ToList().ForEach(x => toReturn.Add(x.Id, GetPredictionsOfCustomer(x.Id, minSup, minConfidence)));
+            foreach (var a in consult)
+            {
+                toReturn.Add(a, GetPredictionsOfCustomer(a, minSup, minConfidence));
+            Debug.WriteLine("aaaaaaa");
+            }
             return toReturn;
         }
    

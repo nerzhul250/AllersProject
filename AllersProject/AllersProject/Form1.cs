@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Modelo.services;
 using System.Diagnostics;
+using MakarovDev.ExpandCollapsePanel;
+
 namespace AllersProject
 {
     public partial class Form1 : Form
@@ -113,13 +115,14 @@ namespace AllersProject
         public void getRelevantCustomers()
         {
             Dictionary<String, List<Prediction>> dic = model.getRelevantCustomersByHisAveragePurchases(minSGeneral,minCGeneral);
-            foreach(var n in dic.Keys)
+            MessageBox.Show("a");
+            foreach (var n in dic.Keys)
             {
-                List<Prediction> predictions =dic[n];
+                List<Prediction> predictions = dic[n];
                 double AverageRelevance = 0;
                 double averageConfidence = 0;
                 string text = "";
-                Debug.WriteLine(predictions.Count);
+
                 foreach (Prediction p in predictions)
                 {
                     averageConfidence += p.confidence;
@@ -139,6 +142,23 @@ namespace AllersProject
                 averageConfidence /= predictions.Count * 100;
                 AverageRelevance /= predictions.Count * 100;
                 text = "Average relevance: " + AverageRelevance + "%" + "\n" + "Average confidence: " + averageConfidence + "%\n" + text;
+                CustomerPredictionPane c1 = new CustomerPredictionPane();
+                c1.setText(text);
+                ExpandCollapsePanel ex = new ExpandCollapsePanel();
+                //ex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+                //ex.ButtonSize = MakarovDev.ExpandCollapsePanel.ExpandCollapseButton.ExpandButtonSize.Normal;
+                //ex.ButtonStyle = MakarovDev.ExpandCollapsePanel.ExpandCollapseButton.ExpandButtonStyle.MagicArrow;
+                ex.Controls.Add(c1);
+                //ex.ExpandedHeight = 376;
+                //ex.IsExpanded = true;
+                //ex.Location = new System.Drawing.Point(3, 3);
+                //ex.Name = n;
+                //ex.Size = new System.Drawing.Size(715, 376);
+                //ex.TabIndex = 1;
+                ex.Text = "Codigo: " + n;
+                //ex.UseAnimation = true;
+                customerPane1.addControlToTheAdvanceControl(ex);
+
             }
         }
         //END_METHODS
