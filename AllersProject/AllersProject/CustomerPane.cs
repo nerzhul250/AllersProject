@@ -30,21 +30,12 @@ namespace AllersProject
         }
         public void modifyPredictions(string text)
         {
-            customerPredictionPane1.setText(text);
+            throw new NotImplementedException();
         }
         private void button1_Click_1(object sender, EventArgs e)
         {
-            try
-            {
-                main.predictionsByCostumer(textBox1.Text,Double.Parse(textBox2.Text), Double.Parse(textBox3.Text));
-                expandCollapsePanel1.Text = "Código: " + textBox1.Text;
-
-        }catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-}
+            throw new NotImplementedException();
+        }
 
         public void addControlToTheAdvanceControl(ExpandCollapsePanel ad)
         {

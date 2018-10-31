@@ -14,6 +14,8 @@ namespace AllersProject
     public partial class MenuPane : UserControl
     {
         public Form1 main;
+        private FrmPrgBarr frmPrgBar;
+
         public MenuPane()
         {
             InitializeComponent();
@@ -28,41 +30,39 @@ namespace AllersProject
                 toolTip1.SetToolTip(this.button1,button1.Text);
             }
         }
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+            if (backgroundWorker1.IsBusy != true)
+            {
+                // Start the asynchronous operation.
+                try
+                {
+                    frmPrgBar = new FrmPrgBarr();
+                    frmPrgBar.StartPosition = FormStartPosition.CenterParent;
+                    backgroundWorker1.RunWorkerAsync();
+                    frmPrgBar.ShowDialog(main);
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
         // This event handler is where the time-consuming work is done.
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-
             worker.ReportProgress(1);
             main.initializeServiceProvider(button1.Text);
             worker.ReportProgress(2);
-            try
-            {
-                main.modifyGeneralPredictions(Double.Parse(textBox1.Text), Double.Parse(textBox2.Text));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Minsup o Minconfidence erróneos");
-                MessageBox.Show(ex.Message);
-            }
+            main.modifyGeneralPredictions(Double.Parse(textBox1.Text), Double.Parse(textBox2.Text));
             worker.ReportProgress(3);
-            try
-            {
-                main.modifyGroupOfCLients(textBox3.Text);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Número de grupos inválidos");
-            }
+            main.modifyGroupOfCLients(textBox3.Text);
             worker.ReportProgress(4);
-            //try
-            //{
-                main.getRelevantCustomers();
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message);
-            //}
+            main.getRelevantCustomers();
+            //It might Be useful
             //if (worker.CancellationPending == true)
             //{
             //    e.Cancel = true;
@@ -75,16 +75,20 @@ namespace AllersProject
             switch (e.ProgressPercentage)
             {
                 case 1:
-                    label5.Text = "Cargando datos";
+                    frmPrgBar.SetLabelText("Cargando datos");
+                    frmPrgBar.SetProgressBarValue(25);
                     break;
                 case 2:
-                    label5.Text = "Generando predicciones generales";
+                    frmPrgBar.SetLabelText("Generando predicciones generales");
+                    frmPrgBar.SetProgressBarValue(50);
                     break;
                 case 3:
-                    label5.Text = "Agrupando clientes similares";
+                    frmPrgBar.SetLabelText("Agrupando clientes similares");
+                    frmPrgBar.SetProgressBarValue(75);
                     break;
                 case 4:
-                    label5.Text = "Generando predicciones por cliente";
+                    frmPrgBar.SetLabelText("Generando predicciones por cliente");
+                    frmPrgBar.SetProgressBarValue(100);
                     break;
                 default:
                     break;
@@ -96,27 +100,24 @@ namespace AllersProject
         {
             if (e.Cancelled == true)
             {
-                label5.Text = "Canceled!";
+                label5.Text = "Cancelado!";
+                label5.ForeColor = Color.Red;
+                frmPrgBar.Close();
             }
             else if (e.Error != null)
             {
-                label5.Text = "Error: " + e.Error.Message;
+                label5.Text = "Error";
+                MessageBox.Show(e.Error.Message);
+                label5.ForeColor = Color.Red;
+                frmPrgBar.Close();
             }
             else
             {
                 label5.Text = "Estado de la aplicacion: Con datos";
                 label5.ForeColor = Color.Green;
+                frmPrgBar.Close();
             }
         }
-        private void button2_Click(object sender, EventArgs e)
-        {
-
-            if (backgroundWorker1.IsBusy != true)
-            {
-                // Start the asynchronous operation.
-                backgroundWorker1.RunWorkerAsync();
-            }
-
-        }
+        
     }
 }
