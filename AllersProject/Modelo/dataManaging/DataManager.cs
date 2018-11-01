@@ -10,7 +10,11 @@ namespace Modelo
 {
     public class DataManager
     {
+        public const int MINIMUM_NUMBER_OF_TIMES_AN_ITEM_IS_PURCHASED = 10;
+        public const int MINIMUM_NUMBER_OF_CUSTOMER_PURCHASES = 10;
+
         public String dataRoute { get; set; }
+
 
         public Dictionary<string, Item> mapFromItemCodeToItem { get; set; }
         public Dictionary<string, Customer> mapFromCustomerIdToCustomer { get; set; }
@@ -27,14 +31,57 @@ namespace Modelo
             mapFromItemCodeToItem = new Dictionary<string, Item>();
             listOfAllTransactions = new List<Transaction>();
             LoadData();
+            //There might be, customers in the map not appearing in transactions
+            //There might be, items in the map not appearing in transactions
+            //Probability, low.
             pruneData();
         }
-
+        
         private void pruneData()
+        {
+            pruneItems();
+            pruneCustomers();
+        }
+
+        private void pruneCustomers()
+        {
+            Dictionary<Customer, int> dict = new Dictionary<Customer, int>();
+            List<Customer> commons = new List<Customer>();
+            foreach (Transaction t in listOfAllTransactions)
+            {
+                if (dict.ContainsKey(t.customer))
+                {
+                    dict[t.customer]++;
+                }
+                else
+                {
+                    dict.Add(t.customer, 1);
+                    commons.Add(t.customer);
+                }
+            }
+            commons = commons.OrderBy(it => dict[it]).TakeWhile(it => dict[it] < MINIMUM_NUMBER_OF_CUSTOMER_PURCHASES).ToList();
+            foreach (Customer cus in commons)
+            {
+                mapFromCustomerIdToCustomer.Remove(cus.id);
+            }
+            
+            for (int i = 0; i < listOfAllTransactions.Count; i++)
+            {
+                Transaction t = listOfAllTransactions[i];
+                foreach (Customer cus in commons) {
+                    if (t.customer.Equals(cus)) {
+                        listOfAllTransactions.Remove(t);
+                        i--;
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void pruneItems()
         {
             List<Item> commons = new List<Item>();
             Dictionary<Item, int> dict = new Dictionary<Item, int>();
-            int minNumberOfOccurences = 11;
             foreach (Transaction t in listOfAllTransactions)
             {
                 foreach (Item i in t.MapFromItemToQuantity.Keys)
@@ -50,8 +97,9 @@ namespace Modelo
                     }
                 }
             }
-            commons = commons.OrderBy(it => dict[it]).TakeWhile(it=> dict[it]<minNumberOfOccurences).ToList();
-            foreach (Item it in commons) {
+            commons = commons.OrderBy(it => dict[it]).TakeWhile(it => dict[it] < MINIMUM_NUMBER_OF_TIMES_AN_ITEM_IS_PURCHASED).ToList();
+            foreach (Item it in commons)
+            {
                 mapFromItemCodeToItem.Remove(it.ItemCode);
             }
             for (int i = 0; i < listOfAllTransactions.Count; i++)
@@ -64,11 +112,12 @@ namespace Modelo
                         t.MapFromItemToQuantity.Remove(it);
                     }
                 }
-                if (t.MapFromItemToQuantity.Count==0) {
+                if (t.MapFromItemToQuantity.Count == 0)
+                {
                     listOfAllTransactions.Remove(t);
                     i--;
                 }
-            }      
+            }
         }
 
         public DataManager(){

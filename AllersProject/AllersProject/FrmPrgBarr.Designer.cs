@@ -60,7 +60,7 @@
             this.Controls.Add(this.progressBar1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "FrmPrgBarr";
-            this.Text = "FrmPrgBarr";
+            this.Text = "Preparando informes...";
             this.ResumeLayout(false);
 
         }
