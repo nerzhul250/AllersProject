@@ -250,6 +250,41 @@ namespace Modelo.services
             items = codes.ToArray();
             return (GetPredictionsFromItemsets(items));
         }
-        
+
+        private List<Prediction> GetPredictionsFromItemsetsForCostumer(Item[] itemsToPredict, string costumerId, double minSup, double minconf)
+        {
+            List<Prediction> SpecificPredictions = new List<Prediction>();
+            List<Prediction> predCostumers = GetPredictionsOfCustomer(costumerId, minSup, minconf);
+            foreach (Prediction pred in predCostumers)
+            {
+                Item[] intersect = pred.antecedent.Intersect(itemsToPredict).ToArray();
+                if (intersect.Length == itemsToPredict.Length)
+                {
+                    SpecificPredictions.Add(pred);
+                }
+            }
+            return SpecificPredictions;
+        }
+
+        public List<Prediction> GetPredictionsFromCodeItemsSpecificClient(string[] ItemCodes, string costumerId, double minSup, double minconf)
+        {
+            List<Item> codes = new List<Item>();
+            List<string> invalidCodes = new List<string>();
+            foreach (string code in ItemCodes)
+            {
+                if (data.mapFromItemCodeToItem.ContainsKey(code))
+                {
+                    codes.Add(data.mapFromItemCodeToItem[code]);
+                }
+                else
+                {
+                    invalidCodes.Add(code);
+                }
+            }
+            Item[] items = new Item[codes.Count];
+            items = codes.ToArray();
+            return (GetPredictionsFromItemsetsForCostumer(items, costumerId, minSup, minconf));
+        }
+
     }
 }

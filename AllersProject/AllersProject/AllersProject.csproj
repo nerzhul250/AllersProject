@@ -73,6 +73,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomerInfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CustomerInfoForm.Designer.cs">
+      <DependentUpon>CustomerInfoForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="CustomerPane.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -97,6 +103,12 @@
     <Compile Include="FrmPrgBarr.Designer.cs">
       <DependentUpon>FrmPrgBarr.cs</DependentUpon>
     </Compile>
+    <Compile Include="GroupsInfoPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GroupsInfoPane.Designer.cs">
+      <DependentUpon>GroupsInfoPane.cs</DependentUpon>
+    </Compile>
     <Compile Include="MenuPane.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -111,6 +123,9 @@
     <Compile Include="RecommendationsPane.Designer.cs">
       <DependentUpon>RecommendationsPane.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="CustomerInfoForm.resx">
+      <DependentUpon>CustomerInfoForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CustomerPane.resx">
       <DependentUpon>CustomerPane.cs</DependentUpon>
     </EmbeddedResource>

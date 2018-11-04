@@ -42,6 +42,8 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.textBox4 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -74,7 +76,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(156, 34);
+            this.textBox1.Location = new System.Drawing.Point(121, 34);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 3;
@@ -90,7 +92,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(156, 63);
+            this.textBox2.Location = new System.Drawing.Point(121, 63);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(100, 20);
             this.textBox2.TabIndex = 5;
@@ -98,7 +100,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 100);
+            this.label4.Location = new System.Drawing.Point(227, 41);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(138, 13);
             this.label4.TabIndex = 6;
@@ -106,14 +108,14 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(156, 93);
+            this.textBox3.Location = new System.Drawing.Point(403, 37);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(100, 20);
             this.textBox3.TabIndex = 7;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(185, 119);
+            this.button2.Location = new System.Drawing.Point(185, 89);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(168, 23);
             this.button2.TabIndex = 8;
@@ -133,17 +135,36 @@
             // 
             this.label5.AutoSize = true;
             this.label5.ForeColor = System.Drawing.Color.Red;
-            this.label5.Location = new System.Drawing.Point(3, 124);
+            this.label5.Location = new System.Drawing.Point(186, 126);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(167, 13);
             this.label5.TabIndex = 9;
             this.label5.Text = "Estado de la aplicación: Sin datos";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(227, 66);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(158, 13);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "Numero de Items a recomendar:";
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(403, 63);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(100, 20);
+            this.textBox4.TabIndex = 11;
+            this.textBox4.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
             // 
             // MenuPane
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.textBox3);
@@ -155,7 +176,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
             this.Name = "MenuPane";
-            this.Size = new System.Drawing.Size(365, 148);
+            this.Size = new System.Drawing.Size(522, 148);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -176,5 +197,7 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox textBox4;
     }
 }
