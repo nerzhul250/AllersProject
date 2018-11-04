@@ -34,7 +34,7 @@ namespace AllersProject
         }
         private void button1_Click_1(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            main.predictionsByCostumer(textBox1.Text, Double.Parse(textBox2.Text), Double.Parse(textBox3.Text));
         }
 
         public void addControlToTheAdvanceControl(ExpandCollapsePanel ad)
@@ -60,6 +60,16 @@ namespace AllersProject
         }
 
         private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
         {
 
         }

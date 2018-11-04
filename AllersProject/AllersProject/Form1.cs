@@ -47,6 +47,8 @@ namespace AllersProject
         {
             minSGeneral = minSup;
             minCGeneral = minConfidence;
+            try
+            {
             List<Prediction> predictions = model.GetGeneralPredictions(minSGeneral, minCGeneral);
             double AverageRelevance = 0;
             double averageConfidence = 0;
@@ -71,6 +73,11 @@ namespace AllersProject
             AverageRelevance /= predictions.Count*100;
             text = "Average relevance: " + AverageRelevance+""+ "%" + "\n" + "Average confidence: " + averageConfidence+"" + "%\n"+text;
             customerPredictionPane1.setText(text);
+
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         //TODO
         public void modifyGroupOfCLients(int numberOfGroups,int itemsToRecommend)
@@ -151,6 +158,8 @@ namespace AllersProject
         }
         public void predictionsByCostumer(String customerId,double sop,double conf)
         {
+            Form2 window = new Form2();
+            window.Visible = true;
             if (model == null)
             {
                 MessageBox.Show("En la primer pestaña debe ingresar los parámetros");
@@ -180,7 +189,20 @@ namespace AllersProject
             averageConfidence /= predictions.Count*100;
             AverageRelevance /= predictions.Count*100;
             text = "Average relevance: " + AverageRelevance+ "%" + "\n" + "Average confidence: " + averageConfidence + "%\n"+text;
-            customerPane1.modifyPredictions(text);
+            window.customerPredictionPane1.setText(text);
+            try
+            {
+            DataManager dm = model.GetDataBy(customerId);
+            Customer cus = dm.mapFromCustomerIdToCustomer[customerId];
+            string info = "Id: " + cus.id + "\n" + "Región: " + cus.regionName+"\n" + "Ciudad: " + cus.cityName;
+            window.txtClientInfo.AppendText(info);
+
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            
         }
         //THIS METHOD DEPENDS ON THE GENERAL SUPPORT AND CONFIDENCE
 
