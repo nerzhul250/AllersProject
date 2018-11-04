@@ -29,22 +29,14 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomerPane));
-            this.advancedFlowLayoutPanel1 = new MakarovDev.ExpandCollapsePanel.AdvancedFlowLayoutPanel();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
+            this.advancedFlowLayoutPanel1 = new MakarovDev.ExpandCollapsePanel.AdvancedFlowLayoutPanel();
             this.SuspendLayout();
-            // 
-            // advancedFlowLayoutPanel1
-            // 
-            this.advancedFlowLayoutPanel1.AutoScroll = true;
-            this.advancedFlowLayoutPanel1.Location = new System.Drawing.Point(3, 39);
-            this.advancedFlowLayoutPanel1.Name = "advancedFlowLayoutPanel1";
-            this.advancedFlowLayoutPanel1.Size = new System.Drawing.Size(738, 318);
-            this.advancedFlowLayoutPanel1.TabIndex = 0;
             // 
             // textBox1
             // 
@@ -68,7 +60,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(194, 15);
+            this.label1.Location = new System.Drawing.Point(180, 15);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(80, 13);
             this.label1.TabIndex = 3;
@@ -77,7 +69,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(280, 11);
+            this.textBox2.Location = new System.Drawing.Point(266, 12);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(100, 20);
             this.textBox2.TabIndex = 4;
@@ -85,7 +77,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(389, 15);
+            this.label2.Location = new System.Drawing.Point(372, 15);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(90, 13);
             this.label2.TabIndex = 5;
@@ -93,10 +85,18 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(485, 12);
+            this.textBox3.Location = new System.Drawing.Point(468, 12);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(100, 20);
             this.textBox3.TabIndex = 6;
+            // 
+            // advancedFlowLayoutPanel1
+            // 
+            this.advancedFlowLayoutPanel1.AutoScroll = true;
+            this.advancedFlowLayoutPanel1.Location = new System.Drawing.Point(3, 39);
+            this.advancedFlowLayoutPanel1.Name = "advancedFlowLayoutPanel1";
+            this.advancedFlowLayoutPanel1.Size = new System.Drawing.Size(768, 532);
+            this.advancedFlowLayoutPanel1.TabIndex = 0;
             // 
             // CustomerPane
             // 
@@ -110,7 +110,7 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.advancedFlowLayoutPanel1);
             this.Name = "CustomerPane";
-            this.Size = new System.Drawing.Size(758, 357);
+            this.Size = new System.Drawing.Size(774, 557);
             this.Load += new System.EventHandler(this.CustomerPane_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

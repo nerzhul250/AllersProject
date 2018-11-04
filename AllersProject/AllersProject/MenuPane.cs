@@ -59,7 +59,7 @@ namespace AllersProject
             worker.ReportProgress(2);
             main.modifyGeneralPredictions(Double.Parse(textBox1.Text), Double.Parse(textBox2.Text));
             worker.ReportProgress(3);
-            main.modifyGroupOfCLients(textBox3.Text);
+            main.modifyGroupOfCLients(int.Parse(textBox3.Text),int.Parse(textBox4.Text));
             worker.ReportProgress(4);
             main.getRelevantCustomers();
             //It might Be useful
@@ -118,6 +118,10 @@ namespace AllersProject
                 frmPrgBar.Close();
             }
         }
-        
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

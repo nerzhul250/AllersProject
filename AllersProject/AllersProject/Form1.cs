@@ -11,6 +11,7 @@ using System.Diagnostics;
 using ZedGraph;
 using MakarovDev.ExpandCollapsePanel;
 using Modelo.services;
+using Modelo;
 
 namespace AllersProject
 {
@@ -72,10 +73,9 @@ namespace AllersProject
             customerPredictionPane1.setText(text);
         }
         //TODO
-        public void modifyGroupOfCLients(String NoGroups)
+        public void modifyGroupOfCLients(int numberOfGroups,int itemsToRecommend)
         {
-            int numberOfGroups = Int32.Parse(NoGroups);
-            List<Recommendation>res=model.GetItemsCustomersMightBuyMoreButBuyFew(numberOfGroups,100,2,3);
+            List<Recommendation>res=model.GetItemsCustomersMightBuyMoreButBuyFew(numberOfGroups,100,2,itemsToRecommend);
             ZedGraph.ZedGraphControl zgc = zedGraphControl1;
             GraphPane myPane = zgc.GraphPane;
 
@@ -100,12 +100,16 @@ namespace AllersProject
                     // Hide the symbol outline
                     myCurve.Symbol.Border.IsVisible = false;
                     // Fill the symbol interior with color
-                    myCurve.Symbol.Fill = new Fill(Color.FromArgb(((control*300)%129)+127, ((control * 750)%129)+127, ((control * 400)%129)+127));
+                    myCurve.Symbol.Fill = new Fill(Color.FromArgb(((control*7)%129)+100, ((control * 101 )%129)+100,((control * 300)%129)+100));
                     list = new PointPairList();
-                    list.Add(x, y);
+                    PointPair IKnowThisVariableNameIsLongButIDontCare = new PointPair(x,y);
+                    IKnowThisVariableNameIsLongButIDontCare.Tag = res[i].customer;
+                    list.Add(IKnowThisVariableNameIsLongButIDontCare);
                 }
                 else {
-                    list.Add(x, y);
+                    PointPair IKnowThisVariableNameIsLongButIDontCare = new PointPair(x, y);
+                    IKnowThisVariableNameIsLongButIDontCare.Tag = res[i];
+                    list.Add(IKnowThisVariableNameIsLongButIDontCare);
                 }
             }
            
@@ -115,6 +119,7 @@ namespace AllersProject
 
             zgc.AxisChange();
             zgc.GraphPane.Legend.IsVisible = false;
+
             string recom = "";
             for (int i=res.Count-1;i>=0;i--) {
                 recom += "El cliente " + res[i].customer.id + "\n";
@@ -217,18 +222,37 @@ namespace AllersProject
             ex.ButtonSize = MakarovDev.ExpandCollapsePanel.ExpandCollapseButton.ExpandButtonSize.Normal;
             ex.ButtonStyle = MakarovDev.ExpandCollapsePanel.ExpandCollapseButton.ExpandButtonStyle.MagicArrow;
             ex.Controls.Add(c1);
-            ex.ExpandedHeight = 376;
+            ex.ExpandedHeight = 405;
             ex.IsExpanded = false;
             ex.Location = new System.Drawing.Point(3, 3);
             ex.Name = n;
-            ex.Size = new System.Drawing.Size(715, 376);
+            ex.Size = new System.Drawing.Size(1000, 376);
             ex.TabIndex = 1;
             ex.Text = "Codigo: " + n;
             ex.UseAnimation = true;
             ex.ButtonStyle = ExpandCollapseButton.ExpandButtonStyle.MagicArrow;
             customerPane1.addControlToTheAdvanceControl(ex);
         }
+        private void zedGraphControl1_MouseClick(object sender, MouseEventArgs e)
+        {
+            object nearestObject;
+            int index;
+            this.zedGraphControl1.GraphPane.FindNearestObject(new PointF(e.X, e.Y), this.CreateGraphics(), out nearestObject, out index);
+            if (nearestObject != null && nearestObject.GetType() == typeof(LineItem))
+            {
+                //PointPairList ppl = (PointPairList)(((LineItem)nearestObject).Points);
+                //PointPair p = null;
+                //double dis = 0;
+                //for (int i = 0; i < ppl.Count; i++)
+                //{
 
+                //}
+                //Recommendation re = (Recommendation)pp.Tag;
+                //CustomerInfoForm cif = new CustomerInfoForm(re);
+                //cif.ShowDialog();
+                //zedGraphControl1.Invalidate();
+            }
+        }
         //END_METHODS
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -275,5 +299,11 @@ namespace AllersProject
         {
 
         }
+
+        private void zedGraphControl1_Load(object sender, EventArgs e)
+        {
+
+        }
+        
     }
 }

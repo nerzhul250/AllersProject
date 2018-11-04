@@ -34,9 +34,9 @@
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(13, 34);
+            this.richTextBox1.Location = new System.Drawing.Point(3, 34);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(697, 229);
+            this.richTextBox1.Size = new System.Drawing.Size(772, 229);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
@@ -57,7 +57,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.richTextBox1);
             this.Name = "RecommendationsPane";
-            this.Size = new System.Drawing.Size(730, 280);
+            this.Size = new System.Drawing.Size(778, 280);
             this.Load += new System.EventHandler(this.RecommendationsPane_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

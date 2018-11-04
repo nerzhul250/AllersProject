@@ -35,9 +35,9 @@
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(25, 43);
+            this.richTextBox1.Location = new System.Drawing.Point(14, 36);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(599, 222);
+            this.richTextBox1.Size = new System.Drawing.Size(739, 366);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
@@ -69,7 +69,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.richTextBox1);
             this.Name = "CustomerPredictionPane";
-            this.Size = new System.Drawing.Size(651, 276);
+            this.Size = new System.Drawing.Size(767, 405);
             this.Load += new System.EventHandler(this.CustomerPredictionPane_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

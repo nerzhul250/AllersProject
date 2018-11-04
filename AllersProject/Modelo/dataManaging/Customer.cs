@@ -9,9 +9,9 @@ namespace Modelo
     public class Customer : IEquatable<Customer>
     {
         public string id { get; set; }
-        private string groupName;
-        private string cityName;
-        private string regionName;
+        public string groupName { get; set; }
+        public string cityName { get; set; }
+        public string regionName { get; set; }
         private string pymntGroup;//What is this?
 
         public Customer(string co,string gp,string cn,string rn,string pg) {
