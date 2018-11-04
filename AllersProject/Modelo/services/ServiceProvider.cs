@@ -21,6 +21,8 @@ namespace Modelo.services
     {
         private DataManager data;
 
+        public List<Prediction> Predictions { get; set; }
+
         public ServiceProvider (String dataRoute)
         {
             data = new DataManager(dataRoute);
@@ -152,6 +154,7 @@ namespace Modelo.services
                 }
                 predictions.Add(pre);
             }
+            this.Predictions = predictions;
             return predictions;
         }
 
@@ -213,6 +216,20 @@ namespace Modelo.services
                 recommendations[i].customer2dRepresentation = components[i];
             }
             return recommendations;
+        }
+
+        public List<Prediction> GetPredictionsFromItemsets(Item [] itemsToPredict)
+        {
+            List<Prediction> SpecificPredictions = new List<Prediction>();
+            foreach(Prediction pred in Predictions)
+            {
+                Item[] intersect = pred.antecedent.Intersect(itemsToPredict).ToArray();
+                if (intersect.Length == itemsToPredict.Length)
+                {
+                    SpecificPredictions.Add(pred);
+                }
+            }
+            return SpecificPredictions;
         }
         
     }
