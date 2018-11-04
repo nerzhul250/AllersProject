@@ -218,7 +218,7 @@ namespace Modelo.services
             return recommendations;
         }
 
-        public List<Prediction> GetPredictionsFromItemsets(Item [] itemsToPredict)
+        private List<Prediction> GetPredictionsFromItemsets(Item [] itemsToPredict)
         {
             List<Prediction> SpecificPredictions = new List<Prediction>();
             foreach(Prediction pred in Predictions)
@@ -230,6 +230,25 @@ namespace Modelo.services
                 }
             }
             return SpecificPredictions;
+        }
+
+        public List<Prediction> GetPredictionsFromCodeItems(string[] ItemCodes)
+        {
+            List<Item> codes = new List<Item>();
+            List<string> invalidCodes = new List<string>();
+            foreach (string code in ItemCodes)
+            {
+                if (data.mapFromItemCodeToItem.ContainsKey(code))
+                {
+                    codes.Add(data.mapFromItemCodeToItem[code]);
+                } else
+                {
+                    invalidCodes.Add(code);
+                }
+            }
+            Item[] items = new Item[codes.Count];
+            items = codes.ToArray();
+            return (GetPredictionsFromItemsets(items));
         }
         
     }
