@@ -76,7 +76,24 @@ namespace AllersProject
         public void modifyGroupOfCLients(int numberOfGroups,int itemsToRecommend)
         {
             List<Recommendation>res=model.GetItemsCustomersMightBuyMoreButBuyFew(numberOfGroups,100,2,itemsToRecommend);
+
+            string recom = "";
+            for (int i = res.Count - 1; i >= 0; i--)
+            {
+                recom += "El cliente " + res[i].customer.id + "\n";
+                recom += "Podria comprar mas de:\n";
+                for (int j = 0; j < res[i].recommendations.Count; j++)
+                {
+                    recom += res[i].recommendations[j].Item1.itemName + " " + "ya que compra " + res[i].recommendations[j].Item2 + "unidades menos que el promedio de su grupo\n";
+                }
+            }
+            recommendationsPane1.setRecommendations(recom);
+
+            res = res.OrderBy(re=>re.groupColor).ToList();
+
             ZedGraph.ZedGraphControl zgc = zedGraphControl1;
+            zgc.GraphPane.CurveList.Clear();
+            zgc.GraphPane.GraphObjList.Clear();
             GraphPane myPane = zgc.GraphPane;
 
             // Set the titles
@@ -91,6 +108,7 @@ namespace AllersProject
             {
                 double x = res[i].customer2dRepresentation[0];
                 double y = res[i].customer2dRepresentation[1];
+                Debug.WriteLine(res[i].groupColor+" "+control);
                 if (res[i].groupColor != control) {
                     control = res[i].groupColor;
                     // Add the curve
@@ -100,10 +118,11 @@ namespace AllersProject
                     // Hide the symbol outline
                     myCurve.Symbol.Border.IsVisible = false;
                     // Fill the symbol interior with color
-                    myCurve.Symbol.Fill = new Fill(Color.FromArgb(((control*7)%129)+100, ((control * 101 )%129)+100,((control * 300)%129)+100));
+                    myCurve.Symbol.Fill = new Fill(Color.FromArgb((((control-1)*7)%129)+100, (((control-1) * 101 )%129)+100,(((control-1) * 300)%129)+100));
+
                     list = new PointPairList();
                     PointPair IKnowThisVariableNameIsLongButIDontCare = new PointPair(x,y);
-                    IKnowThisVariableNameIsLongButIDontCare.Tag = res[i].customer;
+                    IKnowThisVariableNameIsLongButIDontCare.Tag = res[i];
                     list.Add(IKnowThisVariableNameIsLongButIDontCare);
                 }
                 else {
@@ -112,24 +131,23 @@ namespace AllersProject
                     list.Add(IKnowThisVariableNameIsLongButIDontCare);
                 }
             }
-           
+
+            LineItem myCurve2 = myPane.AddCurve("G" + (control) + "", list, Color.Black, SymbolType.Diamond);
+            // Don't display the line (This makes a scatter plot)
+            myCurve2.Line.IsVisible = false;
+            // Hide the symbol outline
+            myCurve2.Symbol.Border.IsVisible = false;
+            // Fill the symbol interior with color
+            myCurve2.Symbol.Fill = new Fill(Color.FromArgb((((control) * 7) % 129) + 100, (((control) * 101) % 129) + 100, (((control) * 300) % 129) + 100));
+
+
+
             // Fill the background of the chart rect and pane
             myPane.Chart.Fill = new Fill(Color.White, Color.LightGoldenrodYellow, 45.0f);
             myPane.Fill = new Fill(Color.White, Color.SlateGray, 45.0f);
 
             zgc.AxisChange();
             zgc.GraphPane.Legend.IsVisible = false;
-
-            string recom = "";
-            for (int i=res.Count-1;i>=0;i--) {
-                recom += "El cliente " + res[i].customer.id + "\n";
-                recom += "Podria comprar mas de:\n";
-                for (int j = 0; j < res[i].recommendations.Count; j++)
-                {
-                    recom += res[i].recommendations[j].Item1.itemName + " " + "ya que compra " + res[i].recommendations[j].Item2 + "unidades menos que el promedio de su grupo\n";
-                }
-            }
-            recommendationsPane1.setRecommendations(recom);
         }
         public void predictionsByCostumer(String customerId,double sop,double conf)
         {
@@ -165,8 +183,15 @@ namespace AllersProject
             customerPane1.modifyPredictions(text);
         }
         //THIS METHOD DEPENDS ON THE GENERAL SUPPORT AND CONFIDENCE
+
+        delegate void CustomerPaneClearCustomersCallback();
+        public void CustomerPaneClearCustomers() {
+            customerPane1.clearAdvancedLayout();
+        }
         public void getRelevantCustomers()
         {
+            CustomerPaneClearCustomersCallback kaka = new CustomerPaneClearCustomersCallback(CustomerPaneClearCustomers);
+            this.Invoke(kaka, new object[] {});
             Dictionary<String, List<Prediction>> dic = model.getRelevantCustomersByHisAveragePurchases(minSGeneral,minCGeneral);
             foreach (var n in dic.Keys)
             {
@@ -240,17 +265,19 @@ namespace AllersProject
             this.zedGraphControl1.GraphPane.FindNearestObject(new PointF(e.X, e.Y), this.CreateGraphics(), out nearestObject, out index);
             if (nearestObject != null && nearestObject.GetType() == typeof(LineItem))
             {
-                //PointPairList ppl = (PointPairList)(((LineItem)nearestObject).Points);
-                //PointPair p = null;
-                //double dis = 0;
-                //for (int i = 0; i < ppl.Count; i++)
-                //{
-
-                //}
-                //Recommendation re = (Recommendation)pp.Tag;
-                //CustomerInfoForm cif = new CustomerInfoForm(re);
-                //cif.ShowDialog();
-                //zedGraphControl1.Invalidate();
+                PointPairList ppl = (PointPairList)(((LineItem)nearestObject).Points);
+                PointPair p = null;
+                double dis = double.MaxValue;
+                for (int i = 0; i < ppl.Count; i++)
+                {
+                    double act = (ppl[i].X - e.X) * (ppl[i].X - e.X) +
+                        (ppl[i].Y - e.Y) * (ppl[i].Y - e.Y);
+                    if (act<dis) { p = ppl[i];dis = act;}
+                }
+                Recommendation re = (Recommendation)p.Tag;
+                CustomerInfoForm cif = new CustomerInfoForm(re);
+                cif.ShowDialog();
+                zedGraphControl1.Invalidate();
             }
         }
         //END_METHODS

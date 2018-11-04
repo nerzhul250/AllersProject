@@ -41,6 +41,9 @@ namespace AllersProject
         {
             advancedFlowLayoutPanel1.Controls.Add(ad);
         }
+        public void clearAdvancedLayout() {
+            advancedFlowLayoutPanel1.Controls.Clear();
+        }
         private void expandCollapsePanel1_Paint(object sender, PaintEventArgs e)
         {
 
