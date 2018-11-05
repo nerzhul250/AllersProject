@@ -27,7 +27,7 @@ namespace AllersProject
             if (result == DialogResult.OK)
             {
                 button1.Text = folderBrowserDialog1.SelectedPath;
-                toolTip1.SetToolTip(this.button1,button1.Text);
+                toolTip1.SetToolTip(this.button1, button1.Text);
             }
         }
         private void button2_Click(object sender, EventArgs e)
@@ -55,6 +55,8 @@ namespace AllersProject
         {
             BackgroundWorker worker = sender as BackgroundWorker;
             worker.ReportProgress(1);
+            try
+            {
             main.initializeServiceProvider(button1.Text);
             worker.ReportProgress(2);
             main.modifyGeneralPredictions(Double.Parse(textBox1.Text), Double.Parse(textBox2.Text));
@@ -62,6 +64,10 @@ namespace AllersProject
             main.modifyGroupOfCLients(int.Parse(textBox3.Text),int.Parse(textBox4.Text));
             worker.ReportProgress(4);
             main.getRelevantCustomers(10);
+            } catch (Exception e1)
+            {
+                MessageBox.Show(e1.Message);
+            }
             //It might Be useful
             //if (worker.CancellationPending == true)
             //{

@@ -19,7 +19,7 @@ namespace AllersProject
 
         private void CustomerPredictionPane_Load(object sender, EventArgs e)
         {
-            richTextBox1.Font = new Font("Consolas", 18f, FontStyle.Bold);
+            richTextBox1.Font = new Font("Consolas", 10f, FontStyle.Bold);
             richTextBox1.BackColor = Color.AliceBlue;
             string[] words =
             {

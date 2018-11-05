@@ -39,7 +39,7 @@ namespace AllersProject
                 model = model1;
             }catch(Exception e)
             {
-                MessageBox.Show("Ruta no especificada correctamente");
+                throw new Exception("Ruta no especificada correctamente");
             }
         }
         
@@ -76,7 +76,7 @@ namespace AllersProject
 
             }catch(Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -205,7 +205,7 @@ namespace AllersProject
 
             }catch(Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                throw new Exception(ex.Message);
             }
 
             
@@ -218,51 +218,54 @@ namespace AllersProject
         }
         public void getRelevantCustomers(int q)
         {
-            CustomerPaneClearCustomersCallback kaka = new CustomerPaneClearCustomersCallback(CustomerPaneClearCustomers);
-            this.Invoke(kaka, new object[] {});
-            Dictionary<String, List<Prediction>> dic = model.getRelevantCustomersByHisAveragePurchases(minSGeneral,minCGeneral, q);
-            foreach (var n in dic.Keys)
+            if (model != null)
             {
-                List<Prediction> predictions = dic[n];
-                double AverageRelevance = 0;
-                double averageConfidence = 0;
-                StringBuilder text = new StringBuilder();
-                Debug.WriteLine(predictions.Count+"JOLA");
-                foreach (Prediction p in predictions)
+                CustomerPaneClearCustomersCallback kaka = new CustomerPaneClearCustomersCallback(CustomerPaneClearCustomers);
+                this.Invoke(kaka, new object[] { });
+                Dictionary<String, List<Prediction>> dic = model.getRelevantCustomersByHisAveragePurchases(minSGeneral, minCGeneral, q);
+                foreach (var n in dic.Keys)
                 {
-                    averageConfidence += p.confidence;
-                    AverageRelevance += p.relevance;
-                    StringBuilder antecedent = new StringBuilder();
-                    antecedent.Append("If the client buy these items:");
-                    StringBuilder consequent = new StringBuilder();
-                    consequent.Append("he will probably buy those: ");
-                    for (int i = 0; i < p.antecedent.Length; i++)
+                    List<Prediction> predictions = dic[n];
+                    double AverageRelevance = 0;
+                    double averageConfidence = 0;
+                    StringBuilder text = new StringBuilder();
+                    Debug.WriteLine(predictions.Count + "JOLA");
+                    foreach (Prediction p in predictions)
                     {
-                        antecedent.Append(", ");
-                        antecedent.Append(p.antecedent[i].itemName);
+                        averageConfidence += p.confidence;
+                        AverageRelevance += p.relevance;
+                        StringBuilder antecedent = new StringBuilder();
+                        antecedent.Append("If the client buy these items:");
+                        StringBuilder consequent = new StringBuilder();
+                        consequent.Append("he will probably buy those: ");
+                        for (int i = 0; i < p.antecedent.Length; i++)
+                        {
+                            antecedent.Append(", ");
+                            antecedent.Append(p.antecedent[i].itemName);
+                        }
+                        for (int i = 0; i < p.consequent.Length; i++)
+                        {
+                            consequent.Append(", ");
+                            consequent.Append(p.consequent[i].itemName);
+                        }
+                        text.Append(antecedent);
+                        text.Append("\n");
+                        text.Append(consequent);
+                        text.Append("\n---------------------------------------\n");
                     }
-                    for (int i = 0; i < p.consequent.Length; i++)
-                    {
-                        consequent.Append(", ");
-                        consequent.Append(p.consequent[i].itemName);
-                    }
-                    text.Append(antecedent);
-                    text.Append("\n");
-                    text.Append(consequent);
-                    text.Append("\n---------------------------------------\n");
+                    Debug.WriteLine("TERMINE");
+                    averageConfidence /= predictions.Count * 100;
+                    AverageRelevance /= predictions.Count * 100;
+                    text.Insert(0, "Average relevance: ");
+                    text.Insert(0, AverageRelevance);
+                    text.Insert(0, "%");
+                    text.Insert(0, "\n");
+                    text.Insert(0, "Average confidence: ");
+                    text.Insert(0, averageConfidence);
+                    text.Insert(0, "%\n");
+                    CrearExpandibleCallback d = new CrearExpandibleCallback(CrearExpandible);
+                    this.Invoke(d, new object[] { text.ToString(), n });
                 }
-                Debug.WriteLine("TERMINE");
-                averageConfidence /= predictions.Count * 100;
-                AverageRelevance /= predictions.Count * 100;
-                text.Insert(0, "Average relevance: ");
-                text.Insert(0, AverageRelevance);
-                text.Insert(0, "%");
-                text.Insert(0, "\n");
-                text.Insert(0, "Average confidence: ");
-                text.Insert(0, averageConfidence);
-                text.Insert(0, "%\n");
-                CrearExpandibleCallback d = new CrearExpandibleCallback(CrearExpandible);
-                this.Invoke(d, new object[] { text.ToString(),n });
             }
         }
         delegate void CrearExpandibleCallback(string text,string n);
@@ -282,7 +285,7 @@ namespace AllersProject
             ex.Size = new System.Drawing.Size(1000, 376);
             ex.TabIndex = 1;
             ex.Text = "Codigo: " + n;
-            ex.UseAnimation = true;
+            ex.UseAnimation = false;
             ex.ButtonStyle = ExpandCollapseButton.ExpandButtonStyle.MagicArrow;
             customerPane1.addControlToTheAdvanceControl(ex);
         }
