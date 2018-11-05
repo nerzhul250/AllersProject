@@ -28,6 +28,7 @@ namespace AllersProject
         {
             customerPane1.main = this;
             menuPane1.main = this;
+            customerPredictionPane1.main = this;
         }
         //METHODS
         public void initializeServiceProvider(String route)

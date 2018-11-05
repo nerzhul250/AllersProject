@@ -17,7 +17,6 @@ namespace AllersProject
         public CustomerPredictionPane()
         {
             InitializeComponent();
-            this.main = main;
         }
 
         private void CustomerPredictionPane_Load(object sender, EventArgs e)
@@ -103,7 +102,6 @@ namespace AllersProject
         private void button1_Click(object sender, EventArgs e)
         {
             main.modifyGeneralPredictions(0, 0, true);
-            //Fuck conflicts
         }
     }
 }
