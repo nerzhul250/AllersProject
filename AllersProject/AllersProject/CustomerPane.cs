@@ -35,7 +35,7 @@ namespace AllersProject
         }
         private void button1_Click_1(object sender, EventArgs e)
         {
-            main.predictionsByCostumer(textBox1.Text, Double.Parse(textBox2.Text), Double.Parse(textBox3.Text));
+            main.predictionsByCostumer(textBox1.Text, Double.Parse(textBox2.Text), Double.Parse(textBox3.Text), false);
         }
 
         public void addControlToTheAdvanceControl(ExpandCollapsePanel ad)

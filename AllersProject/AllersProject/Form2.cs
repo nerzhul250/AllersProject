@@ -12,6 +12,8 @@ namespace AllersProject
 {
     public partial class Form2 : Form
     {
+        public Form1 main { get; set; }
+
         public Form2()
         {
             InitializeComponent();
@@ -24,7 +26,8 @@ namespace AllersProject
 
         private void Form2_Load(object sender, EventArgs e)
         {
-
+            customerPredictionPane1.main = this.main;
+            customerPredictionPane1.tipoPanel = Form1.PESTANHA_CLIENTE;
         }
 
         private void customerPredictionPane1_Load(object sender, EventArgs e)
@@ -35,6 +38,16 @@ namespace AllersProject
         private void txtClientInfo_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        public string GetSpecificClients()
+        {
+            return customerPredictionPane1.getSpecificCodes();
+        }
+
+        public void SetCustomerId(string id)
+        {
+            customerPredictionPane1.customerId = id;
         }
     }
 }

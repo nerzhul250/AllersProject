@@ -224,7 +224,7 @@ namespace Modelo.services
             foreach(Prediction pred in Predictions)
             {
                 Item[] intersect = pred.antecedent.Intersect(itemsToPredict).ToArray();
-                if (intersect.Length == itemsToPredict.Length)
+                if (intersect.Length == pred.antecedent.Length)
                 {
                     SpecificPredictions.Add(pred);
                 }
@@ -258,7 +258,7 @@ namespace Modelo.services
             foreach (Prediction pred in predCostumers)
             {
                 Item[] intersect = pred.antecedent.Intersect(itemsToPredict).ToArray();
-                if (intersect.Length == itemsToPredict.Length)
+                if (intersect.Length == pred.antecedent.Length)
                 {
                     SpecificPredictions.Add(pred);
                 }

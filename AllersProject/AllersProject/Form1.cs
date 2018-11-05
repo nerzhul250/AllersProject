@@ -18,6 +18,12 @@ namespace AllersProject
     public partial class Form1 : Form
     {
         private ServiceProvider model;
+
+        public const char PESTANHA_PRED = 'P';
+        public const char PESTANHA_CLIENTE = 'C';
+
+        public Form2 window { get; set; }
+
         public Form1()
         {
             InitializeComponent();
@@ -29,6 +35,7 @@ namespace AllersProject
             customerPane1.main = this;
             menuPane1.main = this;
             customerPredictionPane1.main = this;
+            customerPredictionPane1.tipoPanel = PESTANHA_PRED;
         }
         //METHODS
         public void initializeServiceProvider(String route)
@@ -52,13 +59,17 @@ namespace AllersProject
             try
             {
                 List<Prediction> predictions;
-                if (specific)
+                string[] specificCodes = customerPredictionPane1.getSpecificCodes().Split(' ');
+                if (specific && specificCodes.Length > 0)
                 {
-                    string[] specificCodes = customerPredictionPane1.getSpecificCodes().Split(' ');
                     predictions = model.GetPredictionsFromCodeItems(specificCodes);
-                } else
+                }
+                else if (!specific)
                 {
                     predictions = model.GetGeneralPredictions(minSGeneral, minCGeneral);
+                } else
+                {
+                    predictions = model.Predictions;
                 }
                 double AverageRelevance = 0;
                 double averageConfidence = 0;
@@ -175,16 +186,29 @@ namespace AllersProject
             zgc.AxisChange();
             zgc.GraphPane.Legend.IsVisible = false;
         }
-        public void predictionsByCostumer(String customerId, double sop, double conf)
+
+        public void predictionsByCostumer(String customerId, double sop, double conf, bool specific)
         {
-            Form2 window = new Form2();
-            window.Visible = true;
-            if (model == null)
-            {
-                MessageBox.Show("En la primer pestaña debe ingresar los parámetros");
-                return;
-            }
             List<Prediction> predictions = model.GetPredictionsOfCustomer(customerId, sop, conf);
+            if (specific)
+            {
+                string[] ProductsCode = window.GetSpecificClients().Split(' ');
+                predictions = model.GetPredictionsFromCodeItemsSpecificClient(ProductsCode, customerId, sop, conf);
+            }
+            else
+            {
+                window = new Form2();
+                window.main = this;
+                window.Visible = true;
+                window.SetCustomerId(customerId);
+                if (model == null)
+                {
+                    MessageBox.Show("En la primer pestaña debe ingresar los parámetros");
+                    return;
+                }
+
+            }
+
             Debug.WriteLine(predictions.Count);
             double AverageRelevance = 0;
             double averageConfidence = 0;

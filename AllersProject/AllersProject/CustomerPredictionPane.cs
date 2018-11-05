@@ -12,7 +12,11 @@ namespace AllersProject
 {
     public partial class CustomerPredictionPane : UserControl
     {
-        public Form1 main;
+        public Form1 main { get; set; }
+
+        public char tipoPanel { get; set; }
+
+        public string customerId { get; set; }
 
         public CustomerPredictionPane()
         {
@@ -100,8 +104,15 @@ namespace AllersProject
         }
 
         private void button1_Click(object sender, EventArgs e)
-        {
+        { 
+            if (tipoPanel == Form1.PESTANHA_PRED)
+            {
             main.modifyGeneralPredictions(0, 0, true);
+
+            } else if (tipoPanel == Form1.PESTANHA_CLIENTE)
+            {
+                main.predictionsByCostumer(customerId , 0, 0, true);
+            }
         }
     }
 }
