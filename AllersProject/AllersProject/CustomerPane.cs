@@ -35,14 +35,40 @@ namespace AllersProject
         }
         private void button1_Click_1(object sender, EventArgs e)
         {
-            main.predictionsByCostumer(textBox1.Text, Double.Parse(textBox2.Text), Double.Parse(textBox3.Text), false);
+            double conf;
+            double sup;
+            try
+            {
+                try
+                {
+                    sup = Double.Parse(textBox2.Text);
+                } catch (Exception ex)
+                {
+                    throw new Exception("El soporte no tiene el formato adecuado (Decimal)");
+                }
+
+                try
+                {
+                    conf = Double.Parse(textBox3.Text);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("La confianza no tiene el formato adecuado (Decimal)");
+                }
+                main.predictionsByCostumer(textBox1.Text, sup, conf, false);
+
+            } catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         public void addControlToTheAdvanceControl(ExpandCollapsePanel ad)
         {
             advancedFlowLayoutPanel1.Controls.Add(ad);
         }
-        public void clearAdvancedLayout() {
+        public void clearAdvancedLayout()
+        {
             advancedFlowLayoutPanel1.Controls.Clear();
         }
         private void expandCollapsePanel1_Paint(object sender, PaintEventArgs e)

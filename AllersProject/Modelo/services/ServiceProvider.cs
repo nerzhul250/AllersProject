@@ -32,6 +32,10 @@ namespace Modelo.services
         {
             DataManager cusData = new DataManager();
             cusData.dataRoute = data.dataRoute;
+            if (!data.mapFromCustomerIdToCustomer.ContainsKey(customerId))
+            {
+                throw new Exception("No existe ningún cliente con el código especificado");
+            }
             cusData.mapFromCustomerIdToCustomer[customerId] = data.mapFromCustomerIdToCustomer[customerId];
             for (int i = 0; i < data.listOfAllTransactions.Count; i++)
             {
@@ -88,7 +92,16 @@ namespace Modelo.services
         {
             DataManager cusData = GetDataBy(customerId);
             AssociationAnalyzerFPGrowth aafpg = new AssociationAnalyzerFPGrowth(data, minSup, minConfidence);
-            aafpg.RuleGeneration(aafpg.frequentItemSets());
+            List<List<string>> frequents = aafpg.frequentItemSets();
+            if (frequents.Count == 0)
+            {
+                throw new Exception("No hay itemsets frecuentes: Intenta con un soporte más bajo");
+            }
+            aafpg.RuleGeneration(frequents);
+            if (aafpg.rules.Count == 0)
+            {
+                throw new Exception("No hay predicciones: Intenta con una confianza más baja");
+            }
             List<Prediction> predictions = new List<Prediction>();
             foreach (Tuple<List<string>, List<string>> rule in aafpg.rules)
             {
@@ -124,7 +137,16 @@ namespace Modelo.services
         public List<Prediction> GetGeneralPredictions(double minSup, double minConfidence)
         {
             AssociationAnalyzerFPGrowth aafpg = new AssociationAnalyzerFPGrowth(data,minSup,minConfidence);
-            aafpg.RuleGeneration(aafpg.frequentItemSets());
+            List<List<string>> frequents = aafpg.frequentItemSets();
+            if (frequents.Count == 0)
+            {
+                throw new Exception("No hay itemsets frecuentes: Intenta con un soporte más bajo");
+            }
+            aafpg.RuleGeneration(frequents);
+            if (aafpg.rules.Count == 0)
+            {
+                throw new Exception("No hay predicciones: Intenta con una confianza más baja");
+            }
             List<Prediction> predictions = new List<Prediction>();
             foreach (Tuple<List<string>,List<string>> rule in aafpg.rules)
             {

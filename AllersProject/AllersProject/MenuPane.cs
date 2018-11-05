@@ -57,14 +57,52 @@ namespace AllersProject
             worker.ReportProgress(1);
             try
             {
-            main.initializeServiceProvider(button1.Text);
-            worker.ReportProgress(2);
-            main.modifyGeneralPredictions(Double.Parse(textBox1.Text), Double.Parse(textBox2.Text), false);
-            worker.ReportProgress(3);
-            main.modifyGroupOfCLients(int.Parse(textBox3.Text),int.Parse(textBox4.Text));
-            worker.ReportProgress(4);
-            main.getRelevantCustomers(10);
-            } catch (Exception e1)
+                main.initializeServiceProvider(button1.Text);
+                worker.ReportProgress(2);
+                double conf;
+                double sup;
+                try
+                {
+                    sup = Double.Parse(textBox1.Text);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("El soporte no tiene el formato adecuado (Decimal)");
+                }
+                try
+                {
+                    conf = Double.Parse(textBox2.Text);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("La confidencia no tiene el formato adecuado (Decimal)");
+                }
+                main.modifyGeneralPredictions(sup, conf, false);
+                worker.ReportProgress(3);
+                int numClientes;
+                int Recom;
+                try
+                {
+                    numClientes = int.Parse(textBox3.Text);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("El numero de grupos a formar  debe de ser entero y mayor a 0");
+                }
+
+                try
+                {
+                    Recom = int.Parse(textBox4.Text);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("El numero de recomendaciones a formar  debe de ser entero y mayor a 0");
+                }
+                main.modifyGroupOfCLients(numClientes, Recom);
+                worker.ReportProgress(4);
+                main.getRelevantCustomers(10);
+            }
+            catch (Exception e1)
             {
                 MessageBox.Show(e1.Message);
             }
