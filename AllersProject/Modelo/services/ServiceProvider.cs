@@ -229,6 +229,10 @@ namespace Modelo.services
                     SpecificPredictions.Add(pred);
                 }
             }
+            if (SpecificPredictions.Count == 0)
+            {
+                throw new Exception("No se encontraron predicciones con los items especificados");
+            }
             return SpecificPredictions;
         }
 

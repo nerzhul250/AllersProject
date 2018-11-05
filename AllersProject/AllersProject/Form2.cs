@@ -14,6 +14,7 @@ namespace AllersProject
     {
         public Form1 main { get; set; }
 
+
         public Form2()
         {
             InitializeComponent();
@@ -48,6 +49,12 @@ namespace AllersProject
         public void SetCustomerId(string id)
         {
             customerPredictionPane1.customerId = id;
+        }
+
+        public void SetConfSup (double conf, double sup)
+        {
+            customerPredictionPane1.minConf = conf;
+            customerPredictionPane1.minSup = sup;
         }
     }
 }

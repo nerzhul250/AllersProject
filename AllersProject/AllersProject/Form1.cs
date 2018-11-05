@@ -59,17 +59,25 @@ namespace AllersProject
             try
             {
                 List<Prediction> predictions;
-                string[] specificCodes = customerPredictionPane1.getSpecificCodes().Split(' ');
-                if (specific && specificCodes.Length > 0)
+                string specificCodes = customerPredictionPane1.getSpecificCodes();
+                if (specific && !specificCodes.Equals(""))
                 {
-                    predictions = model.GetPredictionsFromCodeItems(specificCodes);
+                    string[] specificCodesArray = specificCodes.Split(' ');
+                    if (model == null)
+                    {
+                        throw new Exception("Primero se deben de cargar datos");
+                    }
+                    predictions = model.GetPredictionsFromCodeItems(specificCodesArray);
+                    Debug.WriteLine(specificCodes.Length + " " + specificCodes[0] + ".");
                 }
                 else if (!specific)
                 {
                     predictions = model.GetGeneralPredictions(minSGeneral, minCGeneral);
-                } else
+                }
+                else
                 {
                     predictions = model.Predictions;
+                    Debug.WriteLine("What's your problem");
                 }
                 double AverageRelevance = 0;
                 double averageConfidence = 0;
@@ -193,7 +201,11 @@ namespace AllersProject
             if (specific)
             {
                 string[] ProductsCode = window.GetSpecificClients().Split(' ');
-                predictions = model.GetPredictionsFromCodeItemsSpecificClient(ProductsCode, customerId, sop, conf);
+                if (ProductsCode.Length != 1 || !ProductsCode[0].Equals(""))
+                {
+                    predictions = model.GetPredictionsFromCodeItemsSpecificClient(ProductsCode, customerId, sop, conf);
+
+                }
             }
             else
             {
@@ -201,6 +213,7 @@ namespace AllersProject
                 window.main = this;
                 window.Visible = true;
                 window.SetCustomerId(customerId);
+                window.SetConfSup(conf, sop);
                 if (model == null)
                 {
                     MessageBox.Show("En la primer pestaña debe ingresar los parámetros");

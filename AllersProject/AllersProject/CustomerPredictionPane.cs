@@ -18,6 +18,10 @@ namespace AllersProject
 
         public string customerId { get; set; }
 
+        public double minConf { get; set; }
+
+        public double minSup { get; set; }
+
         public CustomerPredictionPane()
         {
             InitializeComponent();
@@ -104,14 +108,29 @@ namespace AllersProject
         }
 
         private void button1_Click(object sender, EventArgs e)
-        { 
+        {
             if (tipoPanel == Form1.PESTANHA_PRED)
             {
-            main.modifyGeneralPredictions(0, 0, true);
+                try
+                {
+                    main.modifyGeneralPredictions(0, 0, true);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
 
-            } else if (tipoPanel == Form1.PESTANHA_CLIENTE)
+            }
+            else if (tipoPanel == Form1.PESTANHA_CLIENTE)
             {
-                main.predictionsByCostumer(customerId , 0, 0, true);
+                try
+                {
+                    main.predictionsByCostumer(customerId, minSup, minConf, true);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
     }
