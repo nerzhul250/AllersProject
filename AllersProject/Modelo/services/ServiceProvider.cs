@@ -93,10 +93,11 @@ namespace Modelo.services
             foreach (Tuple<List<string>, List<string>> rule in aafpg.rules)
             {
                 Prediction pre = new Prediction();
-                pre.relevance = (aafpg.fptree.frequentsSupport[rule.Item1] +
-                    aafpg.fptree.frequentsSupport[rule.Item2] + 0.0) / aafpg.TransactionCodes.Count;
-                pre.confidence = (aafpg.fptree.frequentsSupport[rule.Item1] +
-                    aafpg.fptree.frequentsSupport[rule.Item2] + 0.0) / aafpg.fptree.frequentsSupport[rule.Item1];
+
+                pre.relevance = (aafpg.fptree.frequentsSupport[rule.Item1.Concat(rule.Item2).ToList()] + 0.0) / aafpg.TransactionCodes.Count;
+                pre.confidence = (aafpg.fptree.frequentsSupport[rule.Item1.Concat(rule.Item2).ToList()] + 0.0) / aafpg.fptree.frequentsSupport[rule.Item1];
+
+
                 List<Item> items = new List<Item>();
                 foreach (string itemCode in rule.Item1)
                 {
@@ -129,10 +130,8 @@ namespace Modelo.services
             foreach (Tuple<List<string>,List<string>> rule in aafpg.rules)
             {
                 Prediction pre = new Prediction();
-                pre.relevance = (aafpg.fptree.frequentsSupport[rule.Item1] +
-                    aafpg.fptree.frequentsSupport[rule.Item2] + 0.0) / aafpg.TransactionCodes.Count;
-                pre.confidence = (aafpg.fptree.frequentsSupport[rule.Item1] +
-                    aafpg.fptree.frequentsSupport[rule.Item2] + 0.0) / aafpg.fptree.frequentsSupport[rule.Item1];
+                pre.relevance = (aafpg.fptree.frequentsSupport[rule.Item1.Concat(rule.Item2).ToList()]+0.0) / aafpg.TransactionCodes.Count;
+                pre.confidence = (aafpg.fptree.frequentsSupport[rule.Item1.Concat(rule.Item2).ToList()]+0.0) / aafpg.fptree.frequentsSupport[rule.Item1];
                 List<Item> items = new List<Item>();
                 foreach (string itemCode in rule.Item1)
                 {
