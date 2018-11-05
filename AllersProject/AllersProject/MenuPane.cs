@@ -61,7 +61,7 @@ namespace AllersProject
             worker.ReportProgress(3);
             main.modifyGroupOfCLients(int.Parse(textBox3.Text),int.Parse(textBox4.Text));
             worker.ReportProgress(4);
-            main.getRelevantCustomers();
+            main.getRelevantCustomers(10);
             //It might Be useful
             //if (worker.CancellationPending == true)
             //{

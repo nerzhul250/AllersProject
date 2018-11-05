@@ -79,6 +79,12 @@ namespace AllersProject
                 MessageBox.Show(ex.Message);
             }
         }
+
+        internal void ChangeRange(int v)
+        {
+            getRelevantCustomers(v);
+        }
+
         //TODO
         public void modifyGroupOfCLients(int numberOfGroups,int itemsToRecommend)
         {
@@ -210,11 +216,11 @@ namespace AllersProject
         public void CustomerPaneClearCustomers() {
             customerPane1.clearAdvancedLayout();
         }
-        public void getRelevantCustomers()
+        public void getRelevantCustomers(int q)
         {
             CustomerPaneClearCustomersCallback kaka = new CustomerPaneClearCustomersCallback(CustomerPaneClearCustomers);
             this.Invoke(kaka, new object[] {});
-            Dictionary<String, List<Prediction>> dic = model.getRelevantCustomersByHisAveragePurchases(minSGeneral,minCGeneral);
+            Dictionary<String, List<Prediction>> dic = model.getRelevantCustomersByHisAveragePurchases(minSGeneral,minCGeneral, q);
             foreach (var n in dic.Keys)
             {
                 List<Prediction> predictions = dic[n];

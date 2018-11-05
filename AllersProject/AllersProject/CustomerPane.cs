@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MakarovDev.ExpandCollapsePanel;
+using System.Diagnostics;
 
 namespace AllersProject
 {
@@ -72,6 +73,11 @@ namespace AllersProject
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void combQuantity_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            main.ChangeRange(Int32.Parse(combQuantity.SelectedItem.ToString()));
         }
     }
 }
