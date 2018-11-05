@@ -237,6 +237,7 @@ namespace Modelo.services
             {
                 recommendations[i].customer2dRepresentation = components[i];
             }
+            recommendations = recommendations.OrderBy(r => r.customer.id).ToList();
             return recommendations;
         }
 

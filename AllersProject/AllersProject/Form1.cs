@@ -119,7 +119,6 @@ namespace AllersProject
         public void modifyGroupOfCLients(int numberOfGroups, int itemsToRecommend)
         {
             List<Recommendation> res = model.GetItemsCustomersMightBuyMoreButBuyFew(numberOfGroups, 100, 2, itemsToRecommend);
-
             string recom = "";
             for (int i = res.Count - 1; i >= 0; i--)
             {
@@ -129,6 +128,7 @@ namespace AllersProject
                 {
                     recom += res[i].recommendations[j].Item1.itemName + " " + "ya que compra " + res[i].recommendations[j].Item2 + "unidades menos que el promedio de su grupo\n";
                 }
+                recom += "----------------------------------------------------------------------------------------------------\n";
             }
             recommendationsPane1.setRecommendations(recom);
 
