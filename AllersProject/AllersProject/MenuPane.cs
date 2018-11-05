@@ -59,7 +59,7 @@ namespace AllersProject
             {
             main.initializeServiceProvider(button1.Text);
             worker.ReportProgress(2);
-            main.modifyGeneralPredictions(Double.Parse(textBox1.Text), Double.Parse(textBox2.Text));
+            main.modifyGeneralPredictions(Double.Parse(textBox1.Text), Double.Parse(textBox2.Text), false);
             worker.ReportProgress(3);
             main.modifyGroupOfCLients(int.Parse(textBox3.Text),int.Parse(textBox4.Text));
             worker.ReportProgress(4);

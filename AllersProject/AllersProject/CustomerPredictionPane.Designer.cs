@@ -31,6 +31,8 @@
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.textCodigosProductos = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // richTextBox1
@@ -59,12 +61,32 @@
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
             this.comboBox1.TabIndex = 2;
             // 
+            // textCodigosProductos
+            // 
+            this.textCodigosProductos.Location = new System.Drawing.Point(404, 10);
+            this.textCodigosProductos.Name = "textCodigosProductos";
+            this.textCodigosProductos.Size = new System.Drawing.Size(232, 20);
+            this.textCodigosProductos.TabIndex = 3;
+            this.textCodigosProductos.Text = "Separate item codes by spaces";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(642, 8);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(111, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "Specific predictions";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // CustomerPredictionPane
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.textCodigosProductos);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.richTextBox1);
@@ -81,5 +103,7 @@
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.TextBox textCodigosProductos;
+        private System.Windows.Forms.Button button1;
     }
 }

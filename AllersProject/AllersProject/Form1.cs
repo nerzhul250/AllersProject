@@ -34,47 +34,57 @@ namespace AllersProject
         {
             try
             {
-                String r= route+"\\";
-            ServiceProvider model1 = new ServiceProvider(r);
+                String r = route + "\\";
+                ServiceProvider model1 = new ServiceProvider(r);
                 model = model1;
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 throw new Exception("Ruta no especificada correctamente");
             }
         }
-        
-        public void modifyGeneralPredictions(double minSup, double minConfidence)
+
+        public void modifyGeneralPredictions(double minSup, double minConfidence, bool specific)
         {
             minSGeneral = minSup;
             minCGeneral = minConfidence;
             try
             {
-            List<Prediction> predictions = model.GetGeneralPredictions(minSGeneral, minCGeneral);
-            double AverageRelevance = 0;
-            double averageConfidence = 0;
-            string text = "";
-            foreach (var p in predictions)
-            {
-                averageConfidence += p.confidence;
-                AverageRelevance += p.relevance;
-                string antecedent = "If you buy these items:";
-                string consequent = "You will probably buy those: ";
-                for(int i = 0; i < p.antecedent.Length; i++)
+                List<Prediction> predictions;
+                if (specific)
                 {
-                    antecedent += ", " + p.antecedent[i].itemName;
-                }
-                for (int i = 0; i < p.consequent.Length; i++)
+                    string[] specificCodes = customerPredictionPane1.getSpecificCodes().Split(' ');
+                    predictions = model.GetPredictionsFromCodeItems(specificCodes);
+                } else
                 {
-                    consequent += ", " + p.consequent[i].itemName;
+                    predictions = model.GetGeneralPredictions(minSGeneral, minCGeneral);
                 }
-                text += antecedent+"\n"+consequent+"\n---------------------------------------\n";
-            }
-            averageConfidence /= predictions.Count*100;
-            AverageRelevance /= predictions.Count*100;
-            text = "Average relevance: " + AverageRelevance+""+ "%" + "\n" + "Average confidence: " + averageConfidence+"" + "%\n"+text;
-            customerPredictionPane1.setText(text);
+                double AverageRelevance = 0;
+                double averageConfidence = 0;
+                string text = "";
+                foreach (var p in predictions)
+                {
+                    averageConfidence += p.confidence;
+                    AverageRelevance += p.relevance;
+                    string antecedent = "If you buy these items:";
+                    string consequent = "You will probably buy those: ";
+                    for (int i = 0; i < p.antecedent.Length; i++)
+                    {
+                        antecedent += ", " + p.antecedent[i].itemName;
+                    }
+                    for (int i = 0; i < p.consequent.Length; i++)
+                    {
+                        consequent += ", " + p.consequent[i].itemName;
+                    }
+                    text += antecedent + "\n" + consequent + "\n---------------------------------------\n";
+                }
+                averageConfidence /= predictions.Count * 100;
+                AverageRelevance /= predictions.Count * 100;
+                text = "Average relevance: " + AverageRelevance + "" + "%" + "\n" + "Average confidence: " + averageConfidence + "" + "%\n" + text;
+                customerPredictionPane1.setText(text);
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -86,9 +96,9 @@ namespace AllersProject
         }
 
         //TODO
-        public void modifyGroupOfCLients(int numberOfGroups,int itemsToRecommend)
+        public void modifyGroupOfCLients(int numberOfGroups, int itemsToRecommend)
         {
-            List<Recommendation>res=model.GetItemsCustomersMightBuyMoreButBuyFew(numberOfGroups,100,2,itemsToRecommend);
+            List<Recommendation> res = model.GetItemsCustomersMightBuyMoreButBuyFew(numberOfGroups, 100, 2, itemsToRecommend);
 
             string recom = "";
             for (int i = res.Count - 1; i >= 0; i--)
@@ -102,7 +112,7 @@ namespace AllersProject
             }
             recommendationsPane1.setRecommendations(recom);
 
-            res = res.OrderBy(re=>re.groupColor).ToList();
+            res = res.OrderBy(re => re.groupColor).ToList();
 
             ZedGraph.ZedGraphControl zgc = zedGraphControl1;
             zgc.GraphPane.CurveList.Clear();
@@ -117,28 +127,30 @@ namespace AllersProject
             // Populate a PointPairList
             PointPairList list = new PointPairList();
             int control = 0;
-            for (int i=0;i<res.Count;i++)
+            for (int i = 0; i < res.Count; i++)
             {
                 double x = res[i].customer2dRepresentation[0];
                 double y = res[i].customer2dRepresentation[1];
-                Debug.WriteLine(res[i].groupColor+" "+control);
-                if (res[i].groupColor != control) {
+                Debug.WriteLine(res[i].groupColor + " " + control);
+                if (res[i].groupColor != control)
+                {
                     control = res[i].groupColor;
                     // Add the curve
-                    LineItem myCurve = myPane.AddCurve("G"+(control-1)+"", list, Color.Black, SymbolType.Diamond);
+                    LineItem myCurve = myPane.AddCurve("G" + (control - 1) + "", list, Color.Black, SymbolType.Diamond);
                     // Don't display the line (This makes a scatter plot)
                     myCurve.Line.IsVisible = false;
                     // Hide the symbol outline
                     myCurve.Symbol.Border.IsVisible = false;
                     // Fill the symbol interior with color
-                    myCurve.Symbol.Fill = new Fill(Color.FromArgb((((control-1)*7)%129)+100, (((control-1) * 101 )%129)+100,(((control-1) * 300)%129)+100));
+                    myCurve.Symbol.Fill = new Fill(Color.FromArgb((((control - 1) * 7) % 129) + 100, (((control - 1) * 101) % 129) + 100, (((control - 1) * 300) % 129) + 100));
 
                     list = new PointPairList();
-                    PointPair IKnowThisVariableNameIsLongButIDontCare = new PointPair(x,y);
+                    PointPair IKnowThisVariableNameIsLongButIDontCare = new PointPair(x, y);
                     IKnowThisVariableNameIsLongButIDontCare.Tag = res[i];
                     list.Add(IKnowThisVariableNameIsLongButIDontCare);
                 }
-                else {
+                else
+                {
                     PointPair IKnowThisVariableNameIsLongButIDontCare = new PointPair(x, y);
                     IKnowThisVariableNameIsLongButIDontCare.Tag = res[i];
                     list.Add(IKnowThisVariableNameIsLongButIDontCare);
@@ -162,7 +174,7 @@ namespace AllersProject
             zgc.AxisChange();
             zgc.GraphPane.Legend.IsVisible = false;
         }
-        public void predictionsByCostumer(String customerId,double sop,double conf)
+        public void predictionsByCostumer(String customerId, double sop, double conf)
         {
             Form2 window = new Form2();
             window.Visible = true;
@@ -171,10 +183,10 @@ namespace AllersProject
                 MessageBox.Show("En la primer pestaña debe ingresar los parámetros");
                 return;
             }
-            List<Prediction> predictions = model.GetPredictionsOfCustomer(customerId,sop,conf);
+            List<Prediction> predictions = model.GetPredictionsOfCustomer(customerId, sop, conf);
             Debug.WriteLine(predictions.Count);
             double AverageRelevance = 0;
-            double averageConfidence = 0;   
+            double averageConfidence = 0;
             string text = "";
             foreach (Prediction p in predictions)
             {
@@ -192,28 +204,30 @@ namespace AllersProject
                 }
                 text += antecedent + "\n" + consequent + "\n---------------------------------------\n";
             }
-            averageConfidence /= predictions.Count*100;
-            AverageRelevance /= predictions.Count*100;
-            text = "Average relevance: " + AverageRelevance+ "%" + "\n" + "Average confidence: " + averageConfidence + "%\n"+text;
+            averageConfidence /= predictions.Count * 100;
+            AverageRelevance /= predictions.Count * 100;
+            text = "Average relevance: " + AverageRelevance + "%" + "\n" + "Average confidence: " + averageConfidence + "%\n" + text;
             window.customerPredictionPane1.setText(text);
             try
             {
-            DataManager dm = model.GetDataBy(customerId);
-            Customer cus = dm.mapFromCustomerIdToCustomer[customerId];
-            string info = "Id: " + cus.id + "\n" + "Región: " + cus.regionName+"\n" + "Ciudad: " + cus.cityName;
-            window.txtClientInfo.AppendText(info);
+                DataManager dm = model.GetDataBy(customerId);
+                Customer cus = dm.mapFromCustomerIdToCustomer[customerId];
+                string info = "Id: " + cus.id + "\n" + "Región: " + cus.regionName + "\n" + "Ciudad: " + cus.cityName;
+                window.txtClientInfo.AppendText(info);
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
 
-            
+
         }
         //THIS METHOD DEPENDS ON THE GENERAL SUPPORT AND CONFIDENCE
 
         delegate void CustomerPaneClearCustomersCallback();
-        public void CustomerPaneClearCustomers() {
+        public void CustomerPaneClearCustomers()
+        {
             customerPane1.clearAdvancedLayout();
         }
         public void getRelevantCustomers(int q)
@@ -268,8 +282,8 @@ namespace AllersProject
                 }
             }
         }
-        delegate void CrearExpandibleCallback(string text,string n);
-        private void CrearExpandible(string text,string n)
+        delegate void CrearExpandibleCallback(string text, string n);
+        private void CrearExpandible(string text, string n)
         {
             CustomerPredictionPane c1 = new CustomerPredictionPane();
             c1.setText(text);
@@ -303,7 +317,7 @@ namespace AllersProject
                 {
                     double act = (ppl[i].X - e.X) * (ppl[i].X - e.X) +
                         (ppl[i].Y - e.Y) * (ppl[i].Y - e.Y);
-                    if (act<dis) { p = ppl[i];dis = act;}
+                    if (act < dis) { p = ppl[i]; dis = act; }
                 }
                 Recommendation re = (Recommendation)p.Tag;
                 CustomerInfoForm cif = new CustomerInfoForm(re);
@@ -362,6 +376,6 @@ namespace AllersProject
         {
 
         }
-        
+
     }
 }

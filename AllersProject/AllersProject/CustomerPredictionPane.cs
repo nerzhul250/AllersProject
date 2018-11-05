@@ -12,9 +12,12 @@ namespace AllersProject
 {
     public partial class CustomerPredictionPane : UserControl
     {
+        public Form1 main;
+
         public CustomerPredictionPane()
         {
             InitializeComponent();
+            this.main = main;
         }
 
         private void CustomerPredictionPane_Load(object sender, EventArgs e)
@@ -80,9 +83,26 @@ namespace AllersProject
                 richTextBox1.AppendText(text);
             }
         }
+
+        public string getSpecificCodes()
+        {
+            return textCodigosProductos.Text;
+        }
+
+
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            main.modifyGeneralPredictions(0, 0, true);
         }
     }
 }
