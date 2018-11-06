@@ -55,7 +55,7 @@ namespace AllersProject
                 {
                     throw new Exception("La confianza no tiene el formato adecuado (Decimal)");
                 }
-                main.predictionsByCostumer(textBox1.Text, sup, conf, false);
+                main.predictionsByCostumer(textBox1.Text, sup, conf, false,"");
 
             } catch (Exception ex)
             {

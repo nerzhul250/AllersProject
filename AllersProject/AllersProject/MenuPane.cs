@@ -77,7 +77,7 @@ namespace AllersProject
                 {
                     throw new Exception("La confidencia no tiene el formato adecuado (Decimal)");
                 }
-                main.modifyGeneralPredictions(sup, conf, false);
+                main.modifyGeneralPredictions(sup, conf, false,"");
                 worker.ReportProgress(3);
                 int numClientes;
                 int Recom;

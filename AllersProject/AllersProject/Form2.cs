@@ -13,7 +13,7 @@ namespace AllersProject
     public partial class Form2 : Form
     {
         public Form1 main { get; set; }
-
+        
 
         public Form2()
         {

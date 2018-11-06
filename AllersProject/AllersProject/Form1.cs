@@ -28,8 +28,8 @@ namespace AllersProject
         {
             InitializeComponent();
         }
-        private double minSGeneral;
-        private double minCGeneral;
+        public double minSGeneral;
+        public double minCGeneral;
         private void Form1_Load(object sender, EventArgs e)
         {
             customerPane1.main = this;
@@ -51,8 +51,39 @@ namespace AllersProject
                 throw new Exception("Ruta no especificada correctamente");
             }
         }
+        public List<Prediction> filterPredictions(List<Prediction> p, String category)
+        {
+            MessageBox.Show(category);
+                List<Prediction> copy = new List<Prediction>();
+            if (category.Equals("Confianza"))
+            {
+                 p.OrderBy(x => x.confidence).ToList().ForEach(x=> copy.Add(x));
+               
+            }else if (category.Equals("Relevancia"))
+            {
 
-        public void modifyGeneralPredictions(double minSup, double minConfidence, bool specific)
+               p.OrderBy(x => x.relevance).ToList().ForEach(x => copy.Add(x));
+                
+            }
+            else if(category.Equals("Ingreso minimo"))
+            {
+
+            }else if(category.Equals("Ingreso maximo"))
+            {
+
+            }else if(category.Equals("Cantidad minima"))
+            {
+
+            }else if(category.Equals("Cantida maxima"))
+            {
+
+            }else if (category.Equals(""))
+            {
+                return p;
+            }
+            return copy;
+        }
+        public void modifyGeneralPredictions(double minSup, double minConfidence, bool specific, String category)
         {
             minSGeneral = minSup;
             minCGeneral = minConfidence;
@@ -79,6 +110,7 @@ namespace AllersProject
                     predictions = model.Predictions;
                     Debug.WriteLine("What's your problem");
                 }
+                predictions= filterPredictions(predictions, category);
                 double AverageRelevance = 0;
                 double averageConfidence = 0;
                 string text = "";
@@ -195,7 +227,7 @@ namespace AllersProject
             zgc.GraphPane.Legend.IsVisible = false;
         }
 
-        public void predictionsByCostumer(String customerId, double sop, double conf, bool specific)
+        public void predictionsByCostumer(String customerId, double sop, double conf, bool specific,String category)
         {
             List<Prediction> predictions = model.GetPredictionsOfCustomer(customerId, sop, conf);
             if (specific)
@@ -223,6 +255,7 @@ namespace AllersProject
             }
 
             Debug.WriteLine(predictions.Count);
+            predictions = filterPredictions(predictions, category);
             double AverageRelevance = 0;
             double averageConfidence = 0;
             string text = "";

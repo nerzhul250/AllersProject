@@ -113,7 +113,7 @@ namespace AllersProject
             {
                 try
                 {
-                    main.modifyGeneralPredictions(0, 0, true);
+                    main.modifyGeneralPredictions(0, 0, true,"");
                 }
                 catch (Exception ex)
                 {
@@ -125,7 +125,32 @@ namespace AllersProject
             {
                 try
                 {
-                    main.predictionsByCostumer(customerId, minSup, minConf, true);
+                    main.predictionsByCostumer(customerId, minSup, minConf, true,"");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tipoPanel == Form1.PESTANHA_PRED)
+            {
+                try
+                {
+                    main.modifyGeneralPredictions(main.minSGeneral, main.minCGeneral, false, comboBox1.Text);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }else if (tipoPanel == Form1.PESTANHA_CLIENTE)
+            {
+                try
+                {
+                    main.predictionsByCostumer(customerId, minSup, minConf, false,comboBox1.Text);
                 }
                 catch (Exception ex)
                 {
