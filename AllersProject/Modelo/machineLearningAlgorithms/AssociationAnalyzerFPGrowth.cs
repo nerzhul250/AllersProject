@@ -20,7 +20,7 @@ namespace Modelo
         {
 
             List<List<String>> transactions = new List<List<string>>();
-
+            Debug.WriteLine(data.mapFromCustomerIdToCustomer.Keys.First()+" "+ data.mapFromCustomerIdToCustomer.Keys.Count()+" "+data.listOfAllTransactions.Count);
             this.minSupport = minSupport;
             this.minConfidence = minConfidence;
             for (int i = 0; i < data.listOfAllTransactions.Count; i++)
@@ -103,6 +103,12 @@ namespace Modelo
             });
         }
 
+        internal void setMinSup(double minSup)
+        {
+            fptree.setMinSup(minSup);
+            this.minSupport = minSup;
+        }
+
         private List<List<string>> AprioriGen(List<List<string>> frequentItemSets)
         {
             List<List<string>> candidates = new List<List<string>>();
@@ -128,6 +134,11 @@ namespace Modelo
                 }
             }
             return candidates;
+        }
+
+        internal void setMinConfidence(double minConfidence)
+        {
+            this.minConfidence = minConfidence;
         }
 
         private bool canBeJoined(List<string> fis1, List<string> fis2)

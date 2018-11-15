@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Diagnostics;
 
 namespace AllersProject
 {
@@ -104,7 +105,8 @@ namespace AllersProject
             }
             catch (Exception e1)
             {
-                MessageBox.Show(e1.Message);
+               MessageBox.Show(e1.Message);
+               Debug.WriteLine(e1.StackTrace);
             }
             //It might Be useful
             //if (worker.CancellationPending == true)

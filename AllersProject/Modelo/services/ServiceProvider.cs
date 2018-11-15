@@ -90,34 +90,26 @@ namespace Modelo.services
         public List<Prediction> GetPredictionsOfCustomer(String customerId,double minSup,double minConfidence)
         {
             DataManager cusData = GetDataBy(customerId);
-            AssociationAnalyzerFPGrowth aafpg = new AssociationAnalyzerFPGrowth(data, minSup, minConfidence);
-            List<List<string>> frequents = aafpg.frequentItemSets();
-            if (frequents.Count == 0)
+            AssociationAnalyzerApriori apriori = new AssociationAnalyzerApriori(cusData,10,minSup,minConfidence,10);
+            List<List<BigInteger>>sets = apriori.GenerateFrequentItemSetsApriori();
+            if (sets.Count == 0)
             {
-                throw new Exception("No hay itemsets frecuentes: Intenta con un soporte más bajo");
+                throw new Exception("Insuficientes items frecuentes, disminuya el soporte");
             }
-            aafpg.RuleGeneration(frequents);
-            if (aafpg.rules.Count == 0)
+            apriori.AprioriRuleGeneration(sets);
+            if (apriori.rules.Count==0)
             {
-                throw new Exception("No hay predicciones: Intenta con una confianza más baja");
+                throw new Exception("Insuficientes reglas, disminuya la confianza");
             }
             List<Prediction> predictions = new List<Prediction>();
-            foreach (Tuple<List<string>, List<string>> rule in aafpg.rules)
+            foreach (Tuple<BigInteger, BigInteger> rule in apriori.rules)
             {
                 Prediction pre = new Prediction();
-                pre.relevance = (aafpg.fptree.frequentsSupport[rule.Item1.Concat(rule.Item2).ToList()] + 0.0) / aafpg.TransactionCodes.Count;
-                pre.confidence = (aafpg.fptree.frequentsSupport[rule.Item1.Concat(rule.Item2).ToList()] + 0.0) / aafpg.fptree.frequentsSupport[rule.Item1];
-                List<Item> items = new List<Item>();
-                foreach (string itemCode in rule.Item1)
-                {
-                    items.Add(data.mapFromItemCodeToItem[itemCode]);
-                }
+                pre.relevance = (apriori.itemSetToSupport[rule.Item1|rule.Item2] + 0.0) / apriori.totalNumberOfTransactions;
+                pre.confidence = (apriori.itemSetToSupport[rule.Item2|rule.Item1]+ 0.0) / apriori.itemSetToSupport[rule.Item1];
+                List<Item> items = apriori.BinaryItemSetToObjectItemSet(rule.Item1);
                 pre.antecedent = items.ToArray();
-                items = new List<Item>();
-                foreach (string itemCode in rule.Item2)
-                {
-                    items.Add(data.mapFromItemCodeToItem[itemCode]);
-                }
+                items = apriori.BinaryItemSetToObjectItemSet(rule.Item2);
                 pre.consequent = items.ToArray();
                 pre.minimumQuantity = new int[pre.consequent.Length];
                 pre.maximumQuantity = new int[pre.consequent.Length];

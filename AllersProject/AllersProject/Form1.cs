@@ -132,7 +132,7 @@ namespace AllersProject
                 }
                 averageConfidence /= predictions.Count;
                 AverageRelevance /= predictions.Count;
-                text = "Average relevance: " + AverageRelevance*100 + "" + "%" + "\n" + "Average confidence: " + averageConfidence*100 + "" + "%\n" + text;
+                text = "Average relevance: " + (AverageRelevance*100).ToString("0.##") + "" + "%" + "\n" + "Average confidence: " + (averageConfidence*100).ToString("0.##") + "" + "%\n" + text;
                 customerPredictionPane1.setText(text);
 
             }
@@ -258,27 +258,42 @@ namespace AllersProject
             predictions = filterPredictions(predictions, category);
             double AverageRelevance = 0;
             double averageConfidence = 0;
-            string text = "";
+            StringBuilder text = new StringBuilder();
             foreach (Prediction p in predictions)
             {
                 averageConfidence += p.confidence;
                 AverageRelevance += p.relevance;
-                string antecedent = "If the client buy these items:";
-                string consequent = "he will probably buy those: ";
+                StringBuilder antecedent = new StringBuilder();
+                antecedent.Append("If the client buy these items:");
+                StringBuilder consequent = new StringBuilder();
+                consequent.Append("he will probably buy those: ");
                 for (int i = 0; i < p.antecedent.Length; i++)
                 {
-                    antecedent += ", " + p.antecedent[i].itemName;
+                    antecedent.Append(", ");
+                    antecedent.Append(p.antecedent[i].itemName);
                 }
                 for (int i = 0; i < p.consequent.Length; i++)
                 {
-                    consequent += ", " + p.consequent[i].itemName;
+                    consequent.Append(", ");
+                    consequent.Append(p.consequent[i].itemName);
                 }
-                text += antecedent + "\n" + consequent + "\n---------------------------------------\n";
+                text.Append(antecedent);
+                text.Append("\n");
+                text.Append(consequent);
+                text.Append("\n---------------------------------------\n");
             }
             averageConfidence /= predictions.Count;
             AverageRelevance /= predictions.Count;
-            text = "Average relevance: " + AverageRelevance*100 + "%" + "\n" + "Average confidence: " + averageConfidence*100 + "%\n" + text;
-            window.customerPredictionPane1.setText(text);
+            text.Insert(0, "\n");
+            text.Insert(0, "%");
+            text.Insert(0, (AverageRelevance * 100).ToString("0.##"));
+            text.Insert(0, "Average relevance: ");
+            text.Insert(0, "\n");
+            text.Insert(0, "%");
+            text.Insert(0, (averageConfidence * 100).ToString("0.##"));
+            text.Insert(0, "Average confidence: ");
+            text.Insert(0, "\n");
+            window.customerPredictionPane1.setText(text.ToString());
             try
             {
                 DataManager dm = model.GetDataBy(customerId);
@@ -308,48 +323,55 @@ namespace AllersProject
                 CustomerPaneClearCustomersCallback kaka = new CustomerPaneClearCustomersCallback(CustomerPaneClearCustomers);
                 this.Invoke(kaka, new object[] { });
                 Dictionary<String, List<Prediction>> dic = model.getRelevantCustomersByHisAveragePurchases(minSGeneral, minCGeneral, q);
+                int counter = 0;
                 foreach (var n in dic.Keys)
                 {
-                    List<Prediction> predictions = dic[n];
-                    double AverageRelevance = 0;
-                    double averageConfidence = 0;
-                    StringBuilder text = new StringBuilder();
-                    Debug.WriteLine(predictions.Count + "JOLA");
-                    foreach (Prediction p in predictions)
-                    {
-                        averageConfidence += p.confidence;
-                        AverageRelevance += p.relevance;
-                        StringBuilder antecedent = new StringBuilder();
-                        antecedent.Append("If the client buy these items:");
-                        StringBuilder consequent = new StringBuilder();
-                        consequent.Append("he will probably buy those: ");
-                        for (int i = 0; i < p.antecedent.Length; i++)
-                        {
-                            antecedent.Append(", ");
-                            antecedent.Append(p.antecedent[i].itemName);
-                        }
-                        for (int i = 0; i < p.consequent.Length; i++)
-                        {
-                            consequent.Append(", ");
-                            consequent.Append(p.consequent[i].itemName);
-                        }
-                        text.Append(antecedent);
-                        text.Append("\n");
-                        text.Append(consequent);
-                        text.Append("\n---------------------------------------\n");
+                    if (counter==q) {
+                        break;
                     }
-                    Debug.WriteLine("TERMINE");
-                    averageConfidence /= predictions.Count;
-                    AverageRelevance /= predictions.Count;
-                    text.Insert(0, "Average relevance: ");
-                    text.Insert(0, AverageRelevance*100);
-                    text.Insert(0, "%");
-                    text.Insert(0, "\n");
-                    text.Insert(0, "Average confidence: ");
-                    text.Insert(0, averageConfidence*100);
-                    text.Insert(0, "%\n");
-                    CrearExpandibleCallback d = new CrearExpandibleCallback(CrearExpandible);
-                    this.Invoke(d, new object[] { text.ToString(), n });
+                    if (dic[n].Count!=0) {
+                    counter++;
+                        List<Prediction> predictions = dic[n];
+                        double AverageRelevance = 0;
+                        double averageConfidence = 0;
+                        StringBuilder text = new StringBuilder();
+                        foreach (Prediction p in predictions)
+                        {
+                            averageConfidence += p.confidence;
+                            AverageRelevance += p.relevance;
+                            StringBuilder antecedent = new StringBuilder();
+                            antecedent.Append("If the client buy these items:");
+                            StringBuilder consequent = new StringBuilder();
+                            consequent.Append("he will probably buy those: ");
+                            for (int i = 0; i < p.antecedent.Length; i++)
+                            {
+                                antecedent.Append(", ");
+                                antecedent.Append(p.antecedent[i].itemName);
+                            }
+                            for (int i = 0; i < p.consequent.Length; i++)
+                            {
+                                consequent.Append(", ");
+                                consequent.Append(p.consequent[i].itemName);
+                            }
+                            text.Append(antecedent);
+                            text.Append("\n");
+                            text.Append(consequent);
+                            text.Append("\n---------------------------------------\n");
+                        }
+                        averageConfidence /= predictions.Count;
+                        AverageRelevance /= predictions.Count;
+                        text.Insert(0, "\n");
+                        text.Insert(0, "%");
+                        text.Insert(0, (AverageRelevance * 100).ToString("0.##"));
+                        text.Insert(0, "Average relevance: ");
+                        text.Insert(0, "\n");
+                        text.Insert(0, "%");
+                        text.Insert(0, (averageConfidence * 100).ToString("0.##"));
+                        text.Insert(0, "Average confidence: ");
+                        text.Insert(0, "\n");
+                        CrearExpandibleCallback d = new CrearExpandibleCallback(CrearExpandible);
+                        this.Invoke(d, new object[] { text.ToString(), n });
+                    }
                 }
             }
         }
