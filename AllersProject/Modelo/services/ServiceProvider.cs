@@ -83,7 +83,6 @@ namespace Modelo.services
             Dictionary<String, List<Prediction>> toReturn = new Dictionary<string, List<Prediction>>();
 
             var consult = data.mapFromCustomerIdToCustomer.Keys.Select(x => new { Id = x, average = GetCustomerAveragePurchasesByMonth(x) }).OrderByDescending(x => x.average).Take(quantity);
-            Debug.WriteLine("HERERERE");
             consult.ToList().ForEach(x => toReturn.Add(x.Id+"-Compras promedio: "+string.Format("{0:C}", x.average), GetPredictionsOfCustomer(x.Id, minSup, minConfidence)));
             return toReturn;
         }
@@ -106,10 +105,8 @@ namespace Modelo.services
             foreach (Tuple<List<string>, List<string>> rule in aafpg.rules)
             {
                 Prediction pre = new Prediction();
-                pre.relevance = (aafpg.fptree.frequentsSupport[rule.Item1] +
-                    aafpg.fptree.frequentsSupport[rule.Item2] + 0.0) / aafpg.TransactionCodes.Count;
-                pre.confidence = (aafpg.fptree.frequentsSupport[rule.Item1] +
-                    aafpg.fptree.frequentsSupport[rule.Item2] + 0.0) / aafpg.fptree.frequentsSupport[rule.Item1];
+                pre.relevance = (aafpg.fptree.frequentsSupport[rule.Item1.Concat(rule.Item2).ToList()] + 0.0) / aafpg.TransactionCodes.Count;
+                pre.confidence = (aafpg.fptree.frequentsSupport[rule.Item1.Concat(rule.Item2).ToList()] + 0.0) / aafpg.fptree.frequentsSupport[rule.Item1];
                 List<Item> items = new List<Item>();
                 foreach (string itemCode in rule.Item1)
                 {
@@ -151,10 +148,8 @@ namespace Modelo.services
             foreach (Tuple<List<string>,List<string>> rule in aafpg.rules)
             {
                 Prediction pre = new Prediction();
-                pre.relevance = (aafpg.fptree.frequentsSupport[rule.Item1] +
-                    aafpg.fptree.frequentsSupport[rule.Item2] + 0.0) / aafpg.TransactionCodes.Count;
-                pre.confidence = (aafpg.fptree.frequentsSupport[rule.Item1] +
-                    aafpg.fptree.frequentsSupport[rule.Item2] + 0.0) / aafpg.fptree.frequentsSupport[rule.Item1];
+                pre.relevance = (aafpg.fptree.frequentsSupport[rule.Item1.Concat(rule.Item2).ToList()] + 0.0) / aafpg.TransactionCodes.Count;
+                pre.confidence = (aafpg.fptree.frequentsSupport[rule.Item1.Concat(rule.Item2).ToList()] + 0.0) / aafpg.fptree.frequentsSupport[rule.Item1];
                 List<Item> items = new List<Item>();
                 foreach (string itemCode in rule.Item1)
                 {

@@ -130,9 +130,9 @@ namespace AllersProject
                     }
                     text += antecedent + "\n" + consequent + "\n---------------------------------------\n";
                 }
-                averageConfidence /= predictions.Count * 100;
-                AverageRelevance /= predictions.Count * 100;
-                text = "Average relevance: " + AverageRelevance + "" + "%" + "\n" + "Average confidence: " + averageConfidence + "" + "%\n" + text;
+                averageConfidence /= predictions.Count;
+                AverageRelevance /= predictions.Count;
+                text = "Average relevance: " + AverageRelevance*100 + "" + "%" + "\n" + "Average confidence: " + averageConfidence*100 + "" + "%\n" + text;
                 customerPredictionPane1.setText(text);
 
             }
@@ -275,9 +275,9 @@ namespace AllersProject
                 }
                 text += antecedent + "\n" + consequent + "\n---------------------------------------\n";
             }
-            averageConfidence /= predictions.Count * 100;
-            AverageRelevance /= predictions.Count * 100;
-            text = "Average relevance: " + AverageRelevance + "%" + "\n" + "Average confidence: " + averageConfidence + "%\n" + text;
+            averageConfidence /= predictions.Count;
+            AverageRelevance /= predictions.Count;
+            text = "Average relevance: " + AverageRelevance*100 + "%" + "\n" + "Average confidence: " + averageConfidence*100 + "%\n" + text;
             window.customerPredictionPane1.setText(text);
             try
             {
@@ -339,14 +339,14 @@ namespace AllersProject
                         text.Append("\n---------------------------------------\n");
                     }
                     Debug.WriteLine("TERMINE");
-                    averageConfidence /= predictions.Count * 100;
-                    AverageRelevance /= predictions.Count * 100;
+                    averageConfidence /= predictions.Count;
+                    AverageRelevance /= predictions.Count;
                     text.Insert(0, "Average relevance: ");
-                    text.Insert(0, AverageRelevance);
+                    text.Insert(0, AverageRelevance*100);
                     text.Insert(0, "%");
                     text.Insert(0, "\n");
                     text.Insert(0, "Average confidence: ");
-                    text.Insert(0, averageConfidence);
+                    text.Insert(0, averageConfidence*100);
                     text.Insert(0, "%\n");
                     CrearExpandibleCallback d = new CrearExpandibleCallback(CrearExpandible);
                     this.Invoke(d, new object[] { text.ToString(), n });
