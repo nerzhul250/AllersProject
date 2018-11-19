@@ -53,31 +53,33 @@ namespace AllersProject
         }
         public List<Prediction> filterPredictions(List<Prediction> p, String category)
         {
-            MessageBox.Show(category);
+            
                 List<Prediction> copy = new List<Prediction>();
             if (category.Equals("Confianza"))
             {
-                 p.OrderBy(x => x.confidence).ToList().ForEach(x=> copy.Add(x));
+                 p.OrderByDescending(x => x.confidence).ToList().ForEach(x=> copy.Add(x));
                
             }else if (category.Equals("Relevancia"))
             {
 
-               p.OrderBy(x => x.relevance).ToList().ForEach(x => copy.Add(x));
+               p.OrderByDescending(x => x.relevance).ToList().ForEach(x => copy.Add(x));
                 
             }
             else if(category.Equals("Ingreso minimo"))
             {
-
+                p.Select(x => new { pre = x, min = x.consequent.Select(y=> y.price).Zip(x.minimumQuantity, (a, b) => a * b).Sum() }).OrderByDescending(x=> x.min).ToList().ForEach(x=> copy.Add(x.pre));
             }else if(category.Equals("Ingreso maximo"))
             {
-
-            }else if(category.Equals("Cantidad minima"))
+                p.Select(x => new { pre = x, max = x.consequent.Select(y => y.price).Zip(x.maximumQuantity, (a, b) => a * b).Sum() }).OrderByDescending(x => x.max).ToList().ForEach(x => copy.Add(x.pre));
+            }
+            else if(category.Equals("Cantidad minima"))
             {
-
-            }else if(category.Equals("Cantida maxima"))
+                p.Select(x => new { pre = x, min = x.minimumQuantity.Average() }).OrderByDescending(x => x.min).ToList().ForEach(x => copy.Add(x.pre));
+            }else if(category.Equals("Cantidad maxima"))
             {
-
-            }else if (category.Equals(""))
+                p.Select(x => new { pre = x, min = x.maximumQuantity.Average() }).OrderByDescending(x => x.min).ToList().ForEach(x => copy.Add(x.pre));
+            }
+            else if (category.Equals(""))
             {
                 return p;
             }
