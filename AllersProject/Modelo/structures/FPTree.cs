@@ -143,11 +143,6 @@ namespace Estructura
             }
         }
 
-        internal void setMinSup(double minSup)
-        {
-            this.minSup = minSup;
-        }
-
         public List<List<string>> FindFrequentItemsets()
         {
             List < List<string> > frequents = new List<List<string>>();

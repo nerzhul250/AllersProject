@@ -125,11 +125,12 @@ namespace Modelo.services
 
         public List<Prediction> GetGeneralPredictions(double minSup, double minConfidence)
         {
+            Debug.WriteLine(minSup+" "+minConfidence);
             AssociationAnalyzerFPGrowth aafpg = new AssociationAnalyzerFPGrowth(data,minSup,minConfidence);
             List<List<string>> frequents = aafpg.frequentItemSets();
             if (frequents.Count == 0)
             {
-                throw new Exception("No hay itemsets frecuentes: Intenta con un soporte más bajo");
+                throw new Exception("No hay itemsets frecuentes: Intenta con un soporte más bajo FUCK");
             }
             aafpg.RuleGeneration(frequents);
             if (aafpg.rules.Count == 0)
