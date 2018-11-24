@@ -120,8 +120,8 @@ namespace AllersProject
                 {
                     averageConfidence += p.confidence;
                     AverageRelevance += p.relevance;
-                    string antecedent = "Si compran estos items:";
-                    string consequent = "Probablemente compraran: ";
+                    string antecedent = "";
+                    string consequent = "";
                     double minimaGananciaAdicional = 0;
                     double maximaGananciaAdicional = 0;
                     for (int i = 0; i < p.antecedent.Length; i++)
@@ -135,10 +135,10 @@ namespace AllersProject
                         maximaGananciaAdicional += p.consequent[i].price * p.maximumQuantity[i];
                     }
                     text += antecedent + "\n" + consequent + "\n";
-                    text += "Relevancia de la prediccion: " + (p.relevance * 100).ToString("0.##")+"%\n";
-                    text += "Confiabilidad de la prediccion: " + (p.confidence * 100).ToString("0.##") + "%\n";
-                    text += "Ganancia minima adicional: " + minimaGananciaAdicional.ToString("C2")+"\n";
-                    text += "Ganancia maxima adicional: " + maximaGananciaAdicional.ToString("C2")+"\n";
+                    text += (p.relevance * 100).ToString("0.##")+"%\n";
+                    text += (p.confidence * 100).ToString("0.##") + "%\n";
+                    text += minimaGananciaAdicional.ToString("C2")+"\n";
+                    text += maximaGananciaAdicional.ToString("C2")+"\n";
                     text += "---------------------------------------\n";
                 }
                 averageConfidence /= predictions.Count;
@@ -275,9 +275,9 @@ namespace AllersProject
                 averageConfidence += p.confidence;
                 AverageRelevance += p.relevance;
                 StringBuilder antecedent = new StringBuilder();
-                antecedent.Append("Si el cliente compra estos items:");
+                //antecedent.Append("Si el cliente compra estos items:");
                 StringBuilder consequent = new StringBuilder();
-                consequent.Append("Probablemente comprara estos: ");
+                //consequent.Append("Probablemente comprara estos: ");
                 double minimaGananciaAdicional = 0;
                 double maximaGananciaAdicional = 0;
                 for (int i = 0; i < p.antecedent.Length; i++)
@@ -296,31 +296,30 @@ namespace AllersProject
                 text.Append("\n");
                 text.Append(consequent);
                 text.Append("\n");
-                text.Append("Relevancia de la prediccion: ");
+                //text.Append("Relevancia de la prediccion: ");
                 text.Append((p.relevance * 100).ToString("0.##"));
                 text.Append("%\n");
-                text.Append("Confiabilidad de la prediccion: ");
+                //text.Append("Confiabilidad de la prediccion: ");
                 text.Append((p.confidence * 100).ToString("0.##"));
                 text.Append("%\n");
-                text.Append("Ganancia minima adicional: ");
+                //text.Append("Ganancia minima adicional: ");
                 text.Append(minimaGananciaAdicional.ToString("C2"));
                 text.Append("\n");
-                text.Append("Ganancia maxima adicional: ");
+                //text.Append("Ganancia maxima adicional: ");
                 text.Append(maximaGananciaAdicional.ToString("C2"));
                 text.Append("\n");
-                text.Append("\n---------------------------------------\n");
+                text.Append("---------------------------------------\n");
             }
             averageConfidence /= predictions.Count;
             AverageRelevance /= predictions.Count;
-            text.Insert(0, "\n\n");
             text.Insert(0, "%");
             text.Insert(0, (AverageRelevance * 100).ToString("0.##"));
-            text.Insert(0, "Relevancia promedio: ");
+            //text.Insert(0, "Relevancia promedio: ");
             text.Insert(0, "\n");
             text.Insert(0, "%");
             text.Insert(0, (averageConfidence * 100).ToString("0.##"));
-            text.Insert(0, "Confianza promedio: ");
-            text.Insert(0, "\n\n");
+            //text.Insert(0, "Confianza promedio: ");
+            text.Insert(0, "\n");
             window.customerPredictionPane1.setText(text.ToString());
             try
             {
@@ -368,9 +367,9 @@ namespace AllersProject
                             averageConfidence += p.confidence;
                             AverageRelevance += p.relevance;
                             StringBuilder antecedent = new StringBuilder();
-                            antecedent.Append("Si el cliente compra estos items:");
+                            //antecedent.Append("Si el cliente compra estos items:");
                             StringBuilder consequent = new StringBuilder();
-                            consequent.Append("Probablemente comprara estos: ");
+                            //consequent.Append("Probablemente comprara estos: ");
                             double minimaGananciaAdicional = 0;
                             double maximaGananciaAdicional = 0;
                             for (int i = 0; i < p.antecedent.Length; i++)
@@ -389,31 +388,30 @@ namespace AllersProject
                             text.Append("\n");
                             text.Append(consequent);
                             text.Append("\n");
-                            text.Append("Relevancia de la prediccion: ");
+                            //text.Append("Relevancia de la prediccion: ");
                             text.Append((p.relevance * 100).ToString("0.##"));
                             text.Append("%\n");
-                            text.Append("Confiabilidad de la prediccion: ");
+                            //text.Append("Confiabilidad de la prediccion: ");
                             text.Append((p.confidence * 100).ToString("0.##"));
                             text.Append("%\n");
-                            text.Append("Ganancia minima adicional: ");
+                            //text.Append("Ganancia minima adicional: ");
                             text.Append(minimaGananciaAdicional.ToString("C2"));
                             text.Append("\n");
-                            text.Append("Ganancia maxima adicional: ");
+                            //text.Append("Ganancia maxima adicional: ");
                             text.Append(maximaGananciaAdicional.ToString("C2"));
                             text.Append("\n");
-                            text.Append("\n---------------------------------------\n");
+                            text.Append("---------------------------------------\n");
                         }
                         averageConfidence /= predictions.Count;
                         AverageRelevance /= predictions.Count;
-                        text.Insert(0, "\n\n");
                         text.Insert(0, "%");
                         text.Insert(0, (AverageRelevance * 100).ToString("0.##"));
-                        text.Insert(0, "Relevancia promedio: ");
+                        //text.Insert(0, "Relevancia promedio: ");
                         text.Insert(0, "\n");
                         text.Insert(0, "%");
                         text.Insert(0, (averageConfidence * 100).ToString("0.##"));
-                        text.Insert(0, "Confianza promedio: ");
-                        text.Insert(0, "\n\n");
+                        //text.Insert(0, "Confianza promedio: ");
+                        text.Insert(0, "\n");
                         CrearExpandibleCallback d = new CrearExpandibleCallback(CrearExpandible);
                         this.Invoke(d, new object[] { text.ToString(), n });
                     }
@@ -425,6 +423,8 @@ namespace AllersProject
         {
             CustomerPredictionPane c1 = new CustomerPredictionPane();
             c1.setText(text);
+            c1.Height -= 50;
+            c1.Width -= 50;
             ExpandCollapsePanel ex = new ExpandCollapsePanel();
             ex.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             ex.ButtonSize = MakarovDev.ExpandCollapsePanel.ExpandCollapseButton.ExpandButtonSize.Normal;

@@ -34,6 +34,11 @@
             this.button1 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Pre = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Pos = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GananciaMinimaAdicional = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GananciaMaximaAdicional = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Relevancia = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Confiabilidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -88,7 +93,12 @@
             this.dataGridView1.AllowUserToOrderColumns = true;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Pre});
+            this.Pre,
+            this.Pos,
+            this.GananciaMinimaAdicional,
+            this.GananciaMaximaAdicional,
+            this.Relevancia,
+            this.Confiabilidad});
             this.dataGridView1.Location = new System.Drawing.Point(3, 36);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
@@ -98,9 +108,44 @@
             // 
             // Pre
             // 
-            this.Pre.HeaderText = "Column1";
+            this.Pre.HeaderText = "Pre";
             this.Pre.Name = "Pre";
             this.Pre.ReadOnly = true;
+            this.Pre.Width = 120;
+            // 
+            // Pos
+            // 
+            this.Pos.HeaderText = "Pos";
+            this.Pos.Name = "Pos";
+            this.Pos.ReadOnly = true;
+            this.Pos.Width = 120;
+            // 
+            // GananciaMinimaAdicional
+            // 
+            this.GananciaMinimaAdicional.HeaderText = "GananciaMinimaAdicional";
+            this.GananciaMinimaAdicional.MinimumWidth = 7;
+            this.GananciaMinimaAdicional.Name = "GananciaMinimaAdicional";
+            this.GananciaMinimaAdicional.ReadOnly = true;
+            this.GananciaMinimaAdicional.Width = 135;
+            // 
+            // GananciaMaximaAdicional
+            // 
+            this.GananciaMaximaAdicional.HeaderText = "GananciaMaximaAdicional";
+            this.GananciaMaximaAdicional.Name = "GananciaMaximaAdicional";
+            this.GananciaMaximaAdicional.ReadOnly = true;
+            this.GananciaMaximaAdicional.Width = 135;
+            // 
+            // Relevancia
+            // 
+            this.Relevancia.HeaderText = "Relevancia";
+            this.Relevancia.Name = "Relevancia";
+            this.Relevancia.ReadOnly = true;
+            // 
+            // Confiabilidad
+            // 
+            this.Confiabilidad.HeaderText = "Confiabilidad";
+            this.Confiabilidad.Name = "Confiabilidad";
+            this.Confiabilidad.ReadOnly = true;
             // 
             // CustomerPredictionPane
             // 
@@ -129,5 +174,10 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Pre;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Pos;
+        private System.Windows.Forms.DataGridViewTextBoxColumn GananciaMinimaAdicional;
+        private System.Windows.Forms.DataGridViewTextBoxColumn GananciaMaximaAdicional;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Relevancia;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Confiabilidad;
     }
 }

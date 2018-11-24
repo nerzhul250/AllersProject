@@ -34,7 +34,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.menu = new System.Windows.Forms.TabPage();
-            this.customerPredictionPane1 = new AllersProject.CustomerPredictionPane();
             this.menuPane1 = new AllersProject.MenuPane();
             this.clientes = new System.Windows.Forms.TabPage();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -43,6 +42,7 @@
             this.recommendationsPane1 = new AllersProject.RecommendationsPane();
             this.zedGraphControl1 = new ZedGraph.ZedGraphControl();
             this.ayuda = new System.Windows.Forms.TabPage();
+            this.customerPredictionPane1 = new AllersProject.CustomerPredictionPane();
             this.tabControl1.SuspendLayout();
             this.menu.SuspendLayout();
             this.clientes.SuspendLayout();
@@ -69,28 +69,18 @@
             this.menu.Controls.Add(this.menuPane1);
             this.menu.Location = new System.Drawing.Point(4, 25);
             this.menu.Name = "menu";
-            this.menu.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.menu.Padding = new System.Windows.Forms.Padding(3);
             this.menu.Size = new System.Drawing.Size(813, 605);
             this.menu.TabIndex = 0;
             this.menu.Text = "Menu";
             this.menu.UseVisualStyleBackColor = true;
             this.menu.Click += new System.EventHandler(this.menu_Click);
             // 
-            // customerPredictionPane1
-            // 
-            this.customerPredictionPane1.AutoScroll = true;
-            this.customerPredictionPane1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.customerPredictionPane1.Location = new System.Drawing.Point(6, 172);
-            this.customerPredictionPane1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
-            this.customerPredictionPane1.Name = "customerPredictionPane1";
-            this.customerPredictionPane1.Size = new System.Drawing.Size(799, 419);
-            this.customerPredictionPane1.TabIndex = 3;
-            // 
             // menuPane1
             // 
             this.menuPane1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.menuPane1.Location = new System.Drawing.Point(119, 6);
-            this.menuPane1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.menuPane1.Margin = new System.Windows.Forms.Padding(6);
             this.menuPane1.Name = "menuPane1";
             this.menuPane1.Size = new System.Drawing.Size(522, 148);
             this.menuPane1.TabIndex = 2;
@@ -102,7 +92,7 @@
             this.clientes.Controls.Add(this.customerPane1);
             this.clientes.Location = new System.Drawing.Point(4, 25);
             this.clientes.Name = "clientes";
-            this.clientes.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.clientes.Padding = new System.Windows.Forms.Padding(3);
             this.clientes.Size = new System.Drawing.Size(813, 605);
             this.clientes.TabIndex = 1;
             this.clientes.Text = "Clientes";
@@ -121,7 +111,7 @@
             // customerPane1
             // 
             this.customerPane1.Location = new System.Drawing.Point(5, 6);
-            this.customerPane1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.customerPane1.Margin = new System.Windows.Forms.Padding(6);
             this.customerPane1.Name = "customerPane1";
             this.customerPane1.Size = new System.Drawing.Size(800, 591);
             this.customerPane1.TabIndex = 0;
@@ -143,7 +133,7 @@
             // recommendationsPane1
             // 
             this.recommendationsPane1.Location = new System.Drawing.Point(3, 442);
-            this.recommendationsPane1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.recommendationsPane1.Margin = new System.Windows.Forms.Padding(6);
             this.recommendationsPane1.Name = "recommendationsPane1";
             this.recommendationsPane1.Size = new System.Drawing.Size(788, 280);
             this.recommendationsPane1.TabIndex = 1;
@@ -151,7 +141,7 @@
             // zedGraphControl1
             // 
             this.zedGraphControl1.Location = new System.Drawing.Point(3, 3);
-            this.zedGraphControl1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.zedGraphControl1.Margin = new System.Windows.Forms.Padding(6);
             this.zedGraphControl1.Name = "zedGraphControl1";
             this.zedGraphControl1.ScrollGrace = 0D;
             this.zedGraphControl1.ScrollMaxX = 0D;
@@ -175,6 +165,20 @@
             this.ayuda.TabIndex = 3;
             this.ayuda.Text = "Ayuda";
             this.ayuda.UseVisualStyleBackColor = true;
+            // 
+            // customerPredictionPane1
+            // 
+            this.customerPredictionPane1.AutoScroll = true;
+            this.customerPredictionPane1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.customerPredictionPane1.customerId = null;
+            this.customerPredictionPane1.Location = new System.Drawing.Point(26, 163);
+            this.customerPredictionPane1.main = null;
+            this.customerPredictionPane1.minConf = 0D;
+            this.customerPredictionPane1.minSup = 0D;
+            this.customerPredictionPane1.Name = "customerPredictionPane1";
+            this.customerPredictionPane1.Size = new System.Drawing.Size(767, 422);
+            this.customerPredictionPane1.TabIndex = 3;
+            this.customerPredictionPane1.tipoPanel = '\0';
             // 
             // Form1
             // 
@@ -205,10 +209,10 @@
         private System.Windows.Forms.TabPage ayuda;
         private ZedGraph.ZedGraphControl zedGraphControl1;
         private MenuPane menuPane1;
-        private CustomerPredictionPane customerPredictionPane1;
         private CustomerPane customerPane1;
         private RecommendationsPane recommendationsPane1;
         private System.Windows.Forms.StatusStrip statusStrip1;
+        private CustomerPredictionPane customerPredictionPane1;
     }
 }
 

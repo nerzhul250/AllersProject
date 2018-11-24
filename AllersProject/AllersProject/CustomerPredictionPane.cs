@@ -37,15 +37,27 @@ namespace AllersProject
             // InvokeRequired required compares the thread ID of the
             // calling thread to the thread ID of the creating thread.
             // If these threads are different, it returns true.
-            if (this.richTextBox1.InvokeRequired)
+            if (this.dataGridView1.InvokeRequired)
             {
                 SetTextCallback d = new SetTextCallback(setText);
                 this.Invoke(d, new object[] { text });
             }
             else
             {
-                richTextBox1.ResetText();
-                richTextBox1.AppendText(text);
+                string[] predictions = text.Split('\n');
+                int num = (predictions.Length - 2) / 7;
+                for (int i = 0; i < num; i++)
+                {
+                    int pos = i * 7 + 2;
+                    int rowId = dataGridView1.Rows.Add();
+                    DataGridViewRow row = dataGridView1.Rows[rowId];
+                    row.Cells["Pre"].Value = predictions[pos++];
+                    row.Cells["Pos"].Value = predictions[pos++];
+                    row.Cells["Relevancia"].Value = predictions[pos++];
+                    row.Cells["Confiabilidad"].Value = predictions[pos++];
+                    row.Cells["GananciaMinimaAdicional"].Value = predictions[pos++];
+                    row.Cells["GananciaMaximaAdicional"].Value = predictions[pos++];
+                }
             }
         }
 
