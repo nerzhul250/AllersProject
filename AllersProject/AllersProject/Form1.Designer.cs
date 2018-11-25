@@ -154,7 +154,6 @@
             this.customerPredictionPane1.Size = new System.Drawing.Size(767, 422);
             this.customerPredictionPane1.TabIndex = 3;
             this.customerPredictionPane1.tipoPanel = '\0';
-            this.customerPredictionPane1.Load += new System.EventHandler(this.customerPredictionPane1_Load_1);
             // 
             // menuPane1
             // 

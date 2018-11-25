@@ -1,4 +1,5 @@
-﻿using Modelo;
+﻿using Estructura;
+using Modelo;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,20 +18,23 @@ namespace AllersProject
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
             DataManager data = new DataManager("../../../Datos/");
-            Debug.WriteLine("EMPEZANDO FP--------------");
-            Stopwatch sw = Stopwatch.StartNew();
-            AssociationAnalyzerFPGrowth asso = new AssociationAnalyzerFPGrowth(data, 0.01,0.01);
-            List<List<string>> frequents = asso.frequentItemSets();
-            Debug.WriteLine("Ellapsed miliseconds = " + sw.ElapsedMilliseconds);
-            foreach (List<string> l in frequents)
+            AssociationAnalyzerFPGrowth fp = new AssociationAnalyzerFPGrowth(data, 0.005, 0.005);
+            AssociationAnalyzerApriori bf20 = new AssociationAnalyzerApriori(data, 20, 0.005, 0.005, 5);
+            AssociationAnalyzerApriori bf25 = new AssociationAnalyzerApriori(data, 25, 0.005, 0.005, 10);
+            AssociationAnalyzerApriori bf30 = new AssociationAnalyzerApriori(data, 30, 0.005, 0.005, 15);
+            AssociationAnalyzerApriori ap100 = new AssociationAnalyzerApriori(data, 100, 0.005, 0.005, 5);
+            AssociationAnalyzerApriori ap150 = new AssociationAnalyzerApriori(data, 150, 0.005, 0.005, 10);
+            AssociationAnalyzerApriori ap200 = new AssociationAnalyzerApriori(data, 200, 0.005, 0.005, 15);
+
+            Debug.WriteLine("FP: ");
+            for (int i = 0; i < 10; i++)
             {
-                Debug.WriteLine("FREQUENT");
-                foreach (string x in l)
-                {
-                    Debug.WriteLine(x);
-                }
+                Stopwatch sw = Stopwatch.StartNew();
+                fp.frequentItemSets();
+                Debug.WriteLine(sw.ElapsedMilliseconds);
             }
-            Debug.WriteLine("FIN FP-------------");
+
+
             //<<<<<<< HEAD
             //AssociationAnalyzerApriori aA = new AssociationAnalyzerApriori(data, 40, 0.05, 0.05, 3);
             //Debug.WriteLine("ItsBeenASuccesThereAre " + data.getTransactionsCount() + "Transactions!");
