@@ -108,14 +108,14 @@
             // 
             // Pre
             // 
-            this.Pre.HeaderText = "Pre";
+            this.Pre.HeaderText = "Si compra:";
             this.Pre.Name = "Pre";
             this.Pre.ReadOnly = true;
             this.Pre.Width = 120;
             // 
             // Pos
             // 
-            this.Pos.HeaderText = "Pos";
+            this.Pos.HeaderText = "Puede comprar:";
             this.Pos.Name = "Pos";
             this.Pos.ReadOnly = true;
             this.Pos.Width = 120;

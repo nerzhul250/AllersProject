@@ -34,15 +34,15 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.menu = new System.Windows.Forms.TabPage();
-            this.menuPane1 = new AllersProject.MenuPane();
             this.clientes = new System.Windows.Forms.TabPage();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.customerPane1 = new AllersProject.CustomerPane();
             this.gruposClientes = new System.Windows.Forms.TabPage();
-            this.recommendationsPane1 = new AllersProject.RecommendationsPane();
             this.zedGraphControl1 = new ZedGraph.ZedGraphControl();
             this.ayuda = new System.Windows.Forms.TabPage();
             this.customerPredictionPane1 = new AllersProject.CustomerPredictionPane();
+            this.menuPane1 = new AllersProject.MenuPane();
+            this.customerPane1 = new AllersProject.CustomerPane();
+            this.recommendationsPane1 = new AllersProject.RecommendationsPane();
             this.tabControl1.SuspendLayout();
             this.menu.SuspendLayout();
             this.clientes.SuspendLayout();
@@ -76,15 +76,6 @@
             this.menu.UseVisualStyleBackColor = true;
             this.menu.Click += new System.EventHandler(this.menu_Click);
             // 
-            // menuPane1
-            // 
-            this.menuPane1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.menuPane1.Location = new System.Drawing.Point(119, 6);
-            this.menuPane1.Margin = new System.Windows.Forms.Padding(6);
-            this.menuPane1.Name = "menuPane1";
-            this.menuPane1.Size = new System.Drawing.Size(522, 148);
-            this.menuPane1.TabIndex = 2;
-            // 
             // clientes
             // 
             this.clientes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -108,14 +99,6 @@
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // customerPane1
-            // 
-            this.customerPane1.Location = new System.Drawing.Point(5, 6);
-            this.customerPane1.Margin = new System.Windows.Forms.Padding(6);
-            this.customerPane1.Name = "customerPane1";
-            this.customerPane1.Size = new System.Drawing.Size(800, 591);
-            this.customerPane1.TabIndex = 0;
-            // 
             // gruposClientes
             // 
             this.gruposClientes.AutoScroll = true;
@@ -129,14 +112,6 @@
             this.gruposClientes.Text = "Grupos de clientes";
             this.gruposClientes.UseVisualStyleBackColor = true;
             this.gruposClientes.Click += new System.EventHandler(this.gruposClientes_Click);
-            // 
-            // recommendationsPane1
-            // 
-            this.recommendationsPane1.Location = new System.Drawing.Point(3, 442);
-            this.recommendationsPane1.Margin = new System.Windows.Forms.Padding(6);
-            this.recommendationsPane1.Name = "recommendationsPane1";
-            this.recommendationsPane1.Size = new System.Drawing.Size(788, 280);
-            this.recommendationsPane1.TabIndex = 1;
             // 
             // zedGraphControl1
             // 
@@ -179,6 +154,32 @@
             this.customerPredictionPane1.Size = new System.Drawing.Size(767, 422);
             this.customerPredictionPane1.TabIndex = 3;
             this.customerPredictionPane1.tipoPanel = '\0';
+            this.customerPredictionPane1.Load += new System.EventHandler(this.customerPredictionPane1_Load_1);
+            // 
+            // menuPane1
+            // 
+            this.menuPane1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.menuPane1.Location = new System.Drawing.Point(119, 6);
+            this.menuPane1.Margin = new System.Windows.Forms.Padding(6);
+            this.menuPane1.Name = "menuPane1";
+            this.menuPane1.Size = new System.Drawing.Size(522, 148);
+            this.menuPane1.TabIndex = 2;
+            // 
+            // customerPane1
+            // 
+            this.customerPane1.Location = new System.Drawing.Point(5, 6);
+            this.customerPane1.Margin = new System.Windows.Forms.Padding(6);
+            this.customerPane1.Name = "customerPane1";
+            this.customerPane1.Size = new System.Drawing.Size(800, 591);
+            this.customerPane1.TabIndex = 0;
+            // 
+            // recommendationsPane1
+            // 
+            this.recommendationsPane1.Location = new System.Drawing.Point(3, 442);
+            this.recommendationsPane1.Margin = new System.Windows.Forms.Padding(6);
+            this.recommendationsPane1.Name = "recommendationsPane1";
+            this.recommendationsPane1.Size = new System.Drawing.Size(788, 280);
+            this.recommendationsPane1.TabIndex = 1;
             // 
             // Form1
             // 
