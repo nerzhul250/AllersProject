@@ -44,6 +44,7 @@ namespace AllersProject
             }
             else
             {
+                dataGridView1.Rows.Clear();
                 string[] predictions = text.Split('\n');
                 int num = (predictions.Length - 2) / 7;
                 for (int i = 0; i < num; i++)
@@ -121,6 +122,7 @@ namespace AllersProject
                 try
                 {
                     main.predictionsByCostumer(customerId, minSup, minConf, false,comboBox1.Text);
+                    main.window.Close();
                 }
                 catch (Exception ex)
                 {
