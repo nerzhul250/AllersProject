@@ -24,8 +24,8 @@ namespace AllersProject
             label4.Text = "Region: "+cus.regionName;
             int control = re.groupColor;
             label5.ForeColor = Color.FromArgb(((control * 7) % 129) + 100, ((control * 101) % 129) + 100, ((control * 300) % 129) + 100);
-            string recom = "";
-            recom += "Podria comprar mas de:\n";
+            string recom = 1 + "\n" + re.recommendations.Count + "\n";
+            recom += cus.id + "\n";
             for (int j = 0; j < re.recommendations.Count; j++)
             {
                 recom += re.recommendations[j].Item1.itemName + " " + "ya que compra " + re.recommendations[j].Item2 + "unidades menos que el promedio de su grupo\n";
