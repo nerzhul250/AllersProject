@@ -151,7 +151,7 @@ namespace Modelo
                     candidateSet.Remove(toRemove);
                 }
             }
-            Debug.WriteLine(sw.ElapsedMilliseconds+"Remove");
+            //Debug.WriteLine(sw.ElapsedMilliseconds+"Remove");
             sw.Stop();
             return candidateSet;
         }

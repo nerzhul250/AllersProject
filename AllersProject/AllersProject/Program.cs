@@ -18,21 +18,82 @@ namespace AllersProject
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
             DataManager data = new DataManager("../../../Datos/");
-            AssociationAnalyzerFPGrowth fp = new AssociationAnalyzerFPGrowth(data, 0.005, 0.005);
-            AssociationAnalyzerApriori bf20 = new AssociationAnalyzerApriori(data, 20, 0.005, 0.005, 5);
-            AssociationAnalyzerApriori bf25 = new AssociationAnalyzerApriori(data, 25, 0.005, 0.005, 10);
-            AssociationAnalyzerApriori bf30 = new AssociationAnalyzerApriori(data, 30, 0.005, 0.005, 15);
-            AssociationAnalyzerApriori ap100 = new AssociationAnalyzerApriori(data, 100, 0.005, 0.005, 5);
-            AssociationAnalyzerApriori ap150 = new AssociationAnalyzerApriori(data, 150, 0.005, 0.005, 10);
-            AssociationAnalyzerApriori ap200 = new AssociationAnalyzerApriori(data, 200, 0.005, 0.005, 15);
+           
+            
+            
+            
+            
+            
+          
 
-            Debug.WriteLine("FP: ");
-            for (int i = 0; i < 10; i++)
-            {
-                Stopwatch sw = Stopwatch.StartNew();
-                fp.frequentItemSets();
-                Debug.WriteLine(sw.ElapsedMilliseconds);
-            }
+            //Debug.WriteLine("FP: ");
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    AssociationAnalyzerFPGrowth fp = new AssociationAnalyzerFPGrowth(data, 0.005, 0.005);
+            //    Stopwatch sw = Stopwatch.StartNew();
+            //    fp.frequentItemSets();
+            //    Debug.WriteLine(sw.ElapsedMilliseconds);
+            //}
+
+            //Debug.WriteLine("-----------------------------------------------------");
+            //Debug.WriteLine("Brute Force 20");
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    AssociationAnalyzerApriori bf20 = new AssociationAnalyzerApriori(data, 20, 0.005, 0.005, 5);
+            //    Stopwatch sw = Stopwatch.StartNew();
+            //    bf20.GenerateFrequentItemSets();
+            //    Debug.WriteLine(sw.ElapsedMilliseconds);
+            //}
+
+            //Debug.WriteLine("-----------------------------------------------------");
+            //Debug.WriteLine("Brute Force 25");
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    AssociationAnalyzerApriori bf25 = new AssociationAnalyzerApriori(data, 25, 0.005, 0.005, 10);
+            //    Stopwatch sw = Stopwatch.StartNew();
+            //    bf25.GenerateFrequentItemSets();
+            //    Debug.WriteLine(sw.ElapsedMilliseconds);
+            //}
+
+            //Debug.WriteLine("-----------------------------------------------------");
+            //Debug.WriteLine("Brute Force 30");
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    AssociationAnalyzerApriori bf30 = new AssociationAnalyzerApriori(data, 30, 0.005, 0.005, 15);
+            //    Stopwatch sw = Stopwatch.StartNew();
+            //    bf30.GenerateFrequentItemSets();
+            //    Debug.WriteLine(sw.ElapsedMilliseconds);
+            //}
+
+            //Debug.WriteLine("-----------------------------------------------------");
+            //Debug.WriteLine("Apiori 100");
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    AssociationAnalyzerApriori ap100 = new AssociationAnalyzerApriori(data, 100, 0.005, 0.005, 5);
+            //    Stopwatch sw = Stopwatch.StartNew();
+            //    ap100.GenerateFrequentItemSetsApriori();
+            //    Debug.WriteLine(sw.ElapsedMilliseconds);
+            //}
+
+            //Debug.WriteLine("-----------------------------------------------------");
+            //Debug.WriteLine("Apiori 150");
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    AssociationAnalyzerApriori ap150 = new AssociationAnalyzerApriori(data, 150, 0.005, 0.005, 10);
+            //    Stopwatch sw = Stopwatch.StartNew();
+            //    ap150.GenerateFrequentItemSetsApriori();
+            //    Debug.WriteLine(sw.ElapsedMilliseconds);
+            //}
+
+            //Debug.WriteLine("-----------------------------------------------------");
+            //Debug.WriteLine("Apiori 200");
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    AssociationAnalyzerApriori ap200 = new AssociationAnalyzerApriori(data, 200, 0.005, 0.005, 15);
+            //    Stopwatch sw = Stopwatch.StartNew();
+            //    ap200.GenerateFrequentItemSetsApriori();
+            //    Debug.WriteLine(sw.ElapsedMilliseconds);
+            //}
 
 
             //<<<<<<< HEAD
