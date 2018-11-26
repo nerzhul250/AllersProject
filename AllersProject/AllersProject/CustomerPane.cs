@@ -103,7 +103,14 @@ namespace AllersProject
 
         private void combQuantity_SelectedIndexChanged(object sender, EventArgs e)
         {
+            try
+            {
             main.ChangeRange(Int32.Parse(combQuantity.SelectedItem.ToString()));
+
+            } catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

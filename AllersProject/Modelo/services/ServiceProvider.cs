@@ -97,7 +97,7 @@ namespace Modelo.services
                 throw new Exception("Insuficientes items frecuentes, disminuya el soporte");
             }
             apriori.AprioriRuleGeneration(sets);
-            if (apriori.rules.Count==0)
+            if (apriori.rules.Count == 0)
             {
                 throw new Exception("Insuficientes reglas, disminuya la confianza");
             }

@@ -370,10 +370,10 @@ namespace UnitTestProject1
         public void testAllTransactionsFrequents()
         {
             setEscenario3();
-            List<List<string>> result = new List<List<string>> { new List<string> {"f","b" },
-            new List<string> { "e", "c" },  new List<string> {"b", "c" },
-             new List<string> {"b","c","a" },  new List<string>{"a","b" },
-             new List<string> {"c","d" },  new List<string> {"d", "c", "a" },
+            List<List<string>> result = new List<List<string>> { new List<string> {"b","f" },
+            new List<string> { "c", "e" },  new List<string> {"b", "c" },
+             new List<string> {"a","b","c" },  new List<string>{"a","b" },
+             new List<string> {"c","d" },  new List<string> {"a", "c", "d" },
              new List<string> {"a","d" },  new List<string> {"a", "c" } };
 
             List<List<string>> test = prueba.FindFrequentItemsets();
@@ -394,7 +394,7 @@ namespace UnitTestProject1
             setEscenario5();
 
             List<List<string>> result = new List<List<string>> { new List<string> {"b","c" },
-            new List<string> { "b", "c", "a" },  new List<string> {"a", "b"},
+            new List<string> { "a", "b", "c" },  new List<string> {"a", "b"},
              new List<string> {"a", "c"} };
 
             List<List<string>> test = prueba.FindFrequentItemsets();
