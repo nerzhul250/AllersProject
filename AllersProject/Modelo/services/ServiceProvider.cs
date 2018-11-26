@@ -83,7 +83,21 @@ namespace Modelo.services
             Dictionary<String, List<Prediction>> toReturn = new Dictionary<string, List<Prediction>>();
 
             var consult = data.mapFromCustomerIdToCustomer.Keys.Select(x => new { Id = x, average = GetCustomerAveragePurchasesByMonth(x) }).OrderByDescending(x => x.average).Take(quantity);
-            consult.ToList().ForEach(x => toReturn.Add(x.Id+"-Compras promedio: "+string.Format("{0:C}", x.average), GetPredictionsOfCustomer(x.Id, minSup, minConfidence)));
+            var list = consult.ToList();
+            foreach(var x in list)
+            {
+                string key = x.Id + "-Compras promedio: " + string.Format("{0:C}", x.average);
+                List<Prediction> value;
+                try
+                {
+                    value = GetPredictionsOfCustomer(x.Id, minSup, minConfidence);
+                } catch (Exception e)
+                {
+                    value = new List<Prediction>();
+                }
+                toReturn.Add(key, value);
+            }
+                //.ForEach(x => toReturn.Add(x.Id+"-Compras promedio: "+string.Format("{0:C}", x.average), GetPredictionsOfCustomer(x.Id, minSup, minConfidence)));
             return toReturn;
         }
    

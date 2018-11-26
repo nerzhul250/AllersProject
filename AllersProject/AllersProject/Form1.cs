@@ -344,14 +344,18 @@ namespace AllersProject
         }
         public void getRelevantCustomers(int q)
         {
+            Debug.WriteLine("ENTRO");
             if (model != null)
             {
+                Debug.WriteLine("ENTRO X2");
                 CustomerPaneClearCustomersCallback kaka = new CustomerPaneClearCustomersCallback(CustomerPaneClearCustomers);
                 this.Invoke(kaka, new object[] { });
                 Dictionary<String, List<Prediction>> dic = model.getRelevantCustomersByHisAveragePurchases(minSGeneral, minCGeneral, q);
                 int counter = 0;
+                Debug.WriteLine("ENTRO X3");
                 foreach (var n in dic.Keys)
                 {
+                    Debug.WriteLine("Aqui es: " + n);
                     if (counter==q) {
                         break;
                     }
