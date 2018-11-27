@@ -53,29 +53,32 @@ namespace AllersProject
         }
         public List<Prediction> filterPredictions(List<Prediction> p, String category)
         {
-            
-                List<Prediction> copy = new List<Prediction>();
+
+            List<Prediction> copy = new List<Prediction>();
             if (category.Equals("Confianza"))
             {
-                 p.OrderByDescending(x => x.confidence).ToList().ForEach(x=> copy.Add(x));
-               
-            }else if (category.Equals("Relevancia"))
+                p.OrderByDescending(x => x.confidence).ToList().ForEach(x => copy.Add(x));
+
+            }
+            else if (category.Equals("Relevancia"))
             {
 
-               p.OrderByDescending(x => x.relevance).ToList().ForEach(x => copy.Add(x));
-                
+                p.OrderByDescending(x => x.relevance).ToList().ForEach(x => copy.Add(x));
+
             }
-            else if(category.Equals("Ingreso minimo"))
+            else if (category.Equals("Ingreso minimo"))
             {
-                p.Select(x => new { pre = x, min = x.consequent.Select(y=> y.price).Zip(x.minimumQuantity, (a, b) => a * b).Sum() }).OrderByDescending(x=> x.min).ToList().ForEach(x=> copy.Add(x.pre));
-            }else if(category.Equals("Ingreso maximo"))
+                p.Select(x => new { pre = x, min = x.consequent.Select(y => y.price).Zip(x.minimumQuantity, (a, b) => a * b).Sum() }).OrderByDescending(x => x.min).ToList().ForEach(x => copy.Add(x.pre));
+            }
+            else if (category.Equals("Ingreso maximo"))
             {
                 p.Select(x => new { pre = x, max = x.consequent.Select(y => y.price).Zip(x.maximumQuantity, (a, b) => a * b).Sum() }).OrderByDescending(x => x.max).ToList().ForEach(x => copy.Add(x.pre));
             }
-            else if(category.Equals("Cantidad minima"))
+            else if (category.Equals("Cantidad minima"))
             {
                 p.Select(x => new { pre = x, min = x.minimumQuantity.Average() }).OrderByDescending(x => x.min).ToList().ForEach(x => copy.Add(x.pre));
-            }else if(category.Equals("Cantidad maxima"))
+            }
+            else if (category.Equals("Cantidad maxima"))
             {
                 p.Select(x => new { pre = x, min = x.maximumQuantity.Average() }).OrderByDescending(x => x.min).ToList().ForEach(x => copy.Add(x.pre));
             }
@@ -85,7 +88,7 @@ namespace AllersProject
             }
             return copy;
         }
-        public void modifyGeneralPredictions(double minSup, double minConfidence, bool specific, String category)
+        public void modifyGeneralPredictions(double minSup, double minConfidence, bool specific, string category)
         {
             minSGeneral = minSup;
             minCGeneral = minConfidence;
@@ -112,7 +115,7 @@ namespace AllersProject
                     predictions = model.Predictions;
                     Debug.WriteLine("What's your problem");
                 }
-                predictions= filterPredictions(predictions, category);
+                predictions = filterPredictions(predictions, category);
                 double AverageRelevance = 0;
                 double averageConfidence = 0;
                 string text = "";
@@ -135,15 +138,15 @@ namespace AllersProject
                         maximaGananciaAdicional += p.consequent[i].price * p.maximumQuantity[i];
                     }
                     text += antecedent + "\n" + consequent + "\n";
-                    text += (p.relevance * 100).ToString("0.##")+"%\n";
+                    text += (p.relevance * 100).ToString("0.##") + "%\n";
                     text += (p.confidence * 100).ToString("0.##") + "%\n";
-                    text += minimaGananciaAdicional.ToString("C2")+"\n";
-                    text += maximaGananciaAdicional.ToString("C2")+"\n";
+                    text += minimaGananciaAdicional.ToString("C2") + "\n";
+                    text += maximaGananciaAdicional.ToString("C2") + "\n";
                     text += "---------------------------------------\n";
                 }
                 averageConfidence /= predictions.Count;
                 AverageRelevance /= predictions.Count;
-                text = "Relevancia promedio: " + (AverageRelevance*100).ToString("0.##") + "" + "%" + "\n" + "Confiabilidad promedio: " + (averageConfidence*100).ToString("0.##") + "" + "%\n" + text;
+                text = "Relevancia promedio: " + (AverageRelevance * 100).ToString("0.##") + "" + "%" + "\n" + "Confiabilidad promedio: " + (averageConfidence * 100).ToString("0.##") + "" + "%\n" + text;
                 customerPredictionPane1.setText(text);
 
             }
@@ -162,7 +165,7 @@ namespace AllersProject
         public void modifyGroupOfCLients(int numberOfGroups, int itemsToRecommend)
         {
             List<Recommendation> res = model.GetItemsCustomersMightBuyMoreButBuyFew(numberOfGroups, 100, 2, itemsToRecommend);
-            string recom = res.Count+"\n"+ res[0].recommendations.Count+ "\n";
+            string recom = res.Count + "\n" + res[0].recommendations.Count + "\n";
             for (int i = res.Count - 1; i >= 0; i--)
             {
                 recom += res[i].customer.id + "\n";
@@ -237,9 +240,9 @@ namespace AllersProject
             zgc.GraphPane.Legend.IsVisible = false;
         }
 
-        public void predictionsByCostumer(String customerId, double sop, double conf, bool specific,String category)
+        public void predictionsByCostumer(String customerId, double sop, double conf, bool specific, String category)
         {
-            Form2 window2=null;
+            Form2 window2 = null;
             List<Prediction> predictions = model.GetPredictionsOfCustomer(customerId, sop, conf);
             if (specific)
             {
@@ -247,21 +250,29 @@ namespace AllersProject
                 if (ProductsCode.Length != 1 || !ProductsCode[0].Equals(""))
                 {
                     predictions = model.GetPredictionsFromCodeItemsSpecificClient(ProductsCode, customerId, sop, conf);
+                    if (predictions.Count == 0)
+                    {
+                        throw new Exception("No se encontraron predicciones con los items especificados");
+                    }
 
                 }
             }
             else
             {
-                if (window != null) window2=window;
-                window = new Form2();
-                window.main = this;
-                window.Visible = true;
-                window.SetCustomerId(customerId);
-                window.SetConfSup(conf, sop);
-                if (model == null)
+                if (category.Equals(""))
                 {
-                    MessageBox.Show("En la primer pestaña debe ingresar los parámetros");
-                    return;
+
+                    if (window != null) window2 = window;
+                    window = new Form2();
+                    window.main = this;
+                    window.Visible = true;
+                    window.SetCustomerId(customerId);
+                    window.SetConfSup(conf, sop);
+                    if (model == null)
+                    {
+                        MessageBox.Show("En la primer pestaña debe ingresar los parámetros");
+                        return;
+                    }
                 }
 
             }
@@ -322,17 +333,21 @@ namespace AllersProject
             //text.Insert(0, "Confianza promedio: ");
             text.Insert(0, "\n");
             window.customerPredictionPane1.setText(text.ToString());
-            try
+            if (!specific)
             {
-                DataManager dm = model.GetDataBy(customerId);
-                Customer cus = dm.mapFromCustomerIdToCustomer[customerId];
-                string info = "Id: " + cus.id + "\n" + "Región: " + cus.regionName + "\n" + "Ciudad: " + cus.cityName;
-                window.txtClientInfo.AppendText(info);
-                if (window2 != null) window2.Close();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
+                try
+                {
+                    DataManager dm = model.GetDataBy(customerId);
+                    Customer cus = dm.mapFromCustomerIdToCustomer[customerId];
+                    string info = "Id: " + cus.id + "\n" + "Región: " + cus.regionName + "\n" + "Ciudad: " + cus.cityName;
+                    window.txtClientInfo.AppendText(info);
+                    if (window2 != null) window2.Close();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+
             }
 
 
@@ -358,11 +373,13 @@ namespace AllersProject
                 foreach (var n in dic.Keys)
                 {
                     Debug.WriteLine("Aqui es: " + n);
-                    if (counter==q) {
+                    if (counter == q)
+                    {
                         break;
                     }
-                    if (dic[n].Count!=0) {
-                    counter++;
+                    if (dic[n].Count != 0)
+                    {
+                        counter++;
                         List<Prediction> predictions = dic[n];
                         double AverageRelevance = 0;
                         double averageConfidence = 0;
