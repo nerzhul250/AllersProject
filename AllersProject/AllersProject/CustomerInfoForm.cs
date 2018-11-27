@@ -28,7 +28,7 @@ namespace AllersProject
             recom += cus.id + "\n";
             for (int j = 0; j < re.recommendations.Count; j++)
             {
-                recom += re.recommendations[j].Item1.itemName + " " + "ya que compra " + re.recommendations[j].Item2 + "unidades menos que el promedio de su grupo\n";
+                recom += re.recommendations[j].Item1.itemName + "\n" + re.recommendations[j].Item2 + "\n";
             }
             recommendationsPane1.setRecommendations(recom);
         }

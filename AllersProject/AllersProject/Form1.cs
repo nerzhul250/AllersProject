@@ -433,6 +433,7 @@ namespace AllersProject
                         }
                         averageConfidence /= predictions.Count;
                         AverageRelevance /= predictions.Count;
+                        text.Insert(0, "\n");
                         text.Insert(0, "%");
                         text.Insert(0, (AverageRelevance * 100).ToString("0.##"));
                         //text.Insert(0, "Relevancia promedio: ");
@@ -440,7 +441,6 @@ namespace AllersProject
                         text.Insert(0, "%");
                         text.Insert(0, (averageConfidence * 100).ToString("0.##"));
                         //text.Insert(0, "Confianza promedio: ");
-                        text.Insert(0, "\n");
                         CrearExpandibleCallback d = new CrearExpandibleCallback(CrearExpandible);
                         this.Invoke(d, new object[] { text.ToString(), n });
                     }
