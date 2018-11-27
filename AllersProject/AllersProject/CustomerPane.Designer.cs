@@ -119,10 +119,9 @@
             "0",
             "5",
             "10",
-            "20",
-            "50"});
+            "15"});
             this.combQuantity.Location = new System.Drawing.Point(678, 12);
-            this.combQuantity.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.combQuantity.Margin = new System.Windows.Forms.Padding(2);
             this.combQuantity.Name = "combQuantity";
             this.combQuantity.Size = new System.Drawing.Size(68, 21);
             this.combQuantity.TabIndex = 0;
