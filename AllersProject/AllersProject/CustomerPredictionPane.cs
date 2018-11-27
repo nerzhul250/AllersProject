@@ -122,7 +122,6 @@ namespace AllersProject
                 try
                 {
                     main.predictionsByCostumer(customerId, minSup, minConf, false,comboBox1.Text);
-                    main.window.Close();
                 }
                 catch (Exception ex)
                 {

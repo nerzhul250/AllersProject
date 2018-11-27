@@ -101,7 +101,6 @@ namespace AllersProject
                 }
                 main.modifyGroupOfCLients(numClientes, Recom);
                 worker.ReportProgress(4);
-                main.getRelevantCustomers(10);
             }
             catch (Exception e1)
             {

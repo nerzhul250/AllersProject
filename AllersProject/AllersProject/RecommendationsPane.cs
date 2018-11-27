@@ -36,21 +36,24 @@ namespace AllersProject
                 string[]recom = text.Split('\n');
                 int customersNum = int.Parse(recom[0]);
                 int recomNum = int.Parse(recom[1]);
+                dataGridView1.Columns.Clear();
                 dataGridView1.Columns.Add("Cliente","Cliente");
                 for (int i = 0; i < recomNum; i++)
                 {
                     dataGridView1.Columns.Add("Recomendacion" + (i + 1), "Recomendacion"+(i+1));
+                    dataGridView1.Columns.Add("CantidadMenosQueCompraDelPromedio" + (i + 1), "CantidadMenosQueCompraDelPromedio" + (i + 1));
                 }
-                int num = (recom.Length - 2) / (2+recomNum);
+                int num = (recom.Length - 2) / (2+recomNum*2);
                 for (int i = 0; i < num; i++)
                 {
-                    int pos = i * (2+recomNum) + 2;
+                    int pos = i * (2+recomNum*2) + 2;
                     int rowId = dataGridView1.Rows.Add();
                     DataGridViewRow row = dataGridView1.Rows[rowId];
                     row.Cells["Cliente"].Value = recom[pos++];
-                    for (int j = pos; j <recomNum+pos ; j++)
+                    for (int j = pos; j <recomNum*2+pos ; j+=2)
                     {
-                        row.Cells["Recomendacion" + (j+1-pos)].Value = recom[j];
+                        row.Cells["Recomendacion" + (((j-pos)/2)+1)].Value = recom[j];
+                        row.Cells["CantidadMenosQueCompraDelPromedio" + (((j - pos)/ 2)+1)].Value = recom[j+1];
                     }
                 }
             }
