@@ -45,9 +45,10 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(22, 12);
+            this.label1.Location = new System.Drawing.Point(40, 22);
+            this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(138, 13);
+            this.label1.Size = new System.Drawing.Size(257, 25);
             this.label1.TabIndex = 1;
             this.label1.Text = "Filtrar prediciones por mayor";
             // 
@@ -62,27 +63,31 @@
             "Ingreso maximo",
             "Cantidad minima",
             "Cantidad maxima"});
-            this.comboBox1.Location = new System.Drawing.Point(213, 9);
+            this.comboBox1.Location = new System.Drawing.Point(391, 17);
+            this.comboBox1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.Size = new System.Drawing.Size(219, 32);
             this.comboBox1.TabIndex = 2;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // textCodigosProductos
             // 
-            this.textCodigosProductos.Location = new System.Drawing.Point(404, 10);
+            this.textCodigosProductos.Location = new System.Drawing.Point(689, 18);
+            this.textCodigosProductos.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.textCodigosProductos.Name = "textCodigosProductos";
-            this.textCodigosProductos.Size = new System.Drawing.Size(232, 20);
+            this.textCodigosProductos.ReadOnly = true;
+            this.textCodigosProductos.Size = new System.Drawing.Size(422, 29);
             this.textCodigosProductos.TabIndex = 3;
-            this.textCodigosProductos.Text = "Separate item codes by spaces";
+            this.textCodigosProductos.Text = "Códigos (CodArt1 CodArt2 ... CodArtN)";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(642, 8);
+            this.button1.Location = new System.Drawing.Point(1123, 15);
+            this.button1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(111, 23);
+            this.button1.Size = new System.Drawing.Size(258, 42);
             this.button1.TabIndex = 4;
-            this.button1.Text = "Specific predictions";
+            this.button1.Text = "Predicciones específicas";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -99,10 +104,11 @@
             this.GananciaMaximaAdicional,
             this.Relevancia,
             this.Confiabilidad});
-            this.dataGridView1.Location = new System.Drawing.Point(3, 36);
+            this.dataGridView1.Location = new System.Drawing.Point(6, 66);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(750, 366);
+            this.dataGridView1.Size = new System.Drawing.Size(1375, 676);
             this.dataGridView1.TabIndex = 5;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
@@ -149,7 +155,7 @@
             // 
             // CustomerPredictionPane
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -158,8 +164,9 @@
             this.Controls.Add(this.textCodigosProductos);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.label1);
+            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.Name = "CustomerPredictionPane";
-            this.Size = new System.Drawing.Size(767, 405);
+            this.Size = new System.Drawing.Size(1406, 748);
             this.Load += new System.EventHandler(this.CustomerPredictionPane_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);

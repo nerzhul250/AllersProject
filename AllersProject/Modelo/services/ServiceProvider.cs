@@ -144,12 +144,12 @@ namespace Modelo.services
             List<List<string>> frequents = aafpg.frequentItemSets();
             if (frequents.Count == 0)
             {
-                throw new Exception("No hay itemsets frecuentes: Intenta con un soporte más bajo FUCK");
+                throw new Exception("No se obtuvieron asociaciones frecuentes: Intenta con un soporte más bajo");
             }
             aafpg.RuleGeneration(frequents);
             if (aafpg.rules.Count == 0)
             {
-                throw new Exception("No hay predicciones: Intenta con una confianza más baja");
+                throw new Exception("No se obtuvieron predicciones: Intenta con una confianza más baja");
             }
             List<Prediction> predictions = new List<Prediction>();
             foreach (Tuple<List<string>,List<string>> rule in aafpg.rules)
@@ -256,7 +256,7 @@ namespace Modelo.services
             }
             if (SpecificPredictions.Count == 0)
             {
-                throw new Exception("No se encontraron predicciones con los items especificados");
+                throw new Exception("No se encontraron predicciones con los productos especificados");
             }
             return SpecificPredictions;
         }
