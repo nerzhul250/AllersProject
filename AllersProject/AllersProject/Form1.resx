@@ -120,6 +120,27 @@
   <metadata name="statusStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="label5.Text" xml:space="preserve">
+    <value>El grupo 4 en el curso de Proyecto Integrador 1 desarrolló el software llamado Super Prediction-Allers, que tiene como finalidad el uso de datos (ventas) de la empresa para solventar la generación de promociones y envío de información a clientes específicos. En otras palabras, SP-A busca predecir las compras que ejecutan los clientes y encontrar la relación que tienen ciertos productos y clientes con otros de su misma clasificación. De esta forma se puede “acceder a la mente de los clientes” con mayor facilidad y satisfacer sus necesidades, generando fidelización con el mismo y aumentando los volúmenes de ventas a corto plazo.</value>
+  </data>
+  <data name="label6.Text" xml:space="preserve">
+    <value>Predicciones específicas: Con la intención de facilitar la búsqueda de predicciones, el usuario tiene la posibilidad de escribir el código del producto y filtrar la lista, también es posible escribir varios códigos separados por un solo espacio.</value>
+  </data>
+  <data name="label4.Text" xml:space="preserve">
+    <value>Teniendo en cuenta la cantidad de facturas y productos, se recomienda que el soporte mínimo sea bastante pequeño (menor que el 2%); entre más pequeño, más grande puede ser la confianza mínima debido a la cantidad de reglas de asociación. Estos valores pueden ser escritos con el separador decimal “.” o “,”, dependiendo de la configuración del idioma establecida en el computador.</value>
+  </data>
+  <data name="label3.Text" xml:space="preserve">
+    <value>Soporte y confianza mínima: Teniendo en cuenta cada definición, el soporte mínimo hace referencia al mínimo porcentual (valor entre 0 y 1) que parametriza las predicciones a mostrar. Del mismo modo funciona la confianza mínima.</value>
+  </data>
+  <data name="label2.Text" xml:space="preserve">
+    <value>Confianza: determina qué tan frecuente aparece el producto implicado en las transacciones que contienen al producto implicante. Por ejemplo, si el cliente compra tapabocas y estas interfieren en la compra de máscaras, ¿qué tanto aparecen las máscaras en las facturas de los tapabocas?</value>
+  </data>
+  <data name="label1.Text" xml:space="preserve">
+    <value>Soporte: determina qué tan frecuentes son las implicaciones dentro de todas las transacciones. Por ejemplo, cuando el cliente compra vendas y estas interfieren en la compra de jeringas, ¿qué tanto aparece esta relación dentro de todas las transacciones?</value>
+  </data>
+  <data name="labAssociationRule.Text" xml:space="preserve">
+    <value>El software SP-A cuenta con reglas de asociación, las cuales son implicaciones que nos ayudan a determinar si la compra de un producto interfiere o no en la compra de otro, éstas pueden ser medidas en términos de soporte y confianza.</value>
+  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>48</value>
   </metadata>

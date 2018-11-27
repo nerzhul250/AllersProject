@@ -168,7 +168,7 @@ namespace AllersProject
                 recom += res[i].customer.id + "\n";
                 for (int j = 0; j < res[i].recommendations.Count; j++)
                 {
-                    recom += res[i].recommendations[j].Item1.itemName + " " + "ya que compra " + (res[i].recommendations[j].Item2).ToString("0.##") + " unidades menos que el promedio de su grupo\n";
+                    recom += res[i].recommendations[j].Item1.itemName + "\n" + (res[i].recommendations[j].Item2).ToString("0.##") + "\n";
                 }
                 recom += "----------------------------------------------------------------------------------------------------\n";
             }
@@ -239,6 +239,7 @@ namespace AllersProject
 
         public void predictionsByCostumer(String customerId, double sop, double conf, bool specific,String category)
         {
+            Form2 window2=null;
             List<Prediction> predictions = model.GetPredictionsOfCustomer(customerId, sop, conf);
             if (specific)
             {
@@ -251,6 +252,7 @@ namespace AllersProject
             }
             else
             {
+                if (window != null) window2=window;
                 window = new Form2();
                 window.main = this;
                 window.Visible = true;
@@ -326,7 +328,7 @@ namespace AllersProject
                 Customer cus = dm.mapFromCustomerIdToCustomer[customerId];
                 string info = "Id: " + cus.id + "\n" + "Región: " + cus.regionName + "\n" + "Ciudad: " + cus.cityName;
                 window.txtClientInfo.AppendText(info);
-
+                if (window2 != null) window2.Close();
             }
             catch (Exception ex)
             {
@@ -344,14 +346,18 @@ namespace AllersProject
         }
         public void getRelevantCustomers(int q)
         {
+            Debug.WriteLine("ENTRO");
             if (model != null)
             {
+                Debug.WriteLine("ENTRO X2");
                 CustomerPaneClearCustomersCallback kaka = new CustomerPaneClearCustomersCallback(CustomerPaneClearCustomers);
                 this.Invoke(kaka, new object[] { });
                 Dictionary<String, List<Prediction>> dic = model.getRelevantCustomersByHisAveragePurchases(minSGeneral, minCGeneral, q);
                 int counter = 0;
+                Debug.WriteLine("ENTRO X3");
                 foreach (var n in dic.Keys)
                 {
+                    Debug.WriteLine("Aqui es: " + n);
                     if (counter==q) {
                         break;
                     }
@@ -514,5 +520,9 @@ namespace AllersProject
 
         }
 
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
