@@ -84,7 +84,7 @@ namespace AllersProject
             {
                 try
                 {
-                    main.modifyGeneralPredictions(0, 0, true,"");
+                    main.modifyGeneralPredictions(main.minSGeneral, main.minCGeneral, true,"");
                 }
                 catch (Exception ex)
                 {

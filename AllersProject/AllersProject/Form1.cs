@@ -108,19 +108,26 @@ namespace AllersProject
                 }
                 else if (!specific)
                 {
+                    Debug.WriteLine("Aqui");
+                    Debug.WriteLine(minSGeneral);
+                    Debug.WriteLine(minCGeneral);
                     predictions = model.GetGeneralPredictions(minSGeneral, minCGeneral);
+                    Debug.WriteLine("Joder");
                 }
                 else
                 {
                     predictions = model.Predictions;
                     Debug.WriteLine("What's your problem");
                 }
+                Debug.WriteLine("x");
                 predictions = filterPredictions(predictions, category);
+                Debug.WriteLine("y");
                 double AverageRelevance = 0;
                 double averageConfidence = 0;
                 string text = "";
                 foreach (var p in predictions)
                 {
+                    Debug.WriteLine("Waaaa");
                     averageConfidence += p.confidence;
                     AverageRelevance += p.relevance;
                     string antecedent = "";
@@ -129,11 +136,11 @@ namespace AllersProject
                     double maximaGananciaAdicional = 0;
                     for (int i = 0; i < p.antecedent.Length; i++)
                     {
-                        antecedent += ", " + p.antecedent[i].itemName;
+                        antecedent += ", " + p.antecedent[i].itemName + " (" + p.antecedent[i].ItemCode + ")";
                     }
                     for (int i = 0; i < p.consequent.Length; i++)
                     {
-                        consequent += ", " + p.consequent[i].itemName;
+                        consequent += ", " + p.consequent[i].itemName + " (" + p.consequent[i].ItemCode + ")";
                         minimaGananciaAdicional += p.consequent[i].price * p.minimumQuantity[i];
                         maximaGananciaAdicional += p.consequent[i].price * p.maximumQuantity[i];
                     }
@@ -242,7 +249,7 @@ namespace AllersProject
 
         public void predictionsByCostumer(String customerId, double sop, double conf, bool specific, String category)
         {
-            Form2 window2 = null;
+            //Form2 window2 = null;
             List<Prediction> predictions = model.GetPredictionsOfCustomer(customerId, sop, conf);
             if (specific)
             {
@@ -259,20 +266,20 @@ namespace AllersProject
             }
             else
             {
-                if (category.Equals(""))
-                {
 
-                    if (window != null) window2 = window;
+                if (window == null) 
+                {
                     window = new Form2();
                     window.main = this;
                     window.Visible = true;
                     window.SetCustomerId(customerId);
                     window.SetConfSup(conf, sop);
-                    if (model == null)
-                    {
-                        MessageBox.Show("En la primer pestaña debe ingresar los parámetros");
-                        return;
-                    }
+
+                }
+                if (model == null)
+                {
+                    MessageBox.Show("En la primer pestaña debe ingresar los parámetros");
+                    return;
                 }
 
             }
@@ -295,12 +302,12 @@ namespace AllersProject
                 for (int i = 0; i < p.antecedent.Length; i++)
                 {
                     antecedent.Append(", ");
-                    antecedent.Append(p.antecedent[i].itemName);
+                    antecedent.Append(p.antecedent[i].itemName + " (" + p.antecedent[i].ItemCode + ")");
                 }
                 for (int i = 0; i < p.consequent.Length; i++)
                 {
                     consequent.Append(", ");
-                    consequent.Append(p.consequent[i].itemName);
+                    consequent.Append(p.consequent[i].itemName + " (" + p.consequent[i].ItemCode + ")");
                     minimaGananciaAdicional += p.consequent[i].price * p.minimumQuantity[i];
                     maximaGananciaAdicional += p.consequent[i].price * p.maximumQuantity[i];
                 }
@@ -340,8 +347,8 @@ namespace AllersProject
                     DataManager dm = model.GetDataBy(customerId);
                     Customer cus = dm.mapFromCustomerIdToCustomer[customerId];
                     string info = "Id: " + cus.id + "\n" + "Región: " + cus.regionName + "\n" + "Ciudad: " + cus.cityName;
-                    window.txtClientInfo.AppendText(info);
-                    if (window2 != null) window2.Close();
+                    window.txtClientInfo.Text = info;
+                    //if (window2 != null) window2.Close();
                 }
                 catch (Exception ex)
                 {
@@ -397,12 +404,12 @@ namespace AllersProject
                             for (int i = 0; i < p.antecedent.Length; i++)
                             {
                                 antecedent.Append(", ");
-                                antecedent.Append(p.antecedent[i].itemName);
+                                antecedent.Append(p.antecedent[i].itemName + " (" + p.antecedent[i].ItemCode + ")");
                             }
                             for (int i = 0; i < p.consequent.Length; i++)
                             {
                                 consequent.Append(", ");
-                                consequent.Append(p.consequent[i].itemName);
+                                consequent.Append(p.consequent[i].itemName + " (" + p.consequent[i].ItemCode + ")");
                                 minimaGananciaAdicional += p.consequent[i].price * p.minimumQuantity[i];
                                 maximaGananciaAdicional += p.consequent[i].price * p.maximumQuantity[i];
                             }
