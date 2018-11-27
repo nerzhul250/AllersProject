@@ -65,18 +65,20 @@ namespace AllersProject
                 try
                 {
                     sup = Double.Parse(textBox1.Text);
+                    if (sup <= 0) throw new Exception();
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("El soporte no tiene el formato adecuado (Decimal)");
+                    throw new Exception("El soporte no tiene el formato adecuado (Decimal) o es menor o igual a cero");
                 }
                 try
                 {
                     conf = Double.Parse(textBox2.Text);
+                    if (conf <= 0) throw new Exception();
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("La confidencia no tiene el formato adecuado (Decimal)");
+                    throw new Exception("La confianza no tiene el formato adecuado (Decimal) o es menor o igual cero");
                 }
                 main.modifyGeneralPredictions(sup, conf, false,"");
                 worker.ReportProgress(3);
@@ -85,6 +87,7 @@ namespace AllersProject
                 try
                 {
                     numClientes = int.Parse(textBox3.Text);
+                    if (numClientes <= 0) throw new Exception();
                 }
                 catch (Exception ex)
                 {
@@ -94,18 +97,18 @@ namespace AllersProject
                 try
                 {
                     Recom = int.Parse(textBox4.Text);
+                    if (Recom <= 0) throw new Exception();
                 }
                 catch (Exception ex)
                 {
                     throw new Exception("El numero de recomendaciones a formar  debe de ser entero y mayor a 0");
                 }
-                main.modifyGroupOfCLients(numClientes, Recom);
                 worker.ReportProgress(4);
+                main.modifyGroupOfCLients(numClientes, Recom);
             }
             catch (Exception e1)
             {
-               MessageBox.Show(e1.Message);
-               Debug.WriteLine(e1.StackTrace);
+                throw new Exception(e1.Message);
             }
             //It might Be useful
             //if (worker.CancellationPending == true)
@@ -151,7 +154,7 @@ namespace AllersProject
             }
             else if (e.Error != null)
             {
-                label5.Text = "Error";
+                label5.Text = "Estado de la aplicacion: Con errores";
                 MessageBox.Show(e.Error.Message);
                 label5.ForeColor = Color.Red;
                 frmPrgBar.Close();
